@@ -1,9 +1,9 @@
 {
   "route_name": "Липецк 2",
   "points_count": 7,
-  "calculation_time": "2025-04-21 22:15:32",
-  "total_distance": 576288,
-  "total_duration": 28172,
+  "calculation_time": "2025-04-29 17:22:15",
+  "total_distance": 533302,
+  "total_duration": 28313,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 53.209816,
         "lon": 39.467203
       },
-      "distance": 220294,
-      "duration": 10793,
+      "distance": 220950,
+      "duration": 11058,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.117591
       },
       "distance": 33279,
-      "duration": 1713,
+      "duration": 1818,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 38.877946
       },
       "distance": 18370,
-      "duration": 1004,
+      "duration": 1048,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 38.852274
       },
       "distance": 41893,
-      "duration": 2334,
+      "duration": 2476,
       "status": "OK"
     },
     {
@@ -76,8 +76,8 @@
         "lat": 52.709598,
         "lon": 38.722625
       },
-      "distance": 124075,
-      "duration": 6159,
+      "distance": 80433,
+      "duration": 5476,
       "status": "OK"
     },
     {
@@ -92,8 +92,9 @@
         "lon": 39.266546
       },
       "distance": 138377,
-      "duration": 6169,
+      "duration": 6437,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

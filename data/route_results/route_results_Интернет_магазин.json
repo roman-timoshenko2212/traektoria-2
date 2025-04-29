@@ -1,9 +1,9 @@
 {
   "route_name": "Интернет магазин",
   "points_count": 11,
-  "calculation_time": "2025-04-24 15:44:35",
-  "total_distance": 45009,
-  "total_duration": 6174,
+  "calculation_time": "2025-04-29 17:30:18",
+  "total_distance": 47862,
+  "total_duration": 7119,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.652782,
         "lon": 39.095065
       },
-      "distance": 15477,
-      "duration": 2208,
+      "distance": 18330,
+      "duration": 2760,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.137707
       },
       "distance": 3834,
-      "duration": 505,
+      "duration": 565,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.165746
       },
       "distance": 4284,
-      "duration": 572,
+      "duration": 641,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.165833
       },
       "distance": 3827,
-      "duration": 609,
+      "duration": 659,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.166462
       },
       "distance": 831,
-      "duration": 149,
+      "duration": 163,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 39.163544
       },
       "distance": 1636,
-      "duration": 223,
+      "duration": 240,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 39.170741
       },
       "distance": 4705,
-      "duration": 675,
+      "duration": 682,
       "status": "OK"
     },
     {
@@ -152,8 +152,9 @@
         "lon": 39.266546
       },
       "distance": 10415,
-      "duration": 1233,
+      "duration": 1409,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

@@ -1,9 +1,9 @@
 {
   "route_name": "Курск 2",
   "points_count": 16,
-  "calculation_time": "2025-04-24 15:44:14",
-  "total_distance": 741637,
-  "total_duration": 41368,
+  "calculation_time": "2025-04-29 17:29:54",
+  "total_distance": 739600,
+  "total_duration": 42943,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 52.317442,
         "lon": 36.305082
       },
-      "distance": 306301,
-      "duration": 15953,
+      "distance": 304264,
+      "duration": 17107,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 36.308382
       },
       "distance": 1284,
-      "duration": 229,
+      "duration": 232,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 36.516396
       },
       "distance": 70553,
-      "duration": 3899,
+      "duration": 3978,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 36.372511
       },
       "distance": 39121,
-      "duration": 2492,
+      "duration": 2528,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 36.375867
       },
       "distance": 913,
-      "duration": 159,
+      "duration": 162,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 36.298797
       },
       "distance": 18152,
-      "duration": 954,
+      "duration": 992,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 36.230609
       },
       "distance": 29953,
-      "duration": 2032,
+      "duration": 1986,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 36.234032
       },
       "distance": 892,
-      "duration": 125,
+      "duration": 131,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 36.137422
       },
       "distance": 9942,
-      "duration": 1074,
+      "duration": 1199,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 36.136647
       },
       "distance": 1179,
-      "duration": 161,
+      "duration": 164,
       "status": "OK"
     },
     {
@@ -182,7 +182,7 @@
         "lon": 36.161785
       },
       "distance": 6951,
-      "duration": 717,
+      "duration": 813,
       "status": "OK"
     },
     {
@@ -197,7 +197,7 @@
         "lon": 36.166036
       },
       "distance": 9110,
-      "duration": 740,
+      "duration": 812,
       "status": "OK"
     },
     {
@@ -212,7 +212,7 @@
         "lon": 37.126991
       },
       "distance": 79595,
-      "duration": 3785,
+      "duration": 3879,
       "status": "OK"
     },
     {
@@ -227,8 +227,9 @@
         "lon": 39.266546
       },
       "distance": 167691,
-      "duration": 9048,
+      "duration": 8960,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

@@ -1,9 +1,9 @@
 {
   "route_name": "Новоусманский район, Воронежская обл.",
   "points_count": 8,
-  "calculation_time": "2025-04-24 15:44:33",
-  "total_distance": 87497,
-  "total_duration": 7448,
+  "calculation_time": "2025-04-29 17:30:15",
+  "total_distance": 93832,
+  "total_duration": 7414,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.649273,
         "lon": 39.420666
       },
-      "distance": 16449,
-      "duration": 1659,
+      "distance": 22784,
+      "duration": 1893,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.46352
       },
       "distance": 11917,
-      "duration": 869,
+      "duration": 907,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.432218
       },
       "distance": 10749,
-      "duration": 1026,
+      "duration": 931,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.608425
       },
       "distance": 14413,
-      "duration": 1007,
+      "duration": 965,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.370977
       },
       "distance": 21621,
-      "duration": 1969,
+      "duration": 1725,
       "status": "OK"
     },
     {
@@ -107,8 +107,9 @@
         "lon": 39.266546
       },
       "distance": 12348,
-      "duration": 918,
+      "duration": 993,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

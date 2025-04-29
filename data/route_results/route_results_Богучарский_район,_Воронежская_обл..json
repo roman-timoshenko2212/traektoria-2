@@ -1,9 +1,9 @@
 {
   "route_name": "Богучарский район, Воронежская обл.",
   "points_count": 11,
-  "calculation_time": "2025-04-24 15:44:46",
-  "total_distance": 1220648,
-  "total_duration": 61638,
+  "calculation_time": "2025-04-29 17:30:39",
+  "total_distance": 1236026,
+  "total_duration": 64045,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 50.422095,
         "lon": 40.349645
       },
-      "distance": 180365,
-      "duration": 7822,
+      "distance": 181022,
+      "duration": 8077,
       "status": "OK"
     },
     {
@@ -31,8 +31,8 @@
         "lat": 50.080005,
         "lon": 40.303772
       },
-      "distance": 72284,
-      "duration": 4037,
+      "distance": 84721,
+      "duration": 3921,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 40.547302
       },
       "distance": 30807,
-      "duration": 1769,
+      "duration": 1824,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.831057
       },
       "distance": 63731,
-      "duration": 3199,
+      "duration": 3349,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.194272
       },
       "distance": 272590,
-      "duration": 12930,
+      "duration": 13161,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 39.641581
       },
       "distance": 240086,
-      "duration": 11432,
+      "duration": 11755,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 39.952802
       },
       "distance": 34436,
-      "duration": 2589,
+      "duration": 2720,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 39.418682
       },
       "distance": 54369,
-      "duration": 4147,
+      "duration": 4642,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 39.669585
       },
       "distance": 53902,
-      "duration": 3438,
+      "duration": 3570,
       "status": "OK"
     },
     {
@@ -151,9 +151,10 @@
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 218078,
-      "duration": 10275,
+      "distance": 220362,
+      "duration": 11026,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

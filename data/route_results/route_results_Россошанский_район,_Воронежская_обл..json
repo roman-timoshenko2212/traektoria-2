@@ -1,9 +1,9 @@
 {
   "route_name": "Россошанский район, Воронежская обл.",
   "points_count": 25,
-  "calculation_time": "2025-04-24 15:45:03",
-  "total_distance": 481724,
-  "total_duration": 25941,
+  "calculation_time": "2025-04-29 17:31:00",
+  "total_distance": 494743,
+  "total_duration": 27486,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 50.597494,
         "lon": 39.61947
       },
-      "distance": 183540,
-      "duration": 9437,
+      "distance": 184197,
+      "duration": 9646,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.63825
       },
       "distance": 29301,
-      "duration": 1767,
+      "duration": 1806,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.65261
       },
       "distance": 2020,
-      "duration": 244,
+      "duration": 261,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.645693
       },
       "distance": 691,
-      "duration": 95,
+      "duration": 97,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.639897
       },
       "distance": 2120,
-      "duration": 246,
+      "duration": 264,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 39.557913
       },
       "distance": 26576,
-      "duration": 1576,
+      "duration": 1662,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 39.56055
       },
       "distance": 1589,
-      "duration": 132,
+      "duration": 138,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 39.560021
       },
       "distance": 866,
-      "duration": 82,
+      "duration": 85,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 39.556724
       },
       "distance": 380,
-      "duration": 46,
+      "duration": 47,
       "status": "OK"
     },
     {
@@ -152,7 +152,7 @@
         "lon": 39.566251
       },
       "distance": 2116,
-      "duration": 214,
+      "duration": 223,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 39.580428
       },
       "distance": 1016,
-      "duration": 108,
+      "duration": 113,
       "status": "OK"
     },
     {
@@ -182,7 +182,7 @@
         "lon": 39.587376
       },
       "distance": 564,
-      "duration": 60,
+      "duration": 63,
       "status": "OK"
     },
     {
@@ -197,7 +197,7 @@
         "lon": 39.562131
       },
       "distance": 3330,
-      "duration": 266,
+      "duration": 279,
       "status": "OK"
     },
     {
@@ -212,7 +212,7 @@
         "lon": 39.542905
       },
       "distance": 2562,
-      "duration": 273,
+      "duration": 286,
       "status": "OK"
     },
     {
@@ -242,7 +242,7 @@
         "lon": 39.551675
       },
       "distance": 1613,
-      "duration": 193,
+      "duration": 198,
       "status": "OK"
     },
     {
@@ -257,7 +257,7 @@
         "lon": 39.538702
       },
       "distance": 1838,
-      "duration": 212,
+      "duration": 224,
       "status": "OK"
     },
     {
@@ -287,7 +287,7 @@
         "lon": 39.506533
       },
       "distance": 3221,
-      "duration": 341,
+      "duration": 354,
       "status": "OK"
     },
     {
@@ -317,7 +317,7 @@
         "lon": 39.300696
       },
       "distance": 20453,
-      "duration": 1176,
+      "duration": 1245,
       "status": "OK"
     },
     {
@@ -332,7 +332,7 @@
         "lon": 39.317724
       },
       "distance": 1718,
-      "duration": 210,
+      "duration": 230,
       "status": "OK"
     },
     {
@@ -347,7 +347,7 @@
         "lon": 39.407202
       },
       "distance": 56143,
-      "duration": 2356,
+      "duration": 2486,
       "status": "OK"
     },
     {
@@ -361,9 +361,10 @@
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 139875,
-      "duration": 6880,
+      "distance": 152237,
+      "duration": 7752,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

@@ -1,9 +1,9 @@
 {
   "route_name": "Воронеж ЛБ",
   "points_count": 8,
-  "calculation_time": "2025-04-24 15:44:25",
-  "total_distance": 55719,
-  "total_duration": 5285,
+  "calculation_time": "2025-04-29 17:30:06",
+  "total_distance": 56359,
+  "total_duration": 5272,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.621282,
         "lon": 39.251734
       },
-      "distance": 12108,
-      "duration": 1254,
+      "distance": 12765,
+      "duration": 1316,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.302415
       },
       "distance": 5133,
-      "duration": 864,
+      "duration": 718,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.382888
       },
       "distance": 8830,
-      "duration": 727,
+      "duration": 716,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.37085
       },
       "distance": 3379,
-      "duration": 297,
+      "duration": 325,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.295444
       },
       "distance": 19108,
-      "duration": 1377,
+      "duration": 1341,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 39.270401
       },
       "distance": 5529,
-      "duration": 532,
+      "duration": 581,
       "status": "OK"
     },
     {
@@ -106,9 +106,10 @@
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 1632,
-      "duration": 234,
+      "distance": 1615,
+      "duration": 275,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

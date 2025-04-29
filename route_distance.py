@@ -6,11 +6,11 @@ import requests
 import sys
 import time
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time as dt_time
 import re
 import random
 import math
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import config
 from utils import ensure_data_dirs, get_api_key
@@ -57,13 +57,14 @@ def get_input_file_path(route_name, geocoded_file_arg=None):
     # return os.path.join(config.GEOCODED_DIR, "geocoded_results.csv")
     return None # Если имя маршрута не задано, файл не определить
 
-def calculate_route_in_chunks(points, api_key, traffic_mode='jam'):
+def calculate_route_in_chunks(points, api_key, start_time_iso, traffic_mode='statistics'):
     """
     Рассчитывает расстояния между последовательными точками маршрута.
     
     Args:
         points: Список точек в формате [{"lat": float, "lon": float}, ...]
         api_key: API ключ 2GIS
+        start_time_iso: ISO 8601 UTC время для запроса
         traffic_mode: Режим расчета пробок ('jam' или 'statistics')
         
     Returns:
@@ -76,7 +77,8 @@ def calculate_route_in_chunks(points, api_key, traffic_mode='jam'):
         point_pair = [points[i], points[i + 1]]
         
         # Рассчитываем расстояние между текущей парой точек
-        chunk_result = calculate_matrix_chunk(point_pair, api_key, traffic_mode)
+        print(f"[calculate_route_in_chunks] Вызов calculate_matrix_chunk для пары {i}-{i+1} с start_time: {start_time_iso}, mode: {traffic_mode}")
+        chunk_result = calculate_matrix_chunk(point_pair, api_key, start_time_iso=start_time_iso, traffic_mode=traffic_mode)
         
         if chunk_result:
             # Извлекаем результат для пары точек
@@ -109,7 +111,7 @@ def calculate_route_in_chunks(points, api_key, traffic_mode='jam'):
     
     return results
 
-def calculate_matrix_chunk(points, api_key, traffic_mode='jam'):
+def calculate_matrix_chunk(points, api_key, start_time_iso, traffic_mode='statistics'):
     """
     Рассчитывает расстояние между двумя последовательными точками маршрута,
     используя структуру запроса, аналогичную test_2gis_api.py.
@@ -117,6 +119,7 @@ def calculate_matrix_chunk(points, api_key, traffic_mode='jam'):
     Args:
         points: Список из двух точек в формате [{"lat": float, "lon": float}, ...]
         api_key: API ключ 2GIS
+        start_time_iso: ISO 8601 UTC время для запроса
         traffic_mode: Режим расчета пробок ('jam' или 'statistics')
 
     Returns:
@@ -163,12 +166,10 @@ def calculate_matrix_chunk(points, api_key, traffic_mode='jam'):
         "sources": [0],             # Индекс точки отправления в points
         "targets": [1],             # Индекс точки назначения в points
         "transport": "driving",     # Тип транспорта (автомобиль)
-        # --- ИЗМЕНЕНИЯ ДЛЯ СТАТИСТИКИ ---
-        "type": "statistics",           # Используем статистику пробок
-        "start_time": "2025-04-07T04:00:00Z" # Время: 7 Апреля 2025, 07:00 MSK (04:00 UTC)
-        # Старый параметр: "type": "jam",             # Тип маршрута (текущие пробки)
-        # --- КОНЕЦ ИЗМЕНЕНИЙ ---
+        "type": traffic_mode,       # Используем переданный режим ('statistics' или другой)
+        "start_time": start_time_iso # Используем переданное время
     }
+    print(f"[calculate_matrix_chunk] Сформирован payload: type={payload.get('type')}, start_time={payload.get('start_time')}")
     # print(f"   Тело JSON: {json.dumps(payload)}") # Для отладки
 
     # Заголовки
@@ -301,16 +302,17 @@ def save_distance_matrix_to_csv(points, matrix, route_name=None):
     except Exception as e:
         print(f"❌ Ошибка при сохранении матрицы расстояний: {e}")
 
-def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.ROUTE_RESULTS_DIR, traffic_mode='jam'):
+def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.ROUTE_RESULTS_DIR, traffic_mode='jam', report_date_str=None):
     """
     Основная функция для расчета маршрута и сохранения результата.
     Вызывается как из main(), так и напрямую из других модулей.
     
     Args:
         route_name (str): Имя маршрута.
-        geocoded_file_path (str): Путь к CSV файлу с геокодированными точками.
+        geocoded_file_path (str): Путь к JSON файлу с геокодированными точками.
         output_dir (str): Директория для сохранения JSON результата.
         traffic_mode (str): Режим учета пробок ('jam' или 'statistics').
+        report_date_str (str, optional): Дата отчета в формате YYYY-MM-DD. Defaults to None.
         
     Returns:
         bool: True в случае успеха, False в случае ошибки.
@@ -318,6 +320,7 @@ def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.R
     print(f"\n--- Запуск расчета для маршрута: {route_name} ---")
     print(f"   Входной файл: {geocoded_file_path}")
     print(f"   Режим пробок: {traffic_mode}")
+    print(f"   Дата отчета (получено): {report_date_str}")
     
     # Проверяем OFFLINE режим
     if hasattr(config, 'OFFLINE_MODE') and config.OFFLINE_MODE:
@@ -340,43 +343,49 @@ def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.R
     else:
         print("🔑 API ключ 2GIS успешно получен.")
 
-    # --- Загрузка точек из CSV --- 
+    # --- ДОБАВЛЕНО: Получение start_time_iso --- 
+    start_time_iso = get_start_time_iso(report_date_str)
+    if not start_time_iso:
+        print(f"❌ Не удалось определить время начала (start_time) для расчета. Проверьте формат даты отчета (если указана).")
+        return False # Прерываем расчет, если время не определено
+    print(f"   Время для расчета (start_time): {start_time_iso}")
+    # --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
+    # --- Загрузка точек из JSON --- 
     points_from_file = []
     try:
-        df = pd.read_csv(geocoded_file_path)
-        for _, row in df.iterrows():
-            if pd.notna(row.get('lat')) and pd.notna(row.get('lon')):
+        with open(geocoded_file_path, 'r', encoding='utf-8') as f:
+            geocoded_data = json.load(f) # Читаем JSON
+            
+        # Проверяем, что загружен список
+        if not isinstance(geocoded_data, list):
+            print(f"❌ Ошибка: Файл {geocoded_file_path} не содержит ожидаемый список точек.")
+            return False
+            
+        # Извлекаем валидные координаты
+        for point in geocoded_data:
+            if isinstance(point, dict) and pd.notna(point.get('lat')) and pd.notna(point.get('lon')):
                 try:
-                    lat = float(row['lat'])
-                    lon = float(row['lon'])
+                    lat = float(point['lat'])
+                    lon = float(point['lon'])
                     if -90 <= lat <= 90 and -180 <= lon <= 180:
                         points_from_file.append({"lat": lat, "lon": lon})
                     else:
-                        print(f"⚠️ Некорректные значения координат в файле {geocoded_file_path}: lat={lat}, lon={lon}")
+                        print(f"⚠️ Некорректный диапазон координат в файле {geocoded_file_path}: lat={lat}, lon={lon} (вход: {point.get('input', '?')})")
                 except (ValueError, TypeError):
-                    print(f"⚠️ Невозможно преобразовать координаты в числа в файле {geocoded_file_path}: {row.get('lat')}, {row.get('lon')}")
+                    print(f"⚠️ Невозможно преобразовать координаты в числа в файле {geocoded_file_path}: {point.get('lat')}, {point.get('lon')} (вход: {point.get('input', '?')})")
+            # else: # Опционально: логировать точки без координат или некорректного формата
+            #     print(f"   Пропущена точка из {geocoded_file_path} без валидных lat/lon: {point}")
+                 
     except FileNotFoundError:
         print(f"❌ Ошибка: Файл не найден при попытке чтения: {geocoded_file_path}")
         return False
+    except json.JSONDecodeError as e:
+        print(f"❌ Ошибка декодирования JSON файла {geocoded_file_path}: {e}")
+        return False
     except Exception as e:
-        print(f"⚠️ Ошибка при чтении CSV файла {geocoded_file_path}: {e}. Попытка чтения через CSV модуль...")
-        try:
-            with open(geocoded_file_path, 'r', encoding='utf-8') as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    if row.get('lat') and row.get('lon'):
-                        try:
-                            lat = float(row['lat'])
-                            lon = float(row['lon'])
-                            if -90 <= lat <= 90 and -180 <= lon <= 180:
-                                points_from_file.append({"lat": lat, "lon": lon})
-                            else:
-                                print(f"⚠️ Некорректные значения координат в файле {geocoded_file_path} (строка CSV): lat={lat}, lon={lon}")
-                        except ValueError:
-                            print(f"⚠️ Некорректные координаты в строке CSV файла {geocoded_file_path}: {row}")
-        except Exception as e_csv:
-             print(f"❌ Критическая ошибка при чтении CSV файла {geocoded_file_path}: {e_csv}")
-             return False
+        print(f"❌ Непредвиденная ошибка при чтении или обработке JSON файла {geocoded_file_path}: {e}")
+        return False
 
     if not points_from_file:
         print(f"❌ Не найдено валидных точек в файле {geocoded_file_path}")
@@ -411,7 +420,7 @@ def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.R
     
     # --- Расчет маршрута --- 
     print(f"\n🚀 Начинаем расчет сегментов для {len(points)} точек...")
-    segments = calculate_route_in_chunks(points, api_key, traffic_mode=traffic_mode)
+    segments = calculate_route_in_chunks(points, api_key, start_time_iso, traffic_mode=traffic_mode)
 
     # Проверка, что расчет прошел хотя бы частично
     if not segments:
@@ -429,7 +438,10 @@ def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.R
         "calculation_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "total_distance": total_distance,
         "total_duration": total_duration,
-        "segments": segments
+        "segments": segments,
+        # --- ДОБАВЛЕНО: Сохраняем использованное время --- 
+        "start_time_used": start_time_iso 
+        # --- КОНЕЦ ДОБАВЛЕНИЯ --- 
     }
     
     # --- Сохранение результата --- 
@@ -449,13 +461,15 @@ def calculate_and_save_route(route_name, geocoded_file_path, output_dir=config.R
         return False
 
 # --- НОВАЯ ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ СЕГМЕНТОВ --- 
-def get_route_segments(points: List[Dict[str, float]]) -> List[Dict[str, Any]]:
+def get_route_segments(points: List[Dict[str, float]], start_time_iso: Optional[str] = None, traffic_mode: str = 'statistics') -> List[Dict[str, Any]]:
     """
     Рассчитывает сегменты маршрута между точками, не сохраняя результат.
     Использует существующую логику calculate_route_in_chunks.
     
     Args:
         points: Список точек в формате [{"lat": float, "lon": float}, ...]
+        start_time_iso (str, optional): ISO 8601 UTC время для запроса. Если None, будет использовано время по умолчанию.
+        traffic_mode (str): Режим учета пробок ('jam' или 'statistics').
         
     Returns:
         Список словарей, описывающих сегменты маршрута (расстояние, время, статус).
@@ -471,15 +485,64 @@ def get_route_segments(points: List[Dict[str, float]]) -> List[Dict[str, Any]]:
         # Можно вернуть ошибку или пустой список
         return [] 
 
+    # --- ДОБАВЛЕНО: Определяем start_time_iso, если он не передан ---
+    if not start_time_iso:
+        print("⚠️ get_route_segments: start_time_iso не передан, будет использовано время по умолчанию.")
+        start_time_iso = get_start_time_iso() # Используем функцию для получения дефолтного времени
+        if not start_time_iso:
+             print("❌ get_route_segments: Не удалось получить время по умолчанию. Расчет невозможен.")
+             return []
+    # --- КОНЕЦ ДОБАВЛЕНИЯ ---
+             
     try:
-        # Вызываем существующую функцию расчета по чанкам
-        # traffic_mode здесь не передаем явно, т.к. calculate_matrix_chunk его игнорирует
-        # и использует свои внутренние настройки.
-        segments = calculate_route_in_chunks(points, api_key)
+        # --- ИЗМЕНЕНО: Передаем параметры в calculate_route_in_chunks ---
+        print(f"[get_route_segments] Calling calculate_route_in_chunks with start_time: {start_time_iso}, mode: {traffic_mode}")
+        segments = calculate_route_in_chunks(points, api_key, start_time_iso=start_time_iso, traffic_mode=traffic_mode)
+        # --- КОНЕЦ ИЗМЕНЕНИЯ ---
         return segments
     except Exception as e:
         print(f"❌ get_route_segments: Ошибка при вызове calculate_route_in_chunks: {e}")
         return []
+# --- КОНЕЦ НОВОЙ ФУНКЦИИ ---
+
+# --- НОВАЯ ФУНКЦИЯ --- 
+def get_start_time_iso(report_date_str=None):
+    """Определяет дату и время для параметра start_time API 2GIS в формате ISO 8601 UTC.
+
+    Args:
+        report_date_str (str, optional): Дата отчета в формате 'YYYY-MM-DD'.
+                                         Если None, используется сегодня - 7 дней.
+                                         Defaults to None.
+
+    Returns:
+        str: Дата и время в формате 'YYYY-MM-DDTHH:MM:SSZ'.
+             Возвращает None в случае ошибки парсинга даты.
+    """
+    target_date = None
+    try:
+        if report_date_str:
+            # Пытаемся распарсить предоставленную дату
+            target_date = datetime.strptime(report_date_str, '%Y-%m-%d').date()
+            print(f"[get_start_time_iso] Используется указанная дата отчета: {target_date}")
+        else:
+            # Используем сегодня минус 7 дней
+            target_date = datetime.now().date() - timedelta(days=7)
+            print(f"[get_start_time_iso] Дата отчета не указана. Используется дата: {target_date} (сегодня - 7 дней)")
+
+        # Устанавливаем время 8:00
+        target_datetime = datetime.combine(target_date, dt_time(8, 0, 0))
+
+        # Форматируем в ISO 8601 UTC (добавляем 'Z')
+        iso_string = target_datetime.isoformat() + "Z"
+        print(f"[get_start_time_iso] Сформированная строка start_time: {iso_string}")
+        return iso_string
+
+    except ValueError:
+        print(f"[get_start_time_iso] Ошибка: Неверный формат даты отчета '{report_date_str}'. Ожидался 'YYYY-MM-DD'.")
+        return None # Возвращаем None в случае ошибки
+    except Exception as e:
+        print(f"[get_start_time_iso] Произошла непредвиденная ошибка при расчете start_time: {e}")
+        return None
 # --- КОНЕЦ НОВОЙ ФУНКЦИИ ---
 
 def main():
@@ -488,7 +551,7 @@ def main():
     # Определяем входной файл
     input_file = get_input_file_path(args.route_name, args.geocoded_file)
     if not input_file:
-        print("❌ Не удалось определить входной файл CSV. Укажите --route_name или --geocoded_file.")
+        print("❌ Не удалось определить входной файл JSON. Укажите --route_name или --geocoded_file.")
         sys.exit(1)
         
     # Определяем директорию для вывода (если задан полный путь)
@@ -506,7 +569,8 @@ def main():
         route_name=args.route_name, 
         geocoded_file_path=input_file, 
         output_dir=output_dir, 
-        traffic_mode=args.traffic_mode or 'jam' # Передаем режим или 'jam' по умолч.
+        traffic_mode=args.traffic_mode or 'jam', # Передаем режим или 'jam' по умолч.
+        report_date_str=args.report_date_str
     )
     
     if not success:

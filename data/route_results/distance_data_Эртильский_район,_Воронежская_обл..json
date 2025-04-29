@@ -8,41 +8,41 @@
                 "lon": 39.266546
             },
             "to_point": {
-                "lat": 51.83961,
-                "lon": 39.94633
+                "lat": 51.8399,
+                "lon": 39.940141
             },
-            "distance": 68522,
-            "duration": 4207,
+            "distance": 64235,
+            "duration": 4098,
             "status": "OK"
         },
         {
             "from_index": 1,
             "to_index": 2,
             "from_point": {
-                "lat": 51.83961,
-                "lon": 39.94633
+                "lat": 51.8399,
+                "lon": 39.940141
             },
             "to_point": {
-                "lat": 51.110405,
-                "lon": 40.723214
+                "lat": 51.11472,
+                "lon": 40.719919
             },
-            "distance": 141612,
-            "duration": 7124,
+            "distance": 141266,
+            "duration": 7288,
             "status": "OK"
         },
         {
             "from_index": 2,
             "to_index": 3,
             "from_point": {
-                "lat": 51.110405,
-                "lon": 40.723214
+                "lat": 51.11472,
+                "lon": 40.719919
             },
             "to_point": {
                 "lat": 51.633419,
                 "lon": 39.230678
             },
-            "distance": 160630,
-            "duration": 8047,
+            "distance": 156536,
+            "duration": 8529,
             "status": "OK"
         },
         {
@@ -57,7 +57,7 @@
                 "lon": 40.137389
             },
             "distance": 86865,
-            "duration": 5656,
+            "duration": 5569,
             "status": "OK"
         },
         {
@@ -72,12 +72,12 @@
                 "lon": 39.266546
             },
             "distance": 65223,
-            "duration": 3891,
+            "duration": 3919,
             "status": "OK"
         }
     ],
-    "total_distance": 523,
-    "total_duration": 28925,
-    "formatted_distance": "523 км",
-    "formatted_duration": "8 ч 2 мин"
+    "total_distance": 514,
+    "total_duration": 29403,
+    "formatted_distance": "514 км",
+    "formatted_duration": "8 ч 10 мин"
 }

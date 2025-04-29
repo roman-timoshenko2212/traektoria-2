@@ -1,9 +1,9 @@
 {
   "route_name": "Воронеж, Воронежская обл.",
   "points_count": 12,
-  "calculation_time": "2025-04-24 15:44:37",
-  "total_distance": 41896,
-  "total_duration": 4947,
+  "calculation_time": "2025-04-29 17:30:22",
+  "total_distance": 42337,
+  "total_duration": 5688,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.674401,
         "lon": 39.138264
       },
-      "distance": 10979,
-      "duration": 1450,
+      "distance": 15768,
+      "duration": 2096,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.130697
       },
       "distance": 3146,
-      "duration": 342,
+      "duration": 382,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.147052
       },
       "distance": 1421,
-      "duration": 217,
+      "duration": 240,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.133446
       },
       "distance": 1975,
-      "duration": 329,
+      "duration": 337,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.134877
       },
       "distance": 387,
-      "duration": 82,
+      "duration": 89,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 39.13665
       },
       "distance": 280,
-      "duration": 72,
+      "duration": 60,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 39.139523
       },
       "distance": 492,
-      "duration": 67,
+      "duration": 79,
       "status": "OK"
     },
     {
@@ -133,26 +133,26 @@
         "lon": 39.139523
       },
       "to_point": {
-        "lat": 51.739076,
-        "lon": 39.162142
+        "lat": 51.736033,
+        "lon": 39.158576
       },
-      "distance": 4515,
-      "duration": 464,
+      "distance": 4087,
+      "duration": 462,
       "status": "OK"
     },
     {
       "from_index": 9,
       "to_index": 10,
       "from_point": {
-        "lat": 51.739076,
-        "lon": 39.162142
+        "lat": 51.736033,
+        "lon": 39.158576
       },
       "to_point": {
         "lat": 51.703961,
         "lon": 39.147516
       },
-      "distance": 7043,
-      "duration": 648,
+      "distance": 4667,
+      "duration": 553,
       "status": "OK"
     },
     {
@@ -166,9 +166,10 @@
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 11658,
-      "duration": 1276,
+      "distance": 10114,
+      "duration": 1390,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

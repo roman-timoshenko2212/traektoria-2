@@ -637,52 +637,43 @@ def get_routes():
         return {"routes": []}
 
 # Функция для обработки отдельного маршрута
-def process_route(original_route_name):
+def process_route(original_route_name, report_date_str=None):
     """Обработка маршрута с сохранением оригинального имени"""
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.dirname(script_dir)
-    
-    # Используем глобальные константы для путей
-    file_name = sanitize_filename(original_route_name)
-    parsed_path = os.path.join(PROJECT_DATA_FOLDER, "parsed_addresses", f"parsed_addresses_{file_name}.csv")
-    geocoded_path = os.path.join(GEOCODED_RESULTS_FOLDER, f"geocoded_results_{file_name}.csv")
-    
-    if not os.path.exists(parsed_path):
-        print(f"⚠️ Файл {parsed_path} не найден для маршрута {original_route_name}")
-        return False
-    
-    process_success = False # Флаг успешности ВСЕГО процесса
+    # --- Добавлен лог полученной даты --- 
+    print(f"-- [process_route] Запуск для '{original_route_name}'. Дата отчета: '{report_date_str}'")
+    # --- КОНЕЦ ЛОГА ---
+    process_success = False # Флаг общего успеха
     try:
-        # Геокодирование
-        with open(parsed_path, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            rows = list(reader)
-        
-        geocoded_output = []
-        for row in rows:
-            address = row["normalized_address"]
-            result = geocode_address(address)
-            result["excel_row"] = row["excel_row"]
-            result["route_name"] = original_route_name
-            geocoded_output.append(result)
-        
-        # Создаем директорию, если не существует
-        os.makedirs(os.path.dirname(geocoded_path), exist_ok=True)
-        
-        with open(geocoded_path, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=["excel_row", "route_name", "input", "found", "type", "description", "lat", "lon", "error"])
-            writer.writeheader()
-            writer.writerows(geocoded_output)
-        print(f"✅ Геокодирование завершено для маршрута {original_route_name}")
-        
-        # Расчет расстояний
-        print(f"\n🚀 Запускаем расчет расстояний для {original_route_name}...")
-        # Вызываем импортированную функцию напрямую
-        calculation_success = route_distance.calculate_and_save_route(
-            route_name=original_route_name, 
-            geocoded_file_path=geocoded_path
-            # traffic_mode можно будет брать из config, если нужно
-        )
+        sanitized_name = sanitize_filename(original_route_name)
+        parsed_addresses_file = os.path.join(PARSED_ADDRESSES_FOLDER, f"parsed_addresses_{sanitized_name}.csv")
+        geocoded_file_path = os.path.join(GEOCODED_RESULTS_FOLDER, f"{sanitized_name}_geocoded.json")
+
+        if not os.path.exists(parsed_addresses_file):
+            print(f"❌ Файл {parsed_addresses_file} не найден. Невозможно геокодировать.")
+            return False
+
+        # Выполняем геокодирование
+        geocoding_success = run_geocoding(parsed_addresses_file, geocoded_file_path, original_route_name)
+
+        if not geocoding_success:
+            print(f"❌ Геокодирование для {original_route_name} завершилось с ошибкой. Обработка маршрута прервана.")
+            return False # Прерываем обработку, если геокодирование не удалось
+
+        # Выполняем расчет расстояний ТОЛЬКО если геокодирование успешно
+        # (Этот блок теперь точно будет выполняться только при успехе)
+        calculation_success = False # Флаг успеха расчета расстояний
+        if geocoding_success: # Запускаем расчет, только если геокодирование прошло
+            print(f"\n▶️ Запуск расчета расстояний для {original_route_name}...")
+            # --- ИЗМЕНЕНО: Передаем report_date_str в calculate_and_save_route ---
+            calculation_success = route_distance.calculate_and_save_route(
+                route_name=original_route_name, # Передаем оригинальное имя
+                geocoded_file_path=geocoded_file_path, 
+                traffic_mode='statistics', # <-- ЯВНО УКАЗЫВАЕМ РЕЖИМ
+                report_date_str=report_date_str 
+            )
+            # --- КОНЕЦ ИЗМЕНЕНИЯ --- 
+        else:
+             print(f"ℹ️ Пропуск расчета расстояний для {original_route_name}, т.к. геокодирование не удалось.")
         
         if calculation_success:
             print(f"✅ Расчет расстояний для {original_route_name} завершен успешно (через функцию).")
@@ -694,6 +685,9 @@ def process_route(original_route_name):
         # Добавление в route_data
         if calculation_success: # Добавляем только если расчет прошел
             try:
+                # Получаем данные для добавления в RouteData (включая distance_data)
+                # route_info теперь будет содержать и geocoded_data и distance_data
+                # Вызываем функцию, которая ТОЛЬКО читает файлы и форматирует
                 route_info = get_route_data_endpoint(original_route_name)
                 if route_info and not route_info.get("error"):
                     route_data.add_route(original_route_name, route_info)
@@ -708,10 +702,15 @@ def process_route(original_route_name):
         else:
              print(f"ℹ️ Маршрут {original_route_name} не добавлен в сводку, т.к. расчет расстояний не удался.")
 
-    except Exception as e:
-        print(f"❌ Общая ошибка при обработке маршрута {original_route_name}: {str(e)}")
-
+    except Exception as e_proc:
+        print(f"❌ Непредвиденная ошибка в process_route для '{original_route_name}': {e_proc}")
+        import traceback
+        traceback.print_exc()
+        process_success = False
+        
     return process_success
+
+# --- КОНЕЦ ФУНКЦИИ process_route ---
 
 @app.get("/api/route-data/{route_name}")
 def get_route_data_endpoint(route_name: str = Path(...)):
@@ -1117,7 +1116,7 @@ def get_summary_endpoint():
 @app.post("/api/upload")
 async def upload_excel(file: UploadFile, 
                      service_time_per_stop_minutes: int = Form(0),
-                     report_date: str = Form("")): # <--- ДОБАВЛЕН ПАРАМЕТР ДАТЫ
+                     report_date: str = Form("")): # <--- Параметр даты уже есть
     save_path = os.path.join(UPLOAD_FOLDER, file.filename)
     with open(save_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -1476,13 +1475,15 @@ async def upload_excel(file: UploadFile,
             print("\n✅ Адреса не требуют ручной проверки. Запускаем геокодирование и расчет...")
             # Если исключений НЕТ, запускаем геокодирование и расчет для ВСЕХ маршрутов
             # (Пропускаем те, где упал парсинг, если такие были)
+            processed_route_names = [] # Список успешно обработанных
             for route_name in route_names:
                 if route_name in parsing_failed_routes:
                     print(f"  ⚠️ Пропуск геокодирования/расчета для '{route_name}', т.к. парсинг не удался.")
                     continue
                 
                 print(f"\n--- Геокод+Расчет для: {route_name} ---")
-                process_success = process_route(route_name) 
+                # --- ИЗМЕНЕНО: Передаем дату отчета из route_data --- 
+                process_success = process_route(route_name, report_date_str=route_data.report_date_str) 
                 if process_success:
                     print(f"  ✅ Маршрут '{route_name}' успешно обработан.")
                     processed_route_names.append(route_name)
@@ -2054,77 +2055,64 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
     if not sanitized_route_name:
          raise HTTPException(status_code=400, detail="Invalid route name provided.")
     
-    # --- Пути к файлам данных для этого маршрута ---
-    geocoded_file_path = os.path.join(GEOCODED_RESULTS_FOLDER, f"{sanitized_route_name}_geocoded.json")
-    route_points_file_path = os.path.join(ROUTE_RESULTS_FOLDER, f"{sanitized_route_name}_route_points.json")
-    distance_data_file_path = os.path.join(ROUTE_RESULTS_FOLDER, f"{sanitized_route_name}_distance_data.json")
-    
-    # --- Добавлен Print для проверки --- 
-    print(f">>> Step 1 OK: Route Name = {route_name}, Sanitized = {sanitized_route_name}")
-    print(f"    Geocoded file path: {geocoded_file_path}")
-    
-    # --- РАСКОММЕНТИРОВАНО: Проверка существования и загрузка файла --- 
-    current_geocoder_output = [] # Инициализируем здесь
-    geocoded_data_loaded = False # Флаг для проверки успешности загрузки
-    
-    # --- Проверяем существование файлов ---
+    # --- Определяем пути к файлам --- 
+    # --- ИЗМЕНЕНО: Исправлен путь к файлу геоданных ---
+    geocoded_file_path = os.path.join(config.GEOCODED_DIR, f"{sanitized_route_name}_geocoded.json") # Убран префикс geocoded_results_
+    # --- КОНЕЦ ИЗМЕНЕНИЯ ---
+    # --- ИЗМЕНЕНО: Исправлено имя файла для distance_data ---
+    distance_data_file_path = os.path.join(config.ROUTE_RESULTS_DIR, f"{sanitized_route_name}_distance_data.json") # Имя как в get_route_data
+    # --- КОНЕЦ ИЗМЕНЕНИЯ ---
+    # --- ДОБАВЛЕНО: Путь к файлу с результатами для загрузки start_time --- 
+    route_results_file_path = os.path.join(config.ROUTE_RESULTS_DIR, f"route_results_{sanitized_route_name}.json")
+    print(f"[Recalc] Paths: geocoded={geocoded_file_path}, distance={distance_data_file_path}, results={route_results_file_path}")
+    # --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
+    # --- Загружаем ТЕКУЩИЕ данные --- 
+    current_geocoder_output = []
     if os.path.exists(geocoded_file_path):
-        # --- Загружаем из JSON, если он есть --- 
         try:
             with open(geocoded_file_path, 'r', encoding='utf-8') as f:
                 current_geocoder_output = json.load(f)
-                if not isinstance(current_geocoder_output, list) or not all(isinstance(item, dict) for item in current_geocoder_output):
-                     print(f"ERROR: {geocoded_file_path} does not contain a valid list of dictionaries.")
-                     raise HTTPException(status_code=500, detail="Invalid format in geocoded data file (JSON).")
-                print(f"Loaded {len(current_geocoder_output)} points from JSON: {geocoded_file_path}")
-                geocoded_data_loaded = True
-        except Exception as e:
-            print(f"ERROR loading {geocoded_file_path}: {e}")
-            raise HTTPException(status_code=500, detail=f"Failed to load geocoded data (JSON) for route: {route_name}")
+        except Exception as e_load_geo:
+            print(f"ERROR loading current geocoded data {geocoded_file_path}: {e_load_geo}")
+            # Возможно, стоит вернуть ошибку, если не можем загрузить основу
+            raise HTTPException(status_code=500, detail=f"Не удалось загрузить текущие геоданные для маршрута {route_name}")
     else:
-        # --- Если JSON нет, ищем и читаем CSV --- 
-        geocoded_csv_path = os.path.join(GEOCODED_RESULTS_FOLDER, f"geocoded_results_{sanitized_route_name}.csv")
-        if os.path.exists(geocoded_csv_path):
-            print(f"Warning: JSON geocoded file not found. Attempting to load from CSV: {geocoded_csv_path}")
-            try:
-                # Используем pandas для чтения CSV
-                df = pd.read_csv(geocoded_csv_path)
-                # Заменяем NaN на None для совместимости с JSON/Pydantic
-                df.replace({np.nan: None}, inplace=True)
-                # Конвертируем в список словарей
-                current_geocoder_output = df.to_dict('records')
-                print(f"Loaded {len(current_geocoder_output)} points from CSV: {geocoded_csv_path}")
-                geocoded_data_loaded = True
-                # TODO: Сохранить прочитанные данные как JSON для будущих запросов?
-                # try:
-                #     with open(geocoded_file_path, 'w', encoding='utf-8') as f_json:
-                #         json.dump(current_geocoder_output, f_json, ensure_ascii=False, indent=4)
-                #     print(f"Saved converted geocoded data to JSON: {geocoded_file_path}")
-                # except Exception as e_save:
-                #     print(f"Warning: Could not save converted CSV data to JSON: {e_save}")
-            except Exception as e_csv:
-                 print(f"ERROR loading or processing CSV file {geocoded_csv_path}: {e_csv}")
-                 raise HTTPException(status_code=500, detail=f"Failed to load or process geocoded data (CSV) for route: {route_name}")
-        else:
-            # Если нет ни JSON, ни CSV
-             raise HTTPException(status_code=404, detail=f"Geocoded data file (JSON or CSV) not found for route: {route_name}")
-        
-    # Проверяем, были ли данные успешно загружены
-    if not geocoded_data_loaded:
-         # Эта строка не должна выполниться из-за HTTPException выше, но на всякий случай
-         print("FATAL ERROR: Geocoded data was not loaded, but no exception was raised.")
-         raise HTTPException(status_code=500, detail="Internal error loading geocoded data.")
+         print(f"ERROR: Geocoded file not found for recalculation: {geocoded_file_path}")
+         raise HTTPException(status_code=404, detail=f"Геоданные для маршрута {route_name} не найдены.")
 
-    # --- КОНЕЦ БЛОКА ЗАГРУЗКИ ДАННЫХ --- 
+    # --- ДОБАВЛЕНО: Загружаем start_time_used из файла результатов --- 
+    original_start_time_iso = None
+    if os.path.exists(route_results_file_path):
+        try:
+            with open(route_results_file_path, 'r', encoding='utf-8') as f:
+                route_results_data = json.load(f)
+                original_start_time_iso = route_results_data.get("start_time_used")
+                if original_start_time_iso:
+                    print(f"[Recalc] Loaded original start_time_used: {original_start_time_iso} from {route_results_file_path}")
+                else:
+                    print(f"[Recalc] WARNING: 'start_time_used' not found in {route_results_file_path}. Recalculation might use default time.")
+                    # Альтернатива: вызвать get_start_time_iso() без даты? Или вернуть ошибку?
+                    # Пока оставим None, get_route_segments должен будет обработать это
+        except Exception as e_load_results:
+            print(f"[Recalc] ERROR loading route results file {route_results_file_path}: {e_load_results}. Proceeding without original start time.")
+    else:
+        print(f"[Recalc] WARNING: Route results file not found: {route_results_file_path}. Cannot load original start_time_used.")
+        # Обработка случая, если файла нет (первый расчет еще не завершился?)
+        # Можно попробовать вычислить время по умолчанию, но лучше требовать наличие файла.
+        # Пока оставим original_start_time_iso = None
     
-    # --- Добавлен Print для проверки --- 
-    print(f">>> Step 2 OK: Successfully loaded geocoded data ({len(current_geocoder_output)} points).")
-    
-    # --- РАСКОММЕНТИРОВАНО: Обработка точек и геокодирование --- 
-    # --- Обрабатываем точки из запроса ---
+    # --- ВАЖНО: Проверяем, что время удалось загрузить --- 
+    if not original_start_time_iso:
+        print("CRITICAL ERROR: Cannot proceed with recalculation without original start_time_iso.")
+        # Отправляем ошибку клиенту, так как без времени расчет некорректен
+        raise HTTPException(status_code=500, detail=f"Не удалось загрузить исходное время расчета (start_time_used) для маршрута {route_name}. Пересчет невозможен.")
+    # --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
+    # --- Обработка точек из запроса --- 
     new_geocoder_output = []
-    points_for_route_calculation = [] # Список (lat, lon) для route_distance
-    modified_indices = set() # Храним индексы измененных точек для отладки
+    points_for_route_calculation = []
+    modified_indices = set()
     
     print(f"Processing {len(data.points)} points received from client...")
     
@@ -2249,8 +2237,10 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
             # TODO: Получать traffic_mode из config?
             # segments = await route_distance.get_route_segments_async(points_for_route_calculation, traffic_mode='auto') 
             
-            # --- ИЗМЕНЕНО: Вызываем новую синхронную функцию --- 
-            segments = route_distance.get_route_segments(points_for_route_calculation)
+            # --- ИЗМЕНЕНО: Вызываем новую синхронную функцию С ПАРАМЕТРАМИ --- 
+            print(f"[Recalc] Calling get_route_segments with {len(points_for_route_calculation)} points, start_time: {original_start_time_iso}")
+            segments = route_distance.get_route_segments(points_for_route_calculation, start_time_iso=original_start_time_iso, traffic_mode='statistics')
+            # --- КОНЕЦ ИЗМЕНЕНИЯ --- 
             
             # Форматируем результат с помощью вспомогательной функции
             new_distance_data = format_distance_data_from_segments(segments)
@@ -2312,6 +2302,9 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
     # --- ЛОГ 9: Рассчитанное значение для сохранения --- 
     print(f"[DEBUG recalc] Calculated stops for saving: visible={visible_in_recalc}, stops_for_summary_recalc={stops_for_summary_recalc}")
     # --- КОНЕЦ ЛОГА 9 ---
+    # --- [DEBUG recalc] Лог 10: Данные перед добавлением в RouteData --- 
+    print(f"--- [DEBUG recalc Log 10] Route: {route_name}, Calling add_route with: number_of_stops={stops_for_summary_recalc}, total_duration={new_distance_data.get('total_duration')}")
+    # --- КОНЕЦ ЛОГА 10 --- 
     
     updated_route_full_data = {
         "route_name": route_name, # Используем оригинальное имя
@@ -2343,6 +2336,11 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
 
     # --- Формируем финальный ответ для клиента --- 
     # Используем только что рассчитанные/сохраненные данные
+    # --- [DEBUG recalc] Лог 11: Данные из summary перед отправкой ответа --- 
+    final_stops = route_data.summary.get(sanitized_route_name, {}).get("number_of_stops", "N/A")
+    final_time_formatted = route_data.summary.get(sanitized_route_name, {}).get("total_route_time_formatted", "N/A")
+    print(f"--- [DEBUG recalc Log 11] Route: {route_name}, Final summary data: number_of_stops={final_stops}, total_route_time_formatted='{final_time_formatted}'")
+    # --- КОНЕЦ ЛОГА 11 ---
     final_response = {
         "status": "recalculated",
         "route_name": route_name,
@@ -2360,6 +2358,99 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
     return JSONResponse(content=final_response)
     
     # --- КОНЕЦ ЗАКОММЕНТИРОВАННОГО БЛОКА --- 
+
+# --- НОВАЯ ФУНКЦИЯ ГЕОКОДИРОВАНИЯ --- 
+def run_geocoding(parsed_addresses_file: str, geocoded_json_path: str, original_route_name: str) -> bool:
+    """Выполняет геокодирование адресов из CSV и сохраняет результат в JSON.
+
+    Args:
+        parsed_addresses_file: Путь к CSV файлу с адресами (из parsing_route.py).
+        geocoded_json_path: Путь к JSON файлу для сохранения результатов геокодирования.
+        original_route_name: Оригинальное имя маршрута для логов.
+
+    Returns:
+        True, если геокодирование успешно, False в случае ошибки.
+    """
+    print(f"--- [run_geocoding] Запуск для '{original_route_name}' ---")
+    print(f"    Входной CSV: {parsed_addresses_file}")
+    print(f"    Выходной JSON: {geocoded_json_path}")
+    
+    if not os.path.exists(parsed_addresses_file):
+        print(f"  ❌ Ошибка: Файл с адресами не найден: {parsed_addresses_file}")
+        return False
+        
+    geocoded_results = []
+    success_count = 0
+    error_count = 0
+
+    try:
+        with open(parsed_addresses_file, "r", encoding="utf-8") as infile:
+            reader = csv.DictReader(infile)
+            if not reader.fieldnames or "normalized_address" not in reader.fieldnames:
+                 print(f"  ❌ Ошибка: Отсутствует колонка 'normalized_address' в файле {parsed_addresses_file}")
+                 return False
+                 
+            for row_num, row in enumerate(reader, start=1): # Нумеруем строки для логов
+                address = row.get("normalized_address")
+                excel_row = row.get("excel_row", "?") # Получаем номер строки Excel
+                
+                if not address:
+                    print(f"  ⚠️ Пропуск строки {row_num} (Excel: {excel_row}): Пустой адрес.")
+                    continue
+                
+                try:
+                    # Вызываем функцию геокодирования из geocoder.py
+                    result = geocode_address(address)
+                    
+                    # Добавляем доп. поля, которые могут понадобиться дальше
+                    result["excel_row"] = excel_row
+                    result["route_name"] = original_route_name # Сохраняем оригинальное имя
+                    
+                    geocoded_results.append(result)
+                    
+                    if result.get("error"):
+                        error_count += 1
+                        print(f"    -> Строка {row_num} (Excel: {excel_row}): Ошибка геокодирования - {result['error']}")
+                    else:
+                        success_count += 1
+                        # Укороченный лог успеха
+                        # print(f"    -> Строка {row_num} (Excel: {excel_row}): OK - {result.get('lat')}, {result.get('lon')}")
+                        
+                except Exception as e_single:
+                    print(f"  ❌ Критическая ошибка при геокодировании адреса '{address}' (строка {row_num}): {e_single}")
+                    error_count += 1
+                    # Можно добавить запись об ошибке в geocoded_results, если нужно
+                    geocoded_results.append({
+                        "excel_row": excel_row,
+                        "route_name": original_route_name,
+                        "input": address,
+                        "found": None,
+                        "type": "error", 
+                        "description": "<span class=\"accuracy-tag tag-error\">⚠️ Внутренняя ошибка геокодера</span>", 
+                        "lat": None,
+                        "lon": None,
+                        "error": f"Внутренняя ошибка: {e_single}"
+                    })
+
+    except Exception as e_read:
+        print(f"  ❌ Ошибка чтения файла {parsed_addresses_file}: {e_read}")
+        return False
+
+    # Сохраняем результат в JSON
+    try:
+        # Создаем директорию, если не существует
+        os.makedirs(os.path.dirname(geocoded_json_path), exist_ok=True)
+        
+        with open(geocoded_json_path, "w", encoding="utf-8") as outfile:
+            json.dump(geocoded_results, outfile, ensure_ascii=False, indent=4)
+        print(f"  ✅ Результаты геокодирования сохранены в: {geocoded_json_path}")
+        print(f"     Успешно: {success_count}, Ошибок: {error_count}")
+        return True # Успех, даже если были ошибки геокодирования отдельных адресов
+        
+    except Exception as e_save:
+        print(f"  ❌ Ошибка сохранения JSON файла {geocoded_json_path}: {e_save}")
+        return False
+# --- КОНЕЦ НОВОЙ ФУНКЦИИ ---
 
 if __name__ == "__main__":
     # Загрузка данных при старте

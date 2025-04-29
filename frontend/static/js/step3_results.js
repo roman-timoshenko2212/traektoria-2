@@ -687,6 +687,20 @@ function updateDisplay(selectedRouteId) {
     } else {
          console.error("[step3_results.js] Route info elements (distance, duration, total time) not found!");
     }
+
+    // --- ДОБАВЛЕНО: Перерисовываем список маршрутов для обновления значков --- 
+    initializeRouteList();
+    console.log(`[step3_results.js] Called initializeRouteList() to refresh badges.`);
+    // --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
+    // --- ДОБАВЛЕНО: Принудительно обновляем данные для Резюме ---
+    if (typeof loadSummaryData === 'function') {
+        console.log("[step3_results.js] Calling loadSummaryData() to refresh summary cache...");
+        loadSummaryData(); // Вызываем функцию из app.js
+    } else {
+        console.warn("[step3_results.js] Function loadSummaryData not found. Summary cache might be outdated.");
+    }
+    // --- КОНЕЦ ДОБАВЛЕНИЯ ---
 }
 
 // --- Функция для инициализации списка маршрутов ---
@@ -1066,6 +1080,11 @@ function setupEventListeners() {
                         console.log("[step3_results.js] ===> Calling updateDisplay NOW...", currentSelectedRouteId); // Лог ПЕРЕД вызовом
                         updateDisplay(currentSelectedRouteId); 
                         console.log(`[step3_results.js] <=== Finished updateDisplay for ${currentSelectedRouteId}`);
+                        
+                        // --- ДОБАВЛЕНО: Перерисовываем список маршрутов для обновления значков --- 
+                        initializeRouteList();
+                        console.log(`[step3_results.js] Called initializeRouteList() to refresh badges.`);
+                        // --- КОНЕЦ ДОБАВЛЕНИЯ ---
                         
                         // --- ДОБАВЛЕНО: Принудительно обновляем данные для Резюме ---
                         if (typeof loadSummaryData === 'function') {

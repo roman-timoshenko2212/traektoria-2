@@ -1,9 +1,9 @@
 {
   "route_name": "Бутурлиновский район, Воронежская обл.",
   "points_count": 15,
-  "calculation_time": "2025-04-24 15:44:50",
-  "total_distance": 594528,
-  "total_duration": 28901,
+  "calculation_time": "2025-04-29 17:30:45",
+  "total_distance": 595185,
+  "total_duration": 29546,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 50.825278,
         "lon": 40.581224
       },
-      "distance": 179040,
-      "duration": 8271,
+      "distance": 179697,
+      "duration": 8553,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 40.587227
       },
       "distance": 670,
-      "duration": 105,
+      "duration": 106,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 40.599398
       },
       "distance": 1258,
-      "duration": 136,
+      "duration": 141,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 40.638747
       },
       "distance": 4316,
-      "duration": 399,
+      "duration": 420,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 40.922574
       },
       "distance": 33845,
-      "duration": 1799,
+      "duration": 1875,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 41.0301
       },
       "distance": 29611,
-      "duration": 1692,
+      "duration": 1777,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 41.012463
       },
       "distance": 2896,
-      "duration": 230,
+      "duration": 242,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 41.013467
       },
       "distance": 326,
-      "duration": 38,
+      "duration": 35,
       "status": "OK"
     },
     {
@@ -152,7 +152,7 @@
         "lon": 40.990597
       },
       "distance": 8974,
-      "duration": 568,
+      "duration": 595,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 41.027941
       },
       "distance": 4899,
-      "duration": 492,
+      "duration": 518,
       "status": "OK"
     },
     {
@@ -182,7 +182,7 @@
         "lon": 40.775569
       },
       "distance": 52130,
-      "duration": 2636,
+      "duration": 2764,
       "status": "OK"
     },
     {
@@ -197,7 +197,7 @@
         "lon": 40.873432
       },
       "distance": 15918,
-      "duration": 879,
+      "duration": 919,
       "status": "OK"
     },
     {
@@ -212,8 +212,9 @@
         "lon": 39.266546
       },
       "distance": 260545,
-      "duration": 11632,
+      "duration": 11577,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }

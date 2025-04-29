@@ -1,0 +1,52 @@
+# Чек-лист: Переход на режим расчета маршрутов 'statistics' API 2GIS
+
+## Модуль: route_distance.py
+
+- [x] **Создать функцию `get_start_time_iso(report_date_str=None)`:**
+    - [x] Импортировать `datetime`, `timedelta`.
+    - [x] Реализовать логику определения даты: указанная `report_date_str` ИЛИ `сегодня - 7 дней`.
+    - [x] Установить время 08:00:00.
+    - [x] Преобразовать в строку ISO 8601 UTC (вида `YYYY-MM-DDTHH:MM:SSZ`).
+    - [x] Вернуть строку ISO 8601.
+
+- [x] **Модифицировать сигнатуру `calculate_matrix_chunk`:**
+    - [x] Изменить `traffic_mode='jam'` на `traffic_mode='statistics'`.
+    - [x] Добавить параметр `start_time_iso`.
+
+- [x] **Модифицировать сигнатуру `calculate_route_in_chunks`:**
+    - [x] Изменить `traffic_mode='jam'` на `traffic_mode='statistics'`.
+    - [x] Добавить параметр `start_time_iso`.
+
+- [x] **Обновить вызов `calculate_matrix_chunk` в `calculate_route_in_chunks`:**
+    - [x] Передавать `start_time_iso` в `calculate_matrix_chunk`.
+    - [x] Передавать `traffic_mode` в `calculate_matrix_chunk`.
+
+- [x] **Обновить формирование `payload` в `calculate_matrix_chunk`:**
+    - [x] Установить `payload['type'] = traffic_mode` (который будет 'statistics').
+    - [x] Добавить `payload['start_time'] = start_time_iso`.
+
+- [x] **Модифицировать сигнатуру `calculate_and_save_route`:**
+    - [x] Добавить необязательный параметр `report_date_str=None`.
+
+- [x] **Обновить логику `calculate_and_save_route`:**
+    - [x] Вызвать `start_time_iso = get_start_time_iso(report_date_str)`.
+    - [x] Передавать `start_time_iso` и `traffic_mode='statistics'` в `calculate_route_in_chunks`.
+    - [x] **Сохранить `start_time_iso`** (или `report_date_str`) вместе с данными маршрута (например, в JSON-файл с результатами или summary).
+
+## Модуль: main.py
+
+- [x] **Обновить эндпоинт `/api/recalculate-route` (`recalculate_route_endpoint`):**
+    - [x] Загрузить сохраненный `start_time_iso` (или `report_date_str`) для текущего `routeId`.
+    - [x] Определить актуальный `start_time_iso` для пересчета (возможно, повторным вызовом `get_start_time_iso`, если сохраняли `report_date_str`).
+    - [x] Передать `start_time_iso` и `traffic_mode='statistics'` в функцию, выполняющую расчет матрицы (вероятно, `calculate_route_in_chunks` или обертку над ней).
+
+- [x] **Обновить вызов `calculate_and_save_route` (при первоначальном расчете):**
+    - [x] Найти место, где вызывается `calculate_and_save_route` после обработки загруженного файла (шаг 1 -> шаг 2).
+    - [x] Получить значение даты отчета, если оно было указано на шаге 1.
+    - [x] Передать это значение как `report_date_str` в `calculate_and_save_route`.
+
+## Общее
+
+- [ ] Протестировать оба сценария: с указанной датой отчета и без нее.
+- [ ] Проверить корректность формата строки `start_time` в запросах к API 2GIS.
+- [ ] Проверить, что сохраненная информация о времени/дате корректно загружается и используется при пересчете. 

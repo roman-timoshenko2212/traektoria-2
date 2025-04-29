@@ -1,9 +1,9 @@
 {
   "route_name": "Мичуринск, Тамбовская обл.",
   "points_count": 13,
-  "calculation_time": "2025-04-21 22:15:36",
-  "total_distance": 535038,
-  "total_duration": 28459,
+  "calculation_time": "2025-04-29 17:22:24",
+  "total_distance": 535694,
+  "total_duration": 30061,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 52.546865,
         "lon": 39.270453
       },
-      "distance": 120976,
-      "duration": 5705,
+      "distance": 121632,
+      "duration": 6081,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.363384
       },
       "distance": 15364,
-      "duration": 777,
+      "duration": 809,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.458911
       },
       "distance": 11109,
-      "duration": 677,
+      "duration": 761,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.824049
       },
       "distance": 51786,
-      "duration": 2762,
+      "duration": 2972,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 40.500931
       },
       "distance": 52975,
-      "duration": 2669,
+      "duration": 2839,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 40.452699
       },
       "distance": 4549,
-      "duration": 536,
+      "duration": 650,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 40.785988
       },
       "distance": 32454,
-      "duration": 2036,
+      "duration": 2270,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 40.395602
       },
       "distance": 53864,
-      "duration": 3137,
+      "duration": 3265,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 39.720069
       },
       "distance": 92380,
-      "duration": 4581,
+      "duration": 4641,
       "status": "OK"
     },
     {
@@ -152,7 +152,7 @@
         "lon": 39.739253
       },
       "distance": 32294,
-      "duration": 1663,
+      "duration": 1774,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 39.73422
       },
       "distance": 727,
-      "duration": 106,
+      "duration": 115,
       "status": "OK"
     },
     {
@@ -182,8 +182,9 @@
         "lon": 39.266546
       },
       "distance": 66560,
-      "duration": 3810,
+      "duration": 3884,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-22T08:00:00Z"
 }
