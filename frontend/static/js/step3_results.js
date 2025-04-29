@@ -25,6 +25,7 @@ let previousDurationMinutes = 0;
 let previousTotalTimeMinutes = 0;
 let currentRoutesData = {}; // Хранилище для данных маршрутов
 let modifiedAddresses = {}; // Хранилище для измененных адресов
+let hasStructuralChanges = false; // <-- ВОССТАНОВЛЕНО: Отслеживает скрытие/удаление/добавление
 let rowContextMenu = null; // Переменная для контекстного меню
 
 // --- SVG иконки ---
@@ -228,6 +229,48 @@ function formatMinutesToTime(totalMinutes) {
     return result;
 }
 
+// --- НОВАЯ ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ для отрисовки только маркеров ---
+function drawMarkersOnly(waypoints) {
+    console.log("[step3_results.js] drawMarkersOnly called");
+    if (typeof window.clearMapMarkers === 'function') {
+        window.clearMapMarkers(); // Очищаем старые маркеры
+    }
+    if (typeof window.createMarker !== 'function') {
+        console.error("[step3_results.js] window.createMarker function not found.");
+        return;
+    }
+    if (!waypoints || !Array.isArray(waypoints)) {
+         console.error("[step3_results.js] Invalid waypoints data for drawMarkersOnly.");
+         return;
+    }
+
+    waypoints.forEach((point, index) => {
+        if (point && typeof point.lat === 'number' && typeof point.lon === 'number') {
+            let markerType = 'intermediate';
+            if (index === 0) {
+                markerType = 'start';
+            } else if (index === waypoints.length - 1) {
+                markerType = 'end';
+            }
+            // Вызываем существующую функцию createMarker
+            window.createMarker({ lat: point.lat, lng: point.lon }, markerType, index);
+        } else {
+             console.warn(`[step3_results.js] Skipping marker for point at index ${index} due to invalid data:`, point);
+        }
+    });
+     console.log(`[step3_results.js] Drew ${window.markers?.length || 0} markers.`);
+     // Опционально: Масштабировать карту по маркерам, если нужно
+     if (window.map && window.markers && window.markers.length > 0) {
+         const markerGroup = L.featureGroup(window.markers);
+         try {
+             window.map.fitBounds(markerGroup.getBounds().pad(0.1)); // pad для небольшого отступа
+         } catch (e) {
+             console.error("[step3_results.js] Error fitting map bounds to markers only:", e);
+         }
+     }
+}
+// --- КОНЕЦ НОВОЙ ФУНКЦИИ ---
+
 // --- Функция для анимации чисел ---
 function animateCounter(element, start, end, duration, unit = '', formatter = null) {
     let startTime = null;
@@ -265,6 +308,14 @@ function animateCounter(element, start, end, duration, unit = '', formatter = nu
 
 // --- Функция обновления данных на странице ---
 function updateDisplay(selectedRouteId) {
+    // --- ВОССТАНОВЛЕНО: Сброс флагов при смене маршрута ---
+    hasStructuralChanges = false;
+    // Сбрасываем измененные адреса для старого маршрута (если он был)
+    if (currentSelectedRouteId && modifiedAddresses[currentSelectedRouteId]) {
+        modifiedAddresses[currentSelectedRouteId] = {};
+    }
+    // --- КОНЕЦ ВОССТАНОВЛЕНИЯ ---
+
     // Используем сохраненные данные currentRoutesData
     const data = currentRoutesData[selectedRouteId];
     console.log(`[step3_results.js] updateDisplay called for routeId: ${selectedRouteId}. Data found:`, data);
@@ -310,6 +361,8 @@ function updateDisplay(selectedRouteId) {
         const newTotalTimeMinutes = parseTimeToMinutes(newTotalTime);
         animateCounter(totalTimeValueEl, previousTotalTimeMinutes, newTotalTimeMinutes, 500, '', formatMinutesToTime);
         previousTotalTimeMinutes = newTotalTimeMinutes;
+    } else {
+         console.error("[step3_results.js] Route info elements (distance, duration, total time) not found!");
     }
 
     // Обновляем таблицу
@@ -547,6 +600,93 @@ function updateDisplay(selectedRouteId) {
       console.warn("[step3_results.js] No route points to display or map drawing function unavailable. Hiding map container.");
     }
     */
+
+    // --- ИЗМЕНЕНО: Добавляем try...catch вокруг вызова window.showMap ---
+    // Обновляем карту
+    const mapContainer = document.getElementById('map-container'); // Получаем контейнер карты
+    if (window.showMap && data.route_points) {
+        console.log(`[step3_results.js] Calling window.showMap for routeId: ${selectedRouteId}`);
+        try {
+            window.showMap(data.route_points);
+            // Успешно отрисовали карту
+            if (mapContainer) {
+                mapContainer.classList.remove('map-error', 'hidden'); // Убираем классы ошибки/скрытия
+            }
+            // Скрываем оверлей ошибки, если он был
+            const mapErrorOverlay = document.getElementById('map-error-overlay');
+            if (mapErrorOverlay) {
+                mapErrorOverlay.style.display = 'none';
+            }
+        } catch (mapError) {
+            console.error(`[step3_results.js] Error during window.showMap call for routeId ${selectedRouteId}:`, mapError);
+            // Ошибка отрисовки карты OSRM
+
+            // Показываем сообщение об ошибке на карте
+            if (mapContainer) {
+                mapContainer.classList.add('map-error'); // Добавляем класс для возможной стилизации
+            }
+            let mapErrorOverlay = document.getElementById('map-error-overlay');
+            if (!mapErrorOverlay && mapContainer) { // Создаем оверлей, только если его нет и есть контейнер
+                 mapErrorOverlay = document.createElement('div');
+                 mapErrorOverlay.id = 'map-error-overlay';
+                 // Стили лучше задать в CSS по классу map-error #map-error-overlay
+                 mapErrorOverlay.style.cssText = `
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(255, 255, 255, 0.85); display: flex;
+                    justify-content: center; align-items: center; z-index: 1000;
+                    color: #dc3545; font-weight: bold; text-align: center; padding: 10px;
+                 `;
+                 mapContainer.appendChild(mapErrorOverlay);
+            }
+             if (mapErrorOverlay) {
+                 mapErrorOverlay.textContent = 'Ошибка загрузки маршрута на карте (OSRM).';
+                 mapErrorOverlay.style.display = 'flex'; // Показываем оверлей
+             }
+
+            // Пытаемся очистить полилинию и отрисовать только маркеры
+            if (typeof window.clearMapPolyline === 'function') {
+                window.clearMapPolyline();
+            }
+            // Используем новую функцию drawMarkersOnly
+            drawMarkersOnly(data.route_points);
+        }
+    } else {
+        console.warn(`[step3_results.js] window.showMap function not found or no route_points for routeId: ${selectedRouteId}`);
+        // Очистить карту, если нет данных или функции
+        if (mapContainer) {
+            mapContainer.classList.remove('map-error'); // Убираем класс ошибки
+            const mapErrorOverlay = document.getElementById('map-error-overlay');
+            if (mapErrorOverlay) mapErrorOverlay.style.display = 'none'; // Скрываем оверлей
+        }
+        if (typeof window.clearMap === 'function') {
+            window.clearMap();
+        }
+    }
+    // --- КОНЕЦ ИЗМЕНЕНИЯ ---
+
+    // Обновляем расстояние и время
+    if (distanceValueEl && durationValueEl && totalTimeValueEl) {
+        const newDistance = (data.distance_data && typeof data.distance_data.total_distance === 'number')
+                                ? data.distance_data.total_distance
+                                : 0;
+        const newDistanceFormatted = data.distance_data?.formatted_distance || 'Н/Д';
+        animateCounter(distanceValueEl, previousDistance, newDistance, 500, ' км', (value) => {
+            return (value === newDistance) ? newDistanceFormatted : `${Math.round(value)} км`;
+        });
+        previousDistance = newDistance;
+
+        const newDuration = data.distance_data?.formatted_duration || 'Н/Д';
+        const newDurationMinutes = parseTimeToMinutes(newDuration);
+        animateCounter(durationValueEl, previousDurationMinutes, newDurationMinutes, 500, '', formatMinutesToTime);
+        previousDurationMinutes = newDurationMinutes;
+
+        const newTotalTime = data.total_route_time_formatted || 'Н/Д';
+        const newTotalTimeMinutes = parseTimeToMinutes(newTotalTime);
+        animateCounter(totalTimeValueEl, previousTotalTimeMinutes, newTotalTimeMinutes, 500, '', formatMinutesToTime);
+        previousTotalTimeMinutes = newTotalTimeMinutes;
+    } else {
+         console.error("[step3_results.js] Route info elements (distance, duration, total time) not found!");
+    }
 }
 
 // --- Функция для инициализации списка маршрутов ---
@@ -801,20 +941,16 @@ function setupEventListeners() {
                     return;
                 }
                 
-                // Только после проверки валидности проверяем наличие изменений
-                const hasModifications = modifiedAddresses[currentSelectedRouteId] && 
+                // --- ВОССТАНОВЛЕНО: Проверка наличия ИЗМЕНЕНИЙ АДРЕСОВ или СТРУКТУРНЫХ ИЗМЕНЕНИЙ ---
+                const hasAddressEdits = modifiedAddresses[currentSelectedRouteId] && 
                                       Object.keys(modifiedAddresses[currentSelectedRouteId]).length > 0;
-                
-                if (!hasModifications) {
-                    console.log('[step3_results.js] No modified addresses to recalculate.');
-                    // --- УДАЛЕНО: alert об отсутствии изменений ---
-                    // alert('Нет измененных адресов для пересчета маршрута.'); 
-                    return;
-                }
+                // const currentHasStructuralChanges = hasStructuralChanges; // Проверяем флаг
 
-                // --- УДАЛЕНО: alert об обнаружении изменений ---
-                // const modCount = Object.keys(modifiedAddresses[currentSelectedRouteId]).length;
-                // alert(`Обнаружено ${modCount} измененных адресов. Пересчет маршрута будет выполнен.`);
+                if (!hasAddressEdits && !hasStructuralChanges) {
+                    console.log('[step3_results.js] No modifications (address edits or structure changes) to recalculate.');
+                    return; // Выход, если нет никаких изменений
+                }
+                // --- КОНЕЦ ВОССТАНОВЛЕНИЯ ---
 
                 // Собираем данные для пересчета
                 const recalculationData = collectModifiedData();
@@ -855,7 +991,7 @@ function setupEventListeners() {
                     
                     // --- ДОБАВЛЕНА ДЕТАЛЬНАЯ ПРОВЕРКА УСЛОВИЯ ---
                     console.log(`[Debug Check] data: ${!!data}`);
-                    console.log(`[Debug Check] data.status === 'recalculated': ${data?.status === 'recalculated'}`);
+                    console.log(`[Debug Check] data.status === \'recalculated\': ${data?.status === 'recalculated'}`);
                     console.log(`[Debug Check] data.route_name: ${data?.route_name}`);
                     console.log(`[Debug Check] currentSelectedRouteId: ${currentSelectedRouteId}`);
                     console.log(`[Debug Check] data.route_name === currentSelectedRouteId: ${data?.route_name === currentSelectedRouteId}`);
@@ -866,15 +1002,65 @@ function setupEventListeners() {
                     if (data && data.status === 'recalculated' && data.route_name === currentSelectedRouteId && currentRoutesData[currentSelectedRouteId]) {
                         console.log("[Debug Check] Condition PASSED. Proceeding with update."); // Лог, что условие пройдено
                         
-                        // 1. Обновляем глобальные данные для этого маршрута
-                        currentRoutesData[currentSelectedRouteId] = data; 
-                        console.log(`[step3_results.js] Updated currentRoutesData for ${currentSelectedRouteId}`);
+                        // --- ИЗМЕНЕНИЕ: Логика слияния данных --- 
+                        const existingPoints = currentRoutesData[currentSelectedRouteId]?.geocoder_output || [];
+                        const updatedVisiblePoints = data?.geocoder_output || [];
+                        const mergedPoints = [];
+                        let updatedIndex = 0;
+
+                        console.log("[Merge Logic] Starting merge. Existing points:", existingPoints.length, "Updated visible points:", updatedVisiblePoints.length);
+
+                        for (let i = 0; i < existingPoints.length; i++) {
+                            const existingPoint = existingPoints[i];
+                            if (existingPoint.hidden === true) {
+                                // Сохраняем скрытую точку
+                                mergedPoints.push(existingPoint);
+                                console.log(`[Merge Logic] Kept hidden point at index ${i}`);
+                            } else {
+                                // Эта точка должна быть в обновленных данных
+                                if (updatedIndex < updatedVisiblePoints.length) {
+                                    // Берем обновленные данные и явно ставим hidden: false
+                                    const updatedPoint = { 
+                                        ...updatedVisiblePoints[updatedIndex],
+                                        hidden: false // Убедимся, что флаг снят
+                                    };
+                                    mergedPoints.push(updatedPoint);
+                                    console.log(`[Merge Logic] Merged updated point at index ${i} from updatedIndex ${updatedIndex}`);
+                                    updatedIndex++;
+                                } else {
+                                    // Ситуация, когда видимая точка не пришла с сервера (не должно быть, но на всякий случай)
+                                    console.warn(`[Merge Logic] Visible point at index ${i} not found in server response. Keeping original (visible).`);
+                                    mergedPoints.push({ ...existingPoint, hidden: false }); // Оставляем старую, но видимой
+                                }
+                            }
+                        }
+                        
+                        // Проверка, все ли обновленные точки были использованы
+                        if (updatedIndex !== updatedVisiblePoints.length) {
+                             console.warn(`[Merge Logic] Mismatch after merge: consumed ${updatedIndex} updated points, but received ${updatedVisiblePoints.length}.`);
+                        }
+
+                        // Создаем новый объект данных маршрута с объединенными точками
+                        const newRouteData = {
+                            ...currentRoutesData[currentSelectedRouteId], // Берем старые данные как основу
+                            ...data, // Перезаписываем общие данные (route_name, distance_data и т.д.) из ответа сервера
+                            geocoder_output: mergedPoints // Используем объединенный список точек
+                        };
+                        
+                        // 1. Обновляем глобальные данные этим новым объектом
+                        currentRoutesData[currentSelectedRouteId] = newRouteData;
+                        console.log(`[step3_results.js] Updated currentRoutesData for ${currentSelectedRouteId} with merged points.`);
+                        // --- КОНЕЦ ИЗМЕНЕНИЯ --- 
 
                         // 2. Очищаем флаги модификаций для этого маршрута
                         if (modifiedAddresses[currentSelectedRouteId]) {
                             modifiedAddresses[currentSelectedRouteId] = {};
                             console.log(`[step3_results.js] Cleared modifications for route: ${currentSelectedRouteId}`);
                         }
+                        // --- ВОССТАНОВЛЕНО: Сбрасываем флаг структурных изменений --- 
+                        hasStructuralChanges = false;
+                        console.log(`[step3_results.js] Cleared structural changes flag.`);
+                        // --- КОНЕЦ ВОССТАНОВЛЕНИЯ ---
                         
                         // 3. Вызываем обновление отображения
                         console.log("[step3_results.js] ===> Calling updateDisplay NOW...", currentSelectedRouteId); // Лог ПЕРЕД вызовом
@@ -1295,6 +1481,11 @@ function endEditAddress(textareaElement, tdElement, isEscaped = false) { // Ме
             console.warn(`[step3_results.js] Could not update geocoder_output data for point ${rowIndex}. Data structure may be inconsistent.`);
         }
 
+        // --- ВОССТАНОВЛЕНО: Установка флага при редактировании --- 
+        console.log("[step3_results.js] Address modified.");
+        hasStructuralChanges = true; // Редактирование адреса тоже считаем изменением для простоты
+        // --- КОНЕЦ ВОССТАНОВЛЕНИЯ ---
+
     } else {
         // Значение не изменилось (и не пустое)
         console.log("[endEditAddress] Value not changed. Reverting text (just in case).");
@@ -1424,26 +1615,43 @@ function toggleRowVisibility(rowIndex) {
     }
     const point = points[rowIndex];
     console.log(`[toggleRowVisibility] Point data before toggle:`, JSON.parse(JSON.stringify(point || {}))); // Лог №2
+    
+    // --- ИЗМЕНЕНО: Помечаем точку как требующую пересчета только если это НЕ офис --- 
+    const isOffice = point.excel_row === 'СТАРТ' || point.excel_row === 'ФИНИШ';
+    if (!isOffice) {
+        point.needsRecalculation = true; 
+        console.log(`[toggleRowVisibility] Marked non-office point as needsRecalculation.`);
+    } else {
+        console.log(`[toggleRowVisibility] Point is an office, not marking needsRecalculation.`);
+    }
+    // --- КОНЕЦ ИЗМЕНЕНИЯ ---
+
     // Переключаем признак скрытия
     point.hidden = !point.hidden;
     console.log(`[toggleRowVisibility] Point data after toggle:`, JSON.parse(JSON.stringify(point))); // Лог №3
     
-    // Обновляем отображение строки
-    // --- ИСПРАВЛЕНО: Получаем tbody заново --- 
+    // Обновляем отображение строки (только класс видимости)
     const currentTbody = document.getElementById('geocoder-table');
     if (!currentTbody) {
         console.error("[toggleRowVisibility] Could not find #geocoder-table (tbody)");
         return;
     }
     const row = currentTbody.rows[rowIndex]; 
-    // --- КОНЕЦ ИСПРАВЛЕНИЯ ---
     
     if (row) {
+        // Обновляем только класс для визуального скрытия/показа
         row.classList.toggle('row-hidden', !!point.hidden);
         console.log(`[toggleRowVisibility] Row found. Class 'row-hidden' set to: ${!!point.hidden}`, row); // Лог №4
+        
+        // --- УДАЛЕНО: Блок обновления содержимого ячеек при !point.hidden --- 
+
     } else {
         console.warn(`[toggleRowVisibility] Row element not found in DOM for rowIndex: ${rowIndex}`); // Лог №5
     }
+
+    // Установка флага при смене видимости (восстановлено ранее)
+    hasStructuralChanges = true;
+    console.log(`[toggleRowVisibility] Set hasStructuralChanges to true.`);
 }
 
 // --- Функция добавления новой строки в таблицу ---
@@ -1597,6 +1805,10 @@ function addNewAddressRow(insertBeforeIndex = -1) {
     // --- Конец НОВОЙ логики анимации (max-height) ---
 
     console.log('Добавлена новая строка по индексу:', insertBeforeIndex);
+    // --- ВОССТАНОВЛЕНО: Установка флага при добавлении --- 
+    hasStructuralChanges = true;
+    console.log(`[addNewAddressRow] Set hasStructuralChanges to true.`);
+    // --- КОНЕЦ ВОССТАНОВЛЕНИЯ ---
     return insertBeforeIndex; // Возвращаем индекс для возможного использования
 }
 
@@ -1668,6 +1880,11 @@ function removeAddressRow(rowIndex) {
         // Обновляем нумерацию строк
         updateRowNumbers();
     }, 300); // Задержка для завершения анимации
+
+    // --- ВОССТАНОВЛЕНО: Установка флага при удалении --- 
+    hasStructuralChanges = true;
+    console.log(`[removeAddressRow] Set hasStructuralChanges to true.`);
+    // --- КОНЕЦ ВОССТАНОВЛЕНИЯ ---
 }
 
 // --- Удаляем закрывающую скобку от DOMContentLoaded ---

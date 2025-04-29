@@ -342,6 +342,9 @@ class RouteData:
         if self.global_service_time_minutes is not None:
             try:
                 # Используем .get с дефолтом 0 для number_of_stops
+                # --- DEBUG ЛОГ: Какое количество точек используется --- 
+                print(f"--- [DEBUG _recalculate_summary_fields] Route: {original_name}, Calculating service time using number_of_stops = {item.get('number_of_stops', 'N/A')}")
+                # --- КОНЕЦ DEBUG ЛОГА ---
                 service_time_sec = int(self.global_service_time_minutes) * 60 * item.get("number_of_stops", 0)
             except (ValueError, TypeError):
                  service_time_sec = 0
@@ -595,6 +598,14 @@ class RouteData:
             print(f"⚠️ Некорректное значение для времени на точку: {minutes}. Оставляем текущее: {self.global_service_time_minutes} мин.")
             return False
 
+    def get_office_coords(self):
+        for route_name, data in self.routes.items():
+            if data.get("geocoder_output"):
+                for point in data["geocoder_output"]:
+                    if point.get("type") == "office":
+                        return {"lat": point["lat"], "lon": point["lon"]}
+        return None
+
 # Создаем глобальный объект для хранения данных
 route_data = RouteData()
 # Пробуем загрузить данные из файла
@@ -723,6 +734,12 @@ def get_route_data_endpoint(route_name: str = Path(...)):
         distance_data = {}
         distance_file_to_read = None
 
+        # --- [DEBUG get_route_data] Лог A: Проверка существования файлов перед чтением --- 
+        print(f"--- [DEBUG get_route_data Log A] Route: {original_route_name}")
+        print(f"    Checking exists ({os.path.basename(distance_data_json_file)}): {os.path.exists(distance_data_json_file)}")
+        print(f"    Checking exists ({os.path.basename(route_results_json_file)}): {os.path.exists(route_results_json_file)}")
+        # --- КОНЕЦ ЛОГА A ---
+
         if os.path.exists(distance_data_json_file):
             distance_file_to_read = distance_data_json_file
             logging.info(f"Found distance data file: {distance_file_to_read}")
@@ -801,8 +818,10 @@ def get_route_data_endpoint(route_name: str = Path(...)):
         # --- ИЗМЕНЕНО: Чтение geocoded_data (приоритет JSON) ---
         geocoded_data = []
         route_points = [] # Будет содержать только точки с валидными lat/lon
-        number_of_stops_actual = 0
+        # number_of_stops_actual = 0 # Старая переменная больше не нужна в этом месте
         geocoded_data_source = None # 'json' или 'csv'
+        # visible_points_count = 0 # Инициализация удалена, будет рассчитываться позже
+        points_for_summary = 0   # Инициализация
 
         try:
             # 1. Пытаемся прочитать JSON
@@ -844,6 +863,14 @@ def get_route_data_endpoint(route_name: str = Path(...)):
             # 3. Если нет ни JSON, ни CSV
             elif not geocoded_data:
                 logging.warning(f"Could not find geocoded file (JSON or CSV) for route {original_route_name}")
+                
+            # --- ЛОГ 1: Содержимое geocoded_data после чтения (УДАЛЕН) --- 
+            # print(f"[DEBUG get_route_data] After read: geocoded_data length={len(geocoded_data)}")
+            # if len(geocoded_data) >= 1:
+            #     print(f"  First point: {geocoded_data[0].get('excel_row')}, Input: {geocoded_data[0].get('input')}")
+            # if len(geocoded_data) >= 2:
+            #     print(f"  Last point: {geocoded_data[-1].get('excel_row')}, Input: {geocoded_data[-1].get('input')}")
+            # --- КОНЕЦ УДАЛЕНИЯ ЛОГА 1 ---
 
             # 4. Обработка прочитанных geocoded_data (если они есть)
             if geocoded_data:
@@ -866,24 +893,28 @@ def get_route_data_endpoint(route_name: str = Path(...)):
                         except (ValueError, TypeError):
                              print(f"⚠️ Invalid coordinate types in geocoded_data for {original_route_name}: {point_data.get('lat')}, {point_data.get('lon')}")
 
-                 # Считаем точки с координатами (без офиса, т.к. он еще не добавлен)
-                 number_of_stops_actual = len(route_points)
-
-                 # Обновляем количество точек в summary, если оно расходится и пересчитываем
-                 if file_name in route_data.summary:
-                     # --- ИЗМЕНЕНО: Сравниваем с number_of_stops_actual (без офиса) ---
-                     current_summary_stops = route_data.summary[file_name].get("number_of_stops")
-                     if current_summary_stops is None or current_summary_stops != number_of_stops_actual:
-                         print(f"⚠️ Обновление кол-ва точек для {original_route_name} с {current_summary_stops} на {number_of_stops_actual}")
-                         route_data.summary[file_name]["number_of_stops"] = number_of_stops_actual
-                         route_data._recalculate_summary_fields(file_name)
-                         route_data.save_to_disk() # Сохраняем изменение
-                         summary_item = route_data.summary.get(file_name, {}) # Обновляем локальный summary_item
-                     # --- КОНЕЦ ИЗМЕНЕНИЯ ---
-                 else:
-                     logging.warning(f"Route {original_route_name} (sanitized: {file_name}) not found in summary data.")
+                 # --- УДАЛЕН БЛОК НЕПРАВИЛЬНОГО ПОДСЧЕТА И ОБНОВЛЕНИЯ SUMMARY ---
+                 # # Считаем точки с координатами (без офиса, т.к. он еще не добавлен)
+                 # number_of_stops_actual = len(route_points)
+                 #
+                 # # Обновляем количество точек в summary, если оно расходится 
+                 # if file_name in route_data.summary:
+                 #     current_summary_stops = route_data.summary[file_name].get("number_of_stops")
+                 #     # --- ЛОГ 6: Перед сравнением --- 
+                 #     print(f"[DEBUG get_route_data] Comparing points: current_in_summary={current_summary_stops}, calculated_now={number_of_stops_actual}")
+                 #     # --- КОНЕЦ ЛОГА 6 ---
+                 #     if current_summary_stops is None or current_summary_stops != number_of_stops_actual:
+                 #         print(f"⚠️ Обновление кол-ва точек для {original_route_name} с {current_summary_stops} на {number_of_stops_actual}")
+                 #         route_data.summary[file_name]["number_of_stops"] = number_of_stops_actual
+                 #         route_data._recalculate_summary_fields(file_name)
+                 #         route_data.save_to_disk() # Сохраняем изменение
+                 #         summary_item = route_data.summary.get(file_name, {}) # Обновляем локальный summary_item
+                 #     # --- КОНЕЦ ИЗМЕНЕНИЯ ---
+                 # else:
+                 #     logging.warning(f"Route {original_route_name} (sanitized: {file_name}) not found in summary data.")
+                 # --- КОНЕЦ УДАЛЕННОГО БЛОКА ---
             else: # Если geocoded_data пуст
-                 number_of_stops_actual = 0
+                 # number_of_stops_actual = 0 # Больше не нужно здесь
                  route_points = []
 
         except Exception as e:
@@ -941,15 +972,110 @@ def get_route_data_endpoint(route_name: str = Path(...)):
             print(f"❌ Ошибка при добавлении офиса РТК: {e_office}")
         # --- КОНЕЦ ДОБАВЛЕНИЯ ОФИСА ---
 
+        # --- Добавление офиса (точек СТАРТ/ФИНИШ) --- 
+        office_coords = route_data.get_office_coords()
+        if office_coords:
+            start_point = {
+                "excel_row": "СТАРТ",
+                "input": "Офис (Старт)",
+                "found": "Офис (Старт)",
+                "lat": office_coords['lat'],
+                "lon": office_coords['lon'],
+                "type": "office",
+                "description": "Офис (Старт)",
+                "hidden": False # Офис по умолчанию видимый
+            }
+            end_point = {
+                "excel_row": "ФИНИШ",
+                "input": "Офис (Финиш)",
+                "found": "Офис (Финиш)",
+                "lat": office_coords['lat'],
+                "lon": office_coords['lon'],
+                "type": "office",
+                "description": "Офис (Финиш)",
+                "hidden": False # Офис по умолчанию видимый
+            }
+            # Вставляем старт в начало, только если его там еще нет
+            # --- ЛОГ 2: Перед проверкой СТАРТ (УДАЛЕН) --- 
+            start_check_condition = not geocoded_data or geocoded_data[0].get('excel_row') != 'СТАРТ'
+            # print(f"[DEBUG get_route_data] Before START check: condition is {start_check_condition}")
+            # --- КОНЕЦ УДАЛЕНИЯ ЛОГА 2 ---
+            if start_check_condition:
+                geocoded_data.insert(0, start_point)
+            # Добавляем финиш в конец, только если его там еще нет
+            # --- ЛОГ 3: Перед проверкой ФИНИШ (УДАЛЕН) --- 
+            finish_check_condition = not geocoded_data or geocoded_data[-1].get('excel_row') != 'ФИНИШ'
+            # print(f"[DEBUG get_route_data] Before FINISH check: condition is {finish_check_condition}")
+            # --- КОНЕЦ УДАЛЕНИЯ ЛОГА 3 ---
+            if finish_check_condition:
+                geocoded_data.append(end_point)
+            # --- ЛОГ 4: После добавления офиса (УДАЛЕН) --- 
+            # print(f"[DEBUG get_route_data] After office check: final geocoded_data length={len(geocoded_data)}")
+            # if len(geocoded_data) >= 1: print(f"  Final first point: {geocoded_data[0].get('excel_row')}, Input: {geocoded_data[0].get('input')}")
+            # if len(geocoded_data) >= 2: print(f"  Final last point: {geocoded_data[-1].get('excel_row')}, Input: {geocoded_data[-1].get('input')}")
+            # --- КОНЕЦ УДАЛЕНИЯ ЛОГА 4 ---
+        # --- Конец Добавления офиса ---
+        
+        # --- НОВЫЙ БЛОК: Пересчитываем количество точек и обновляем summary ПОСЛЕ добавления/проверки офиса ---
+        # Подсчет видимых промежуточных точек (не СТАРТ, не ФИНИШ, не hidden)
+        points_for_summary = sum(
+            1 for p in geocoded_data 
+            if not p.get('hidden', False) 
+            and p.get('excel_row') not in ['СТАРТ', 'ФИНИШ']
+        )
+        
+        # Обновляем количество точек в summary, если оно расходится 
+        if file_name in route_data.summary:
+            current_summary_stops = route_data.summary[file_name].get("number_of_stops")
+            # --- ЛОГ 6: Перед сравнением (УДАЛЕН) --- 
+            # print(f"[DEBUG get_route_data] Comparing points after office: current_in_summary={current_summary_stops}, calculated_now={points_for_summary}")
+            # --- КОНЕЦ УДАЛЕНИЯ ЛОГА 6 ---
+            if current_summary_stops is None or current_summary_stops != points_for_summary:
+                # --- ЛОГ 7: Если происходит обновление (УДАЛЕН) --- 
+                print(f"ℹ️ Обновление кол-ва промежуточных точек для '{original_route_name}' с {current_summary_stops} на {points_for_summary} в summary.")
+                # --- КОНЕЦ УДАЛЕНИЯ ЛОГА 7 ---
+                route_data.summary[file_name]["number_of_stops"] = points_for_summary
+                # Пересчитываем зависимые поля в summary (время на маршруте и т.д.)
+                route_data._recalculate_summary_fields(file_name) 
+                # Сохраняем изменения в route_data.json
+                route_data.save_to_disk() 
+                # Обновляем локальный summary_item для возврата актуальных данных
+                summary_item = route_data.summary.get(file_name, {}) 
+        else:
+            # Логируем, если маршрут не найден в summary (хотя это маловероятно на данном этапе)
+            logging.warning(f"Route {original_route_name} (sanitized: {file_name}) not found in summary data during post-office update.")
+        # --- КОНЕЦ НОВОГО БЛОКА ---
+
+        # --- Старый блок подсчета (УДАЛЕН) ---
+        # # --- Пересчитываем количество точек ПОСЛЕ добавления офиса ---
+        # visible_points_count = sum(1 for p in geocoded_data if not p.get('hidden', False))
+        # points_for_summary = max(0, visible_points_count - 2)
+        # # --- ЛОГ 5: Результаты расчета --- 
+        # print(f"[DEBUG get_route_data] Point calculation: visible_count={visible_points_count}, points_for_summary={points_for_summary}")
+        # # --- КОНЕЦ ЛОГА 5 ---
+        # 
+        # # Обновляем количество точек в summary, если оно расходится 
+        # if file_name in route_data.summary:
+        #     current_summary_stops = route_data.summary[file_name].get("number_of_stops")
+        #     # --- ЛОГ 6: Перед сравнением --- 
+        #     print(f"[DEBUG get_route_data] Comparing points: current_in_summary={current_summary_stops}, calculated_now={points_for_summary}")
+        #     # --- КОНЕЦ ЛОГА 6 ---
+        #     if current_summary_stops is None or current_summary_stops != points_for_summary:
+        #         # --- ЛОГ 7: Если происходит обновление --- 
+        #         print(f"[DEBUG get_route_data] Updating summary stops from {current_summary_stops} to {points_for_summary}")
+        #         # --- КОНЕЦ ЛОГА 7 ---
+        #         route_data.summary[file_name]["number_of_stops"] = points_for_summary
+        #         # ... (остальной код) ...
+        # --- КОНЕЦ УДАЛЕНИЯ СТАРОГО БЛОКА ---
 
         # Возвращаем данные, включая оригинальное имя маршрута и новые поля
-        # Используем number_of_stops_actual (без офиса) для поля number_of_stops
+        # Используем number_of_stops из актуального (возможно, только что обновленного) summary_item
         return {
             "route_name": original_route_name,
-            "geocoder_output": geocoded_data, # <--- Теперь с офисом
+            "geocoder_output": geocoded_data, # <--- Теперь с офисом и правильной структурой
             "route_points": route_points,     # <--- Теперь с офисом
             "distance_data": distance_data,
-            "number_of_stops": summary_item.get("number_of_stops", number_of_stops_actual), # Берем из summary или актуальное (без офиса)
+            "number_of_stops": summary_item.get("number_of_stops", 0), # Берем актуальное значение из summary
             "total_route_time_formatted": summary_item.get("total_route_time_formatted", "Н/Д"),
             "global_service_time_minutes": route_data.global_service_time_minutes
         }
@@ -2128,6 +2254,9 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
             
             # Форматируем результат с помощью вспомогательной функции
             new_distance_data = format_distance_data_from_segments(segments)
+            # --- [DEBUG recalc] Лог 1: Рассчитанное время в пути --- 
+            print(f"--- [DEBUG recalc Log 1] Route: {route_name}, Recalculated total_duration: {new_distance_data.get('total_duration')}")
+            # --- КОНЕЦ ЛОГА 1 ---
             print(f"Route recalculated. Distance: {new_distance_data.get('formatted_distance')}, Duration: {new_distance_data.get('formatted_duration')}")
             
         except Exception as e:
@@ -2148,28 +2277,27 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
     # --- Сохраняем обновленные данные --- 
     try:
         # Сохраняем НОВЫЙ geocoder_output (перезаписываем старый JSON или CSV)
+        # --- ЛОГ 8: Перед сохранением new_geocoder_output --- 
+        print(f"[DEBUG recalc] Before saving new_geocoder_output: length={len(new_geocoder_output)}")
+        if len(new_geocoder_output) >= 1: print(f"  First point: {new_geocoder_output[0].get('excel_row')}, Input: {new_geocoder_output[0].get('input')}")
+        if len(new_geocoder_output) >= 2: print(f"  Last point: {new_geocoder_output[-1].get('excel_row')}, Input: {new_geocoder_output[-1].get('input')}")
+        # --- КОНЕЦ ЛОГА 8 ---
         with open(geocoded_file_path, 'w', encoding='utf-8') as f:
             json.dump(new_geocoder_output, f, ensure_ascii=False, indent=4)
         print(f"Saved updated geocoded data to: {geocoded_file_path}")
-
-        # Сохраняем НОВЫЕ данные о расстоянии
-        # Удаляем старый файл distance_data.json, если он есть
-        if os.path.exists(distance_data_file_path):
-            os.remove(distance_data_file_path)
-            print(f"Removed old distance data file: {distance_data_file_path}")
-        # Сохраняем новые данные, если они есть
-        if new_distance_data:
-             with open(distance_data_file_path, 'w', encoding='utf-8') as f:
-                 json.dump(new_distance_data, f, ensure_ascii=False, indent=4)
-             print(f"Saved new distance data to: {distance_data_file_path}")
-        
-        # TODO: Обновить route_points.json? Пока не используется. Можно удалить старый.
-        if os.path.exists(route_points_file_path):
-            try:
-                 os.remove(route_points_file_path)
-                 print(f"Removed old route points file: {route_points_file_path}")
-            except Exception as e_del_rp:
-                 print(f"Warning: could not remove old route_points file: {e_del_rp}")
+        # --- ДОБАВЛЕНО: Сохраняем НОВЫЕ distance_data --- 
+        if new_distance_data is not None:
+            # --- [DEBUG recalc] Лог 2a: Путь сохранения distance data --- 
+            print(f"--- [DEBUG recalc Log 2a] Route: {route_name}, Saving new distance data to: {distance_data_file_path}")
+            # --- КОНЕЦ ЛОГА 2a ---
+            with open(distance_data_file_path, 'w', encoding='utf-8') as f:
+                json.dump(new_distance_data, f, ensure_ascii=False, indent=4)
+            # --- [DEBUG recalc] Лог 2b: Проверка существования файла ПОСЛЕ сохранения --- 
+            print(f"--- [DEBUG recalc Log 2b] Route: {route_name}, File exists after save? ({os.path.basename(distance_data_file_path)}): {os.path.exists(distance_data_file_path)}")
+            # --- КОНЕЦ ЛОГА 2b ---
+        else:
+            print(f"--- [DEBUG recalc] Route: {route_name}, Skipping distance data save (new_distance_data is None).")
+        # --- КОНЕЦ ДОБАВЛЕНИЯ --- 
                  
     except Exception as e_save:
         print(f"ERROR saving updated route data: {e_save}")
@@ -2177,12 +2305,22 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
 
     # --- Обновляем данные в глобальном RouteData и summary --- 
     # Собираем данные в формате, как их хранит RouteData.add_route
+    
+    # --- ИЗМЕНЕНО: Правильный расчет number_of_stops для сохранения --- 
+    visible_in_recalc = sum(1 for p in new_geocoder_output if not p.get('hidden', False))
+    stops_for_summary_recalc = max(0, visible_in_recalc - 2)
+    # --- ЛОГ 9: Рассчитанное значение для сохранения --- 
+    print(f"[DEBUG recalc] Calculated stops for saving: visible={visible_in_recalc}, stops_for_summary_recalc={stops_for_summary_recalc}")
+    # --- КОНЕЦ ЛОГА 9 ---
+    
     updated_route_full_data = {
         "route_name": route_name, # Используем оригинальное имя
         "geocoder_output": new_geocoder_output,
         "route_points": points_for_route_calculation, # Передаем список lat/lon
         "distance_data": new_distance_data,
-        "number_of_stops": len(points_for_route_calculation) - 2, # Вычитаем старт/финиш для сводки
+        # --- ИЗМЕНЕНО: Используем правильное значение --- 
+        "number_of_stops": stops_for_summary_recalc,
+        # --- КОНЕЦ ИЗМЕНЕНИЯ --- 
         "total_route_time_formatted": new_distance_data.get("formatted_duration", "Н/Д"), # Для get_route_data_endpoint
         "global_service_time_minutes": route_data.global_service_time_minutes # Для get_route_data_endpoint
     }
@@ -2211,8 +2349,10 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
         "geocoder_output": new_geocoder_output, # Передаем обновленный geocoder output
         "route_points": points_for_route_calculation, # Передаем точки для карты
         "distance_data": new_distance_data, # Передаем новые данные о расстоянии
-        # Берем обновленные данные из сохраненного summary
+        # --- ИЗМЕНЕНО: Берем актуальное значение из route_data.summary --- 
+        # (Оно должно было обновиться при вызове route_data.add_route)
         "number_of_stops": route_data.summary.get(sanitized_route_name, {}).get("number_of_stops", 0),
+        # --- КОНЕЦ ИЗМЕНЕНИЯ --- 
         "total_route_time_formatted": route_data.summary.get(sanitized_route_name, {}).get("total_route_time_formatted", "Н/Д"),
         "global_service_time_minutes": route_data.global_service_time_minutes
     }

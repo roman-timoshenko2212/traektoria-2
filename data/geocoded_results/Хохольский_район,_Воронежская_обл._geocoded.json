@@ -1,0 +1,32 @@
+[
+    {
+        "input": "Офис РТК",
+        "excel_row": "СТАРТ",
+        "found": true,
+        "lat": 51.686288,
+        "lon": 39.266546,
+        "type": "office",
+        "description": "Офис РТК",
+        "original_index_from_request": 0
+    },
+    {
+        "input": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21",
+        "excel_row": "",
+        "found": "Центральная улица, 21",
+        "lat": 51.561287,
+        "lon": 38.756167,
+        "type": "exact",
+        "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+        "original_index_from_request": 2
+    },
+    {
+        "input": "Офис РТК",
+        "excel_row": "ФИНИШ",
+        "found": true,
+        "lat": 51.686288,
+        "lon": 39.266546,
+        "type": "office",
+        "description": "Офис РТК",
+        "original_index_from_request": 3
+    }
+]
