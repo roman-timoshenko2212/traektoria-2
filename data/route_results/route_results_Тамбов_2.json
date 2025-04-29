@@ -1,0 +1,159 @@
+{
+  "route_name": "Тамбов 2",
+  "points_count": 11,
+  "calculation_time": "2025-04-21 13:37:23",
+  "total_distance": 678792,
+  "total_duration": 35252,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 52.652482,
+        "lon": 42.723497
+      },
+      "distance": 308150,
+      "duration": 15571,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 52.652482,
+        "lon": 42.723497
+      },
+      "to_point": {
+        "lat": 52.650449,
+        "lon": 42.736581
+      },
+      "distance": 1254,
+      "duration": 221,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 52.650449,
+        "lon": 42.736581
+      },
+      "to_point": {
+        "lat": 52.650491,
+        "lon": 42.756088
+      },
+      "distance": 1690,
+      "duration": 163,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 52.650491,
+        "lon": 42.756088
+      },
+      "to_point": {
+        "lat": 52.663512,
+        "lon": 41.847508
+      },
+      "distance": 70953,
+      "duration": 3638,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 52.663512,
+        "lon": 41.847508
+      },
+      "to_point": {
+        "lat": 52.723794,
+        "lon": 41.46792
+      },
+      "distance": 27855,
+      "duration": 1654,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 52.723794,
+        "lon": 41.46792
+      },
+      "to_point": {
+        "lat": 52.733708,
+        "lon": 41.435942
+      },
+      "distance": 3604,
+      "duration": 604,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 52.733708,
+        "lon": 41.435942
+      },
+      "to_point": {
+        "lat": 52.737307,
+        "lon": 41.437628
+      },
+      "distance": 856,
+      "duration": 170,
+      "status": "OK"
+    },
+    {
+      "from_index": 7,
+      "to_index": 8,
+      "from_point": {
+        "lat": 52.737307,
+        "lon": 41.437628
+      },
+      "to_point": {
+        "lat": 52.716689,
+        "lon": 41.425173
+      },
+      "distance": 3159,
+      "duration": 465,
+      "status": "OK"
+    },
+    {
+      "from_index": 8,
+      "to_index": 9,
+      "from_point": {
+        "lat": 52.716689,
+        "lon": 41.425173
+      },
+      "to_point": {
+        "lat": 52.164197,
+        "lon": 40.472654
+      },
+      "distance": 122398,
+      "duration": 5875,
+      "status": "OK"
+    },
+    {
+      "from_index": 9,
+      "to_index": 10,
+      "from_point": {
+        "lat": 52.164197,
+        "lon": 40.472654
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 138873,
+      "duration": 6891,
+      "status": "OK"
+    }
+  ]
+}

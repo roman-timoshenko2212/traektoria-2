@@ -1,0 +1,54 @@
+{
+  "route_name": "Рамонский район, Воронежская обл.",
+  "points_count": 4,
+  "calculation_time": "2025-04-24 15:34:32",
+  "total_distance": 61366,
+  "total_duration": 3945,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 51.846229,
+        "lon": 39.215358
+      },
+      "distance": 25381,
+      "duration": 1467,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 51.846229,
+        "lon": 39.215358
+      },
+      "to_point": {
+        "lat": 51.80033,
+        "lon": 39.199911
+      },
+      "distance": 16452,
+      "duration": 785,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 51.80033,
+        "lon": 39.199911
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 19533,
+      "duration": 1693,
+      "status": "OK"
+    }
+  ]
+}

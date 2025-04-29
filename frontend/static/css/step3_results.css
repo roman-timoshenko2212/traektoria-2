@@ -1,0 +1,822 @@
+/* Стили скопированы из step3_design_preview.html */
+
+/* Дополнительные стили для плейсхолдера карты */
+.map-placeholder {
+  border: 1px dashed #ccc;
+  min-height: 400px; /* Примерная высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  background-color: #f8f8f8;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  padding: 20px;
+}
+/* Убедимся, что основной контейнер имеет отступы */
+/* body { */ /* Не копируем стили для body */
+    /* padding: 20px; */
+    /* background-color: #f4f7f6; */
+/* } */
+
+/* Стили для нового селектора маршрутов */
+.results-layout {
+    position: relative; /* Делаем контейнер относительным для абсолютного позиционирования селектора */
+    align-items: flex-start;
+    margin-top: 30px;
+    padding: 20px; /* Добавим внутренние отступы */
+    background-color: #ffffff; /* Зададим белый фон по умолчанию */
+    border-radius: var(--border-radius); /* Используем переменную */
+    box-shadow: var(--shadow); /* Используем переменную */
+    transition: background-color 0.3s ease-in-out; /* Добавляем плавный переход фона */
+}
+
+/* Добавляем стили для #route-info внутри .results-layout */
+#route-info {
+    margin-left: 65px; /* Отступ слева, как у таблицы */
+    margin-bottom: 20px; /* Отступ снизу перед таблицей */
+    /* margin-top убираем, т.к. он был для позиционирования вне layout */
+}
+
+/* Стили для заголовка и кнопки пересчета */
+.route-info-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px; /* Добавляем отступ снизу перед карточками */
+}
+
+#recalculate-button {
+    background: none;
+    border: none;
+    padding: 0; /* Убираем padding */
+    margin-left: 10px; /* Отступ от заголовка */
+    width: 30px;  /* Фиксированная ширина */
+    height: 30px; /* Фиксированная высота */
+    color: #adb5bd; /* Светло-серый (может влиять на цвет анимации, если она использует currentColor) */
+    cursor: pointer;
+    transition: color 0.2s ease; /* Оставляем на всякий случай */
+    vertical-align: middle; /* Выравниваем кнопку по вертикали с текстом */
+}
+#recalculate-button:hover {
+    /* Убираем изменение цвета, т.к. это может мешать анимации */
+    /* color: #6c757d; */
+}
+#recalculate-button:disabled {
+    /* color: #ced4da; */ /* Возможно, не нужно менять цвет при блокировке */
+    cursor: default;
+    opacity: 0.6; /* Делаем кнопку полупрозрачной при блокировке */
+}
+
+#recalculate-lottie-container {
+    width: 100%;
+    height: 100%;
+    display: flex; /* Центрируем плеер, если он меньше контейнера */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стиль для названия маршрута в заголовке */
+#route-name-header {
+    color: #0056b3; /* Темно-синий */
+    /* font-weight: bold; /* На всякий случай, если strong недостаточно */
+    transition: background-color 0.3s ease-in-out; /* Добавляем плавный переход фона */
+}
+
+/* --- СТИЛИ ДЛЯ СОСТОЯНИЯ ПЕРЕСЧЕТА --- */
+/* Анимация пульсации для селектора */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+.results-layout.recalculating #vertical-route-selector {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Затемнение контента */
+.results-layout.recalculating .route-info-cards,
+.results-layout.recalculating .results-table-container {
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+}
+/* Возвращаем нормальную прозрачность (для плавного возврата) */
+.results-layout .route-info-cards,
+.results-layout .results-table-container {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.3s ease-out;
+}
+/* ------------------------------------ */
+
+.vertical-route-selector {
+    width: 50px; /* Увеличено с 40px */
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    cursor: pointer;
+    transition: width 0.3s ease-in-out, background-color 0.2s ease;
+}
+
+.vertical-route-selector:hover {
+    width: 300px; /* Увеличено с 250px */
+    background-color: #dde2e6;
+    box-shadow: 3px 0 8px rgba(0,0,0,0.12); /* Слегка усилена тень */
+}
+
+/* Стили для обертки Lottie-анимации */
+.lottie-wrapper {
+    width: 38px; /* Чуть больше размера иконки для отступов */
+    height: 38px;
+    position: absolute;
+    top: 50%;
+    left: 25px; /* Изменено с 20px для центровки в 50px */
+    transform: translate(-50%, -50%); /* Центрируем круг */
+    background-color: transparent; /* Сделано прозрачным по умолчанию */
+    border-radius: 50%; /* Делаем круглым */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Добавлены background-color и box-shadow в transition, время синхронизировано с раскрытием (0.3s) */
+    transition: left 0.3s ease-in-out, background-color 0.9s ease, box-shadow 0.9s ease;
+    z-index: 11; /* Должен быть над селектором, но под текстом внутри */
+    pointer-events: none; /* Чтобы не мешал кликам */
+    box-shadow: none; /* Тень убрана по умолчанию */
+}
+
+/* Контейнер для Lottie анимации внутри обертки */
+#lottie-icon-container {
+    width: 32px;
+    height: 32px;
+    /* Убираем позиционирование, т.к. теперь центрируется через flex */
+    position: static;
+    transform: none;
+    transition: none; /* Убираем transition отсюда, оно теперь на wrapper'е */
+    z-index: 1; /* Внутри wrapper'а */
+}
+
+.route-list {
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.2s 0.1s ease-in-out;
+    position: relative;
+    z-index: 1;
+}
+
+/* Стилизация скроллбара для WebKit браузеров */
+.route-list::-webkit-scrollbar {
+  width: 6px; /* Ширина скроллбара */
+}
+
+.route-list::-webkit-scrollbar-track {
+  background: transparent; /* Фон трека */
+   margin: 5px 0; /* Небольшие отступы сверху/снизу трека */
+}
+
+.route-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* Цвет ползунка */
+  border-radius: 3px; /* Скругление ползунка */
+  border: 1px solid transparent; /* Отступ */
+  background-clip: content-box; /* Чтобы фон не вылезал за границу */
+}
+
+.route-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3); /* Цвет ползунка при наведении */
+}
+
+.vertical-route-selector:hover .route-list {
+    opacity: 1;
+}
+
+ .route-list-item {
+    /* Убираем часть стилей, т.к. они перейдут к дочерним элементам */
+    padding: 0; /* Убираем padding у самого li */
+    /* white-space, overflow, text-overflow убраны */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Более светлый разделитель */
+    /* transition убран, hover будет на внутреннем элементе */
+    position: relative;
+    z-index: 2;
+    /* border-left убран, hover будет на внутреннем элементе */
+    cursor: pointer; /* Оставляем курсор */
+}
+
+/* Новый контейнер внутри li для Flexbox */
+.route-list-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px 10px 15px; /* Восстанавливаем padding здесь */
+    /* Добавляем стили для hover и active */
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+.route-list-item:hover .route-list-item-content {
+    background-color: #f8f9fa; /* Светлый фон при ховере */
+    border-left-color: var(--primary-color, #007bff); /* Показываем левый бордюр при ховере */
+}
+
+/* Возвращаем стили для активного элемента списка */
+.route-list-item.active .route-list-item-content {
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    border-left-color: var(--primary-accent-color, #0056b3);
+}
+
+/* Имя маршрута - ограничение ширины */
+.route-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px; /* Отступ от значков */
+    flex-grow: 1; /* Занимать доступное место */
+}
+
+/* Контейнер для значков */
+.route-badges {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Пространство между значками */
+    flex-shrink: 0; /* Не сжиматься */
+}
+
+/* Базовый стиль значка */
+.accuracy-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.75em;
+    font-weight: bold;
+    line-height: 1; /* Убрать лишнюю высоту строки */
+    box-sizing: border-box; /* Обводка не будет увеличивать размер */
+}
+
+/* Цвет для средней точности (оранжевый) */
+.badge-medium {
+    background-color: #fd7e14; /* Bootstrap orange */
+}
+
+/* Цвет для низкой точности (красный) */
+.badge-low {
+    background-color: #dc3545; /* Bootstrap red */
+}
+
+.route-list-item:last-child {
+    border-bottom: none;
+}
+
+.results-table-container {
+    margin-left: 65px; /* Отступ = новая ширина селектора (50px) + зазор (15px) */
+    width: calc(100% - 65px); /* Скорректировано с 55px */
+    position: relative;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* --- СТИЛИ ДЛЯ ОВЕРЛЕЯ ЗАТЕМНЕНИЯ --- */
+.results-layout::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50px; /* Начальное положение - справа от свернутого селектора */
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.08); /* Слегка темный полупрозрачный фон */
+    z-index: 5; /* Ниже селектора (10) и иконки (11), но выше контента */
+    opacity: 0; /* Скрыт по умолчанию */
+    pointer-events: none; /* Не мешает кликам */
+    transition: opacity 0.3s ease-in-out, left 0.3s ease-in-out; /* Плавное появление и сдвиг */
+    border-radius: 0 8px 8px 0; /* Скругляем углы синхронно с layout (кроме левого верхнего/нижнего) */
+}
+
+/* Показываем и сдвигаем оверлей при наведении на селектор */
+.results-layout:has(> #vertical-route-selector:hover)::after {
+    opacity: 1;
+    left: 300px; /* Сдвигаем вправо за раскрытый селектор */
+}
+/* -------------------------------------- */
+
+/* Позиция и стиль КРУГА при раскрытии селектора */
+.vertical-route-selector:hover .lottie-wrapper {
+    left: 270px; /* Скорректировано: 300px (новая ширина) - 30px (отступ) */
+    background-color: #f8f9fa; /* Возвращаем фон при ховере */
+    box-shadow: 0 0 3px rgba(0,0,0,0.1); /* Возвращаем тень при ховере */
+}
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ ТАБЛИЦЫ --- */
+/* Ограничиваем стили таблицы областью Шага 3 */
+#step-3-content .table {
+    width: 100%; /* Таблица занимает всю ширину контейнера */
+    border-collapse: collapse; /* Убираем двойные границы */
+    margin-top: 15px; /* Небольшой отступ сверху */
+    font-size: 0.9rem; /* Чуть уменьшим шрифт для компактности */
+    table-layout: fixed; /* Фиксированная ширина столбцов */
+}
+
+/* Стиль заголовка таблицы */
+#step-3-content .table thead th {
+    background-color: #e9ecef; /* Делаем фон темнее */
+    color: #495057; /* Темно-серый текст */
+    text-align: left; /* Выравнивание по левому краю */
+    padding: 12px 15px; /* Отступы */
+    border-bottom: 2px solid #dee2e6; /* Нижняя граница */
+    font-weight: 500; /* Средняя жирность */
+}
+
+/* Центрирование ТОЛЬКО номера */
+#step-3-content .table thead th:first-child,
+#step-3-content .table tbody td:first-child { /* Убираем :nth-child(5) */
+    text-align: center;
+}
+
+/* Задание ширины столбцов */
+#step-3-content .table thead th:nth-child(1) { width: 5%; }  /* № */
+#step-3-content .table thead th:nth-child(2) { width: 30%; } /* Исходный адрес */
+#step-3-content .table thead th:nth-child(3) { width: 30%; } /* Найденный адрес */
+#step-3-content .table thead th:nth-child(4) { width: 15%; } /* Координаты */
+#step-3-content .table thead th:nth-child(5) { width: 20%; } /* Точность */
+
+
+/* Стиль ячеек таблицы */
+#step-3-content .table tbody td {
+    padding: 10px 15px; /* Отступы */
+    border-bottom: 1px solid #e9ecef; /* Тонкая серая линия между строками */
+    vertical-align: middle; /* Вертикальное выравнивание по центру */
+    color: #212529; /* Стандартный черный цвет текста */
+    transition: background-color 0.3s ease-in-out, opacity 0.3s ease-out; /* Добавляем opacity в transition */
+    word-break: break-word; /* Перенос длинных слов/строк */
+    /* opacity: 1; /* По умолчанию видимы */
+}
+
+/* Класс для затухания ячейки */
+#step-3-content .cell-fading-out {
+    opacity: 0;
+}
+
+/* Стили для иконки редактирования адреса */
+#step-3-content .edit-icon {
+    opacity: 0; /* Скрыто по умолчанию */
+    margin-left: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+    display: inline-block; /* Чтобы margin работал */
+    vertical-align: middle; /* Выравниваем иконку по вертикали */
+}
+
+/* Задаем размер для SVG внутри иконки */
+#step-3-content .edit-icon svg {
+    width: 18px; /* Или 1em */
+    height: 18  px; /* Или 1em */
+    display: block; /* Убираем лишнее пространство под SVG */
+    fill: currentColor; /* Позволяет цвету наследоваться от родителя (.edit-icon или CSS) */
+    stroke: currentColor; /* Позволяет цвету обводки наследоваться */
+}
+
+/* Показываем иконку при наведении на строку */
+#step-3-content .table tbody tr:hover .edit-icon {
+    opacity: 1;
+}
+
+/* Стили для ячейки в режиме редактирования и поля ввода */
+#step-3-content .table tbody td.editing {
+    padding: 0; /* Убираем внутренние отступы ячейки */
+}
+
+/* Стили для textarea */
+#step-3-content .table tbody td.editing .address-textarea {
+    width: 100%;
+    padding: 10px 15px; /* Отступы как у ячейки */
+    border: none;
+    background-color: #fff; /* Белый фон для поля */
+    font-size: inherit; /* Наследуем размер шрифта */
+    font-family: inherit; /* Наследуем шрифт */
+    box-sizing: border-box; /* padding не увеличивает ширину */
+    outline: 2px solid var(--primary-color, #007bff); /* Выделяем поле */
+    white-space: pre-wrap; /* Сохраняем переносы строк */
+    overflow-wrap: break-word; /* Разрешаем перенос длинных слов */
+    word-break: normal; /* Используем нормальный перенос слов */
+    min-height: 40px; /* Минимальная высота */
+    overflow-y: hidden; /* Скрываем скроллбар, высота регулируется автоматически */
+    max-height: 120px; /* Максимальная высота */
+    resize: none; /* Отключаем ручное изменение размера, т.к. это делается автоматически */
+    line-height: 1.4; /* Межстрочный интервал для лучшей читаемости */
+    vertical-align: middle; /* Центрируем по вертикали */
+}
+
+/* Сохраняем старые стили для input на случай, если он где-то еще используется */
+#step-3-content .table tbody td.editing input[type="text"] {
+    width: 100%;
+    padding: 10px 15px; /* Отступы как у ячейки */
+    border: none;
+    background-color: #fff; /* Белый фон для поля */
+    font-size: inherit; /* Наследуем размер шрифта */
+    font-family: inherit; /* Наследуем шрифт */
+    box-sizing: border-box; /* padding не увеличивает ширину */
+    outline: 2px solid var(--primary-color, #007bff); /* Выделяем поле */
+    
+    /* Добавляем свойства для переноса текста */
+    white-space: pre-wrap; /* Сохраняем переносы строк */
+    overflow-wrap: break-word; /* Разрешаем перенос длинных слов */
+    word-break: break-word; /* Улучшенный перенос для сложных слов */
+    min-height: 40px; /* Минимальная высота */
+    overflow-y: auto; /* Добавляем прокрутку при необходимости */
+    max-height: 120px; /* Максимальная высота до появления прокрутки */
+    resize: vertical; /* Разрешаем вертикальное изменение размера */
+}
+
+/* Начальное состояние строк для анимации - ВОЗВРАЩАЕМ */
+/* Увеличиваем специфичность селектора и объединяем transition */
+#step-3-content #geocoder-table tbody tr {
+    opacity: 0;
+    transform: translateY(15px);
+    /* Объединенный transition с !important для гарантии приоритета */
+    /* Добавляем max-height для анимации удаления */
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out, background-color 0.2s ease, max-height 0.3s ease-out !important;
+}
+
+/* Видимое состояние строк - ВОЗВРАЩАЕМ */
+/* Этот селектор специфичен для #geocoder-table, префикс не нужен */
+#geocoder-table tbody tr.row-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Чередование цветов строк ("зебра") */
+#step-3-content .table tbody tr:nth-of-type(even) { /* ВОЗВРАЩАЕМ ОБЩИЙ СЕЛЕКТОР */
+    background-color: #f8f9fa; /* Слегка серый фон для четных строк */
+}
+
+/* Убираем нижнюю границу у последней строки */
+#step-3-content .table tbody tr:last-of-type td { /* ВОЗВРАЩАЕМ ОБЩИЙ СЕЛЕКТОР */
+    border-bottom: none;
+}
+
+/* Стиль для точности */
+#step-3-content .table .accuracy-display {
+    display: inline-block; /* Чтобы занимало строку */
+    white-space: normal; /* Разрешаем перенос слов для длинных описаний */
+    /* Можно добавить еще стили для разных типов точности, если нужно */
+}
+/* ------------------------------------- */
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ ВЫДЕЛЕНИЯ СТРОК ПО ТОЧНОСТИ --- */
+
+/* Выделение для средней точности */
+#step-3-content .table tbody tr.row-accuracy-medium td {
+    background-color: #fff3e0; /* Светло-оранжевый */
+}
+/* Переопределение зебры для четных строк средней точности */
+#step-3-content .table tbody tr.row-accuracy-medium:nth-of-type(even) td {
+    background-color: #fff3e0; /* Тот же светло-оранжевый */
+}
+
+/* Выделение для низкой точности */
+#step-3-content .table tbody tr.row-accuracy-low td {
+    background-color: #ffebee; /* Светло-красный */
+}
+/* Переопределение зебры для четных строк низкой точности */
+#step-3-content .table tbody tr.row-accuracy-low:nth-of-type(even) td {
+    background-color: #ffebee; /* Тот же светло-красный */
+}
+
+/* --- СТИЛИ ДЛЯ НОВЫХ ДОБАВЛЕННЫХ ТОЧЕК --- */
+#step-3-content .table tbody tr.add-point-row td {
+    /* Убираем все специальные стили, чтобы строка выглядела как обычная */
+    transition: background-color 0.3s ease;
+    /* Убрали левую синюю границу */
+}
+
+/* Эффект при наведении на новую точку - теперь используем стандартный для всей таблицы */
+#step-3-content .table tbody tr.add-point-row:hover td {
+    /* Удаляем специальный цвет фона при наведении */
+}
+
+/* Стили для иконки добавления в новой строке - делаем ее менее заметной */
+#step-3-content .add-point-icon {
+    color: #6c757d; /* Более нейтральный серый цвет */
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.7; /* Полупрозрачная */
+}
+
+.add-point-icon svg {
+    width: 16px;
+    height: 16px;
+    display: block; 
+}
+
+/* Стили для новой строки */
+.add-point-row {
+    /* Убираем max-height и overflow, строка появляется сразу */
+    opacity: 1; /* Строка видима, анимируем содержимое */
+    position: relative; /* Контекст позиционирования для кнопки '+' */
+    /* Убираем transition для строки */
+}
+
+/* Ячейки в новой строке - начальное состояние без паддингов и бордеров */
+.add-point-row td {
+    padding-top: 0; 
+    padding-bottom: 0; 
+    border-width: 0; 
+    border-bottom: none; 
+    /* Добавляем обнуление шрифта и высоты строки */
+    font-size: 0;
+    line-height: 0;
+    /* Возвращаем transition для padding */
+    transition: padding 0.4s ease-out, font-size 0.1s linear, line-height 0.1s linear; 
+}
+
+/* Обертка содержимого ячейки - начальное состояние */
+.cell-content-wrapper {
+    display: block; 
+    max-height: 0;
+    opacity: 0;
+    /* Убираем padding отсюда */
+    /* padding-top: 0; */
+    /* padding-bottom: 0; */
+    margin: 0; 
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, 
+                opacity 0.3s ease-in 0.1s; /* Оставляем только max-height и opacity */
+}
+
+/* ВОЗВРАЩАЕМ правило для ЯЧЕЕК в видимой строке */
+.add-point-row.row-visible td {
+    padding-top: 10px;  /* Возвращаем стандартные паддинги */
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef; /* Возвращаем стандартную границу */
+    /* Убираем !important, если они были */
+    /* border-width: inherit; /* Возможно, это не нужно, т.к. выше есть border-bottom */
+    /* Восстанавливаем размер шрифта и высоту строки */
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* Обертка содержимого в видимой строке - конечное состояние */
+.add-point-row.row-visible .cell-content-wrapper {
+    max-height: 60px; 
+    opacity: 1;
+    /* Убираем padding отсюда, он теперь на TD */
+    /* padding-top: 10px; */ 
+    /* padding-bottom: 10px; */
+}
+
+/* Анимация fadeIn для ячеек больше не нужна в таком виде */
+/* @keyframes fadeIn { ... } */
+
+/* --- ДОБАВЛЕНО: Переопределение opacity для содержимого скрытой НОВОЙ строки --- */
+.add-point-row.row-hidden .cell-content-wrapper {
+    /* Наследуем opacity от родителя (.row-hidden), который имеет opacity: 0.5 */
+    opacity: inherit; 
+    /* Добавляем transition, чтобы содержимое тоже плавно меняло прозрачность */
+    transition: opacity 0.4s ease-out; 
+}
+
+/* Стили для обертки таблицы для анимации высоты */
+#table-scroll-wrapper {
+    /* max-height убран */
+    overflow-x: auto; /* Оставляем горизонтальный скроллбар при необходимости */
+    overflow-y: visible; /* Убираем вертикальный скроллбар, позволяем расти */
+    /* Анимация высоты (остается для возможных будущих нужд, но не будет влиять без явной установки height) */
+    transition: max-height 0.4s ease-out; 
+}
+
+/* Контейнер карты */
+.map-container {
+  border: 1px solid var(--gray-light); /* Тонкая граница */
+  min-height: 400px; 
+  width: 100%; /* Занимает доступную ширину */
+  margin-bottom: 20px; 
+  position: relative; /* Для позиционирования элементов внутри, если нужно */
+  /* --- ДОБАВЛЕНО: Скругление углов и обрезка --- */
+  border-radius: var(--border-radius); /* Используем ту же переменную, что и для .card */
+  overflow: hidden; /* Обрезаем содержимое (плитки карты) по радиусу */
+}
+
+/* Стили для таблицы с результатами геокодирования */
+.table-geocoder {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Стили для кнопки добавления новой строки */
+.add-row-btn {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #4a89dc;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    z-index: 5;
+}
+
+.table-geocoder tr:not(.empty-row):hover .add-row-btn {
+    opacity: 1;
+}
+
+.add-row-btn:hover {
+    background-color: #3671c8;
+}
+
+/* Стили для новой строки */
+.add-point-row {
+    /* Сохраняем только анимационные свойства */
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    position: relative; /* !!! ВОЗВРАЩАЕМ КОНТЕКСТ ПОЗИЦИОНИРОВАНИЯ !!! */
+    /* Добавляем стили для гарантированного обнуления высоты */
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    font-size: 0; /* Чтобы line-height не влиял */
+    line-height: 0; /* Чтобы line-height не влиял */
+    
+    transition: max-height 0.4s ease-out, opacity 0.3s ease-in-out, 
+                padding-top 0.4s ease-out, padding-bottom 0.4s ease-out; /* Добавляем padding в transition */
+}
+
+.add-point-row.row-visible {
+    opacity: 1;
+    max-height: 50px; /* Или другое значение, можно вернуть 100px */
+    /* Возвращаем исходные или нужные паддинги/размеры */
+    padding-top: 10px; /* Пример, взять из стилей td */
+    padding-bottom: 10px; /* Пример, взять из стилей td */
+    font-size: inherit; /* Возвращаем нормальный размер шрифта */
+    line-height: inherit; /* Возвращаем нормальную высоту строки */
+}
+
+.add-point-icon {
+    color: #4a89dc;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Стили для ячеек новой строки - каскадная анимация */
+/* ВРЕМЕННО ОТКЛЮЧАЕМ АНИМАЦИЮ ДЛЯ ТЕСТА */
+/*
+.add-point-row.row-visible td {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+*/
+
+/* Задержка для каждой ячейки, чтобы создать эффект "волны" */
+/*
+.add-point-row.row-visible td:nth-child(1) { animation-delay: 0.1s; }
+.add-point-row.row-visible td:nth-child(2) { animation-delay: 0.2s; }
+.add-point-row.row-visible td:nth-child(3) { animation-delay: 0.3s; }
+.add-point-row.row-visible td:nth-child(4) { animation-delay: 0.4s; }
+.add-point-row.row-visible td:nth-child(5) { animation-delay: 0.5s; }
+*/
+
+/* Анимация появления ячеек */
+/*
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+*/
+
+/* Исходное состояние для ячеек - невидимые */
+/*
+.add-point-row td {
+    opacity: 0;
+}
+*/
+
+/* --- СТИЛИ ДЛЯ КНОПКИ ДОБАВЛЕНИЯ НОВОЙ СТРОКИ --- */
+/* Относительное позиционирование для строк таблицы - нужно для абсолютного позиционирования кнопки */
+#step-3-content .table tbody tr {
+    position: relative; /* !!! УБЕДИМСЯ, ЧТО ВСЕ СТРОКИ ИМЕЮТ КОНТЕКСТ !!! */
+}
+
+/* Стили для кнопки добавления новой строки (появляется при наведении) */
+#step-3-content .table tbody tr:hover .add-row-btn {
+    opacity: 1;
+} 
+
+/* Стили для иконки 'глаз' для скрытия точки */
+.visibility-icon {
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #6c757d;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 5;
+    margin-right: 6px;
+}
+#step-3-content .table tbody tr:hover .visibility-icon {
+    opacity: 1;
+}
+/* Класс для скрытых строк */
+.row-hidden {
+    opacity: 0.3; /* Уменьшена прозрачность до 30% */
+    /* Убираем transition отсюда, т.к. он теперь на базовом tr */
+    /* transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1); */
+}
+
+/* --- ДОБАВЛЕНО: Более специфичное правило для скрытых НОВЫХ строк --- */
+.add-point-row.row-hidden {
+    opacity: 0.3; /* Уменьшена прозрачность до 30% */
+}
+
+/* --- ДОБАВЛЕНО: Переопределение opacity для содержимого скрытой НОВОЙ строки --- */
+.add-point-row.row-hidden .cell-content-wrapper {
+    /* Наследуем opacity от родителя (.row-hidden), который имеет opacity: 0.5 */
+    opacity: inherit; 
+    /* Добавляем transition, чтобы содержимое тоже плавно меняло прозрачность */
+    transition: opacity 0.4s ease-out; 
+}
+
+.row-index {
+    margin-left: 18px;
+    display: inline-block;
+}
+
+/* --- Стили для контекстного меню строки таблицы --- */
+.context-menu {
+    position: absolute;
+    z-index: 1000;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    padding: 5px 0;
+    min-width: 150px;
+    display: none; /* Скрыто по умолчанию */
+}
+
+.context-menu.visible {
+    display: block;
+}
+
+.context-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu li {
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.context-menu li:hover {
+    background-color: #f0f0f0;
+}
+
+.context-menu li.separator {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 5px 0;
+    padding: 0;
+}
+
+/* Класс для неактивных пунктов меню */
+.context-menu li.disabled {
+    color: #aaa;
+    cursor: default;
+    background-color: transparent;
+} 

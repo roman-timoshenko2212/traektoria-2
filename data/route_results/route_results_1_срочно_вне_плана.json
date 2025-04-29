@@ -1,0 +1,39 @@
+{
+  "route_name": "1 срочно вне плана",
+  "points_count": 3,
+  "calculation_time": "2025-04-24 15:44:08",
+  "total_distance": 944069,
+  "total_duration": 39945,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 55.386528,
+        "lon": 37.78136
+      },
+      "distance": 473274,
+      "duration": 20730,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 55.386528,
+        "lon": 37.78136
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 470795,
+      "duration": 19215,
+      "status": "OK"
+    }
+  ]
+}

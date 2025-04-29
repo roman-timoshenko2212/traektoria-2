@@ -1,0 +1,39 @@
+{
+  "route_name": "Воронеж 2",
+  "points_count": 3,
+  "calculation_time": "2025-04-21 11:27:06",
+  "total_distance": 327771,
+  "total_duration": 14514,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 50.454161,
+        "lon": 40.148555
+      },
+      "distance": 166256,
+      "duration": 6956,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 50.454161,
+        "lon": 40.148555
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 161515,
+      "duration": 7558,
+      "status": "OK"
+    }
+  ]
+}

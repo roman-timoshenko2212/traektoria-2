@@ -1,0 +1,54 @@
+{
+  "route_name": "Тамбов, Тамбовская обл.",
+  "points_count": 4,
+  "calculation_time": "2025-04-24 21:42:58",
+  "total_distance": 434936,
+  "total_duration": 21342,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 52.738379,
+        "lon": 41.410542
+      },
+      "distance": 216573,
+      "duration": 10563,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 52.738379,
+        "lon": 41.410542
+      },
+      "to_point": {
+        "lat": 52.737307,
+        "lon": 41.437628
+      },
+      "distance": 2903,
+      "duration": 398,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 52.737307,
+        "lon": 41.437628
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 215460,
+      "duration": 10381,
+      "status": "OK"
+    }
+  ]
+}

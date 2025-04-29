@@ -1,0 +1,24 @@
+# Python кэш-файлы
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Временные файлы
+*.save
+*.backup
+.DS_Store
+
+# Директории сред разработки
+.idea/
+.vscode/
+
+# Файлы виртуального окружения
+venv/
+env/
+.env
+
+# Кэши и логи
+*.log
+.cache
+cache/
+.cursor/ 

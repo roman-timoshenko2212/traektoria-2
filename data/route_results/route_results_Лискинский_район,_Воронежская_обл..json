@@ -1,0 +1,144 @@
+{
+  "route_name": "Лискинский район, Воронежская обл.",
+  "points_count": 10,
+  "calculation_time": "2025-04-21 11:26:50",
+  "total_distance": 436577,
+  "total_duration": 24729,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 50.97925,
+        "lon": 39.508468
+      },
+      "distance": 104553,
+      "duration": 4737,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 50.97925,
+        "lon": 39.508468
+      },
+      "to_point": {
+        "lat": 50.975481,
+        "lon": 39.52143
+      },
+      "distance": 1520,
+      "duration": 179,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 50.975481,
+        "lon": 39.52143
+      },
+      "to_point": {
+        "lat": 50.976983,
+        "lon": 39.550441
+      },
+      "distance": 2275,
+      "duration": 236,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 50.976983,
+        "lon": 39.550441
+      },
+      "to_point": {
+        "lat": 50.984,
+        "lon": 39.546786
+      },
+      "distance": 3919,
+      "duration": 333,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 50.984,
+        "lon": 39.546786
+      },
+      "to_point": {
+        "lat": 50.942278,
+        "lon": 39.241535
+      },
+      "distance": 58283,
+      "duration": 3328,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 50.942278,
+        "lon": 39.241535
+      },
+      "to_point": {
+        "lat": 50.62475,
+        "lon": 38.650072
+      },
+      "distance": 77681,
+      "duration": 5181,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 50.62475,
+        "lon": 38.650072
+      },
+      "to_point": {
+        "lat": 51.310573,
+        "lon": 39.215063
+      },
+      "distance": 134998,
+      "duration": 6593,
+      "status": "OK"
+    },
+    {
+      "from_index": 7,
+      "to_index": 8,
+      "from_point": {
+        "lat": 51.310573,
+        "lon": 39.215063
+      },
+      "to_point": {
+        "lat": 51.35182,
+        "lon": 39.300585
+      },
+      "distance": 11028,
+      "duration": 788,
+      "status": "OK"
+    },
+    {
+      "from_index": 8,
+      "to_index": 9,
+      "from_point": {
+        "lat": 51.35182,
+        "lon": 39.300585
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 42320,
+      "duration": 3354,
+      "status": "OK"
+    }
+  ]
+}

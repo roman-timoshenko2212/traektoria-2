@@ -1,0 +1,84 @@
+{
+  "route_name": "Курск 5",
+  "points_count": 6,
+  "calculation_time": "2025-04-21 11:26:28",
+  "total_distance": 488458,
+  "total_duration": 27115,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 51.738322,
+        "lon": 36.243631
+      },
+      "distance": 229703,
+      "duration": 12479,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 51.738322,
+        "lon": 36.243631
+      },
+      "to_point": {
+        "lat": 51.738389,
+        "lon": 36.24079
+      },
+      "distance": 252,
+      "duration": 61,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 51.738389,
+        "lon": 36.24079
+      },
+      "to_point": {
+        "lat": 51.728082,
+        "lon": 36.155988
+      },
+      "distance": 10266,
+      "duration": 1178,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 51.728082,
+        "lon": 36.155988
+      },
+      "to_point": {
+        "lat": 51.680893,
+        "lon": 36.268126
+      },
+      "distance": 15528,
+      "duration": 1393,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 51.680893,
+        "lon": 36.268126
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 232709,
+      "duration": 12004,
+      "status": "OK"
+    }
+  ]
+}

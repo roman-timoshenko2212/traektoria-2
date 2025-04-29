@@ -1,0 +1,114 @@
+{
+  "route_name": "Панинский район, Воронежская обл.",
+  "points_count": 8,
+  "calculation_time": "2025-04-24 15:34:41",
+  "total_distance": 164748,
+  "total_duration": 9920,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 51.724109,
+        "lon": 39.295444
+      },
+      "distance": 5513,
+      "duration": 621,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 51.724109,
+        "lon": 39.295444
+      },
+      "to_point": {
+        "lat": 51.724109,
+        "lon": 39.295444
+      },
+      "distance": 0,
+      "duration": 0,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 51.724109,
+        "lon": 39.295444
+      },
+      "to_point": {
+        "lat": 51.724109,
+        "lon": 39.295444
+      },
+      "distance": 0,
+      "duration": 0,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 51.724109,
+        "lon": 39.295444
+      },
+      "to_point": {
+        "lat": 51.720371,
+        "lon": 39.294492
+      },
+      "distance": 431,
+      "duration": 49,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 51.720371,
+        "lon": 39.294492
+      },
+      "to_point": {
+        "lat": 51.728034,
+        "lon": 39.291173
+      },
+      "distance": 1516,
+      "duration": 369,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 51.728034,
+        "lon": 39.291173
+      },
+      "to_point": {
+        "lat": 51.70531,
+        "lon": 40.207072
+      },
+      "distance": 80411,
+      "duration": 4675,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 51.70531,
+        "lon": 40.207072
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 76877,
+      "duration": 4206,
+      "status": "OK"
+    }
+  ]
+}

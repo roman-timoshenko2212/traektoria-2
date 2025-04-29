@@ -1,0 +1,189 @@
+{
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.531507,
+        "lon": 39.316547
+      },
+      "to_point": {
+        "lat": 52.546865,
+        "lon": 39.270453
+      },
+      "distance": 140162,
+      "duration": 7559,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 52.546865,
+        "lon": 39.270453
+      },
+      "to_point": {
+        "lat": 52.624184,
+        "lon": 39.363384
+      },
+      "distance": 15364,
+      "duration": 814,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 52.624184,
+        "lon": 39.363384
+      },
+      "to_point": {
+        "lat": 52.593441,
+        "lon": 39.458911
+      },
+      "distance": 11109,
+      "duration": 682,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 52.593441,
+        "lon": 39.458911
+      },
+      "to_point": {
+        "lat": 52.857339,
+        "lon": 39.824049
+      },
+      "distance": 51786,
+      "duration": 2953,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 52.857339,
+        "lon": 39.824049
+      },
+      "to_point": {
+        "lat": 52.888309,
+        "lon": 40.500931
+      },
+      "distance": 52975,
+      "duration": 2883,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 52.888309,
+        "lon": 40.500931
+      },
+      "to_point": {
+        "lat": 52.909969,
+        "lon": 40.452699
+      },
+      "distance": 4549,
+      "duration": 674,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 52.909969,
+        "lon": 40.452699
+      },
+      "to_point": {
+        "lat": 52.894918,
+        "lon": 40.785988
+      },
+      "distance": 32454,
+      "duration": 2389,
+      "status": "OK"
+    },
+    {
+      "from_index": 7,
+      "to_index": 8,
+      "from_point": {
+        "lat": 52.894918,
+        "lon": 40.785988
+      },
+      "to_point": {
+        "lat": 52.670043,
+        "lon": 40.395602
+      },
+      "distance": 53864,
+      "duration": 3342,
+      "status": "OK"
+    },
+    {
+      "from_index": 8,
+      "to_index": 9,
+      "from_point": {
+        "lat": 52.670043,
+        "lon": 40.395602
+      },
+      "to_point": {
+        "lat": 52.303847,
+        "lon": 39.720069
+      },
+      "distance": 92380,
+      "duration": 4749,
+      "status": "OK"
+    },
+    {
+      "from_index": 9,
+      "to_index": 10,
+      "from_point": {
+        "lat": 52.303847,
+        "lon": 39.720069
+      },
+      "to_point": {
+        "lat": 52.043402,
+        "lon": 39.739253
+      },
+      "distance": 32294,
+      "duration": 1787,
+      "status": "OK"
+    },
+    {
+      "from_index": 10,
+      "to_index": 11,
+      "from_point": {
+        "lat": 52.043402,
+        "lon": 39.739253
+      },
+      "to_point": {
+        "lat": 52.041478,
+        "lon": 39.73422
+      },
+      "distance": 727,
+      "duration": 110,
+      "status": "OK"
+    },
+    {
+      "from_index": 11,
+      "to_index": 12,
+      "from_point": {
+        "lat": 52.041478,
+        "lon": 39.73422
+      },
+      "to_point": {
+        "lat": 51.531507,
+        "lon": 39.316547
+      },
+      "distance": 74274,
+      "duration": 5067,
+      "status": "OK"
+    }
+  ],
+  "total_distance": 561938,
+  "total_duration": 33009,
+  "route_name": "Мичуринск, Тамбовская обл.",
+  "points_count": 13,
+  "calculation_time": "2025-04-15 15:41:37"
+}

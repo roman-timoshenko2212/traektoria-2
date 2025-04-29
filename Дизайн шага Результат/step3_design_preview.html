@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дизайн Шага 3 - Результаты</title>
+  <!-- Подключаем шрифты как в оригинальном index.html -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <!-- Подключаем основной файл стилей -->
+  <link rel="stylesheet" href="../frontend/static/css/styles.css">
+  <!-- Подключаем Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    /* Дополнительные стили для плейсхолдера карты */
+    .map-placeholder {
+      border: 1px dashed #ccc;
+      min-height: 400px; /* Примерная высота */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      background-color: #f8f8f8;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 20px;
+    }
+    /* Убедимся, что основной контейнер имеет отступы */
+    body {
+        padding: 20px;
+        background-color: #f4f7f6; /* Фоновый цвет как у body в styles.css */
+    }
+
+    /* Стили для нового селектора маршрутов */
+    .results-layout {
+        position: relative; /* Делаем контейнер относительным для абсолютного позиционирования селектора */
+        align-items: flex-start;
+        margin-top: 30px;
+        padding: 20px; /* Добавим внутренние отступы */
+        background-color: #ffffff; /* Зададим белый фон по умолчанию */
+        border-radius: 8px; /* Слегка скруглим углы */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Легкая тень для выделения */
+        transition: background-color 0.3s ease-in-out; /* Добавляем плавный переход фона */
+    }
+
+    /* Добавляем стили для #route-info внутри .results-layout */
+    #route-info {
+        margin-left: 65px; /* Отступ слева, как у таблицы */
+        margin-bottom: 20px; /* Отступ снизу перед таблицей */
+        /* margin-top убираем, т.к. он был для позиционирования вне layout */
+    }
+
+    /* Стили для заголовка и кнопки пересчета */
+    .route-info-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px; /* Добавляем отступ снизу перед карточками */
+    }
+
+    #recalculate-button {
+        background: none;
+        border: none;
+        padding: 0; /* Убираем padding */
+        margin-left: 10px; /* Отступ от заголовка */
+        width: 30px;  /* Фиксированная ширина */
+        height: 30px; /* Фиксированная высота */
+        color: #adb5bd; /* Светло-серый (может влиять на цвет анимации, если она использует currentColor) */
+        cursor: pointer;
+        transition: color 0.2s ease; /* Оставляем на всякий случай */
+        vertical-align: middle; /* Выравниваем кнопку по вертикали с текстом */
+    }
+    #recalculate-button:hover {
+        /* Убираем изменение цвета, т.к. это может мешать анимации */
+        /* color: #6c757d; */
+    }
+    #recalculate-button:disabled {
+        /* color: #ced4da; */ /* Возможно, не нужно менять цвет при блокировке */
+        cursor: default;
+        opacity: 0.6; /* Делаем кнопку полупрозрачной при блокировке */
+    }
+
+    #recalculate-lottie-container {
+        width: 100%;
+        height: 100%;
+        display: flex; /* Центрируем плеер, если он меньше контейнера */
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Стиль для названия маршрута в заголовке */
+    #route-name-header {
+        color: #0056b3; /* Темно-синий */
+        /* font-weight: bold; /* На всякий случай, если strong недостаточно */
+        transition: background-color 0.3s ease-in-out; /* Добавляем плавный переход фона */
+    }
+
+    /* --- СТИЛИ ДЛЯ СОСТОЯНИЯ ПЕРЕСЧЕТА --- */
+    /* Анимация пульсации для селектора */
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.6; }
+        100% { opacity: 1; }
+    }
+
+    .results-layout.recalculating #vertical-route-selector {
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* Затемнение контента */
+    .results-layout.recalculating .route-info-cards,
+    .results-layout.recalculating .results-table-container {
+        opacity: 0.4;
+        pointer-events: none;
+        transition: opacity 0.3s ease-out;
+    }
+    /* Возвращаем нормальную прозрачность (для плавного возврата) */
+    .results-layout .route-info-cards,
+    .results-layout .results-table-container {
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity 0.3s ease-out;
+    }
+    /* ------------------------------------ */
+
+    .vertical-route-selector {
+        width: 50px; /* Увеличено с 40px */
+        background-color: #e9ecef;
+        border-radius: 5px;
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 10;
+        cursor: pointer;
+        transition: width 0.3s ease-in-out, background-color 0.2s ease;
+    }
+
+    .vertical-route-selector:hover {
+        width: 300px; /* Увеличено с 250px */
+        background-color: #dde2e6;
+        box-shadow: 3px 0 8px rgba(0,0,0,0.12); /* Слегка усилена тень */
+    }
+
+    /* Стили для обертки Lottie-анимации */
+    .lottie-wrapper {
+        width: 38px; /* Чуть больше размера иконки для отступов */
+        height: 38px;
+        position: absolute;
+        top: 50%;
+        left: 25px; /* Изменено с 20px для центровки в 50px */
+        transform: translate(-50%, -50%); /* Центрируем круг */
+        background-color: transparent; /* Сделано прозрачным по умолчанию */
+        border-radius: 50%; /* Делаем круглым */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Добавлены background-color и box-shadow в transition, время синхронизировано с раскрытием (0.3s) */
+        transition: left 0.3s ease-in-out, background-color 0.9s ease, box-shadow 0.9s ease;
+        z-index: 11; /* Должен быть над селектором, но под текстом внутри */
+        pointer-events: none; /* Чтобы не мешал кликам */
+        box-shadow: none; /* Тень убрана по умолчанию */
+    }
+
+    /* Контейнер для Lottie анимации внутри обертки */
+    #lottie-icon-container {
+        width: 32px;
+        height: 32px;
+        /* Убираем позиционирование, т.к. теперь центрируется через flex */
+        position: static;
+        transform: none;
+        transition: none; /* Убираем transition отсюда, оно теперь на wrapper'е */
+        z-index: 1; /* Внутри wrapper'а */
+    }
+
+    .route-list {
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        opacity: 0;
+        transition: opacity 0.2s 0.1s ease-in-out;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Стилизация скроллбара для WebKit браузеров */
+    .route-list::-webkit-scrollbar {
+      width: 6px; /* Ширина скроллбара */
+    }
+    
+    .route-list::-webkit-scrollbar-track {
+      background: transparent; /* Фон трека */
+       margin: 5px 0; /* Небольшие отступы сверху/снизу трека */
+    }
+    
+    .route-list::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2); /* Цвет ползунка */
+      border-radius: 3px; /* Скругление ползунка */
+      border: 1px solid transparent; /* Отступ */
+      background-clip: content-box; /* Чтобы фон не вылезал за границу */
+    }
+
+    .route-list::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0, 0, 0, 0.3); /* Цвет ползунка при наведении */
+    }
+
+    .vertical-route-selector:hover .route-list {
+        opacity: 1;
+    }
+
+     .route-list-item {
+        /* Убираем часть стилей, т.к. они перейдут к дочерним элементам */
+        padding: 0; /* Убираем padding у самого li */
+        /* white-space, overflow, text-overflow убраны */
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Более светлый разделитель */
+        /* transition убран, hover будет на внутреннем элементе */
+        position: relative;
+        z-index: 2;
+        /* border-left убран, hover будет на внутреннем элементе */
+        cursor: pointer; /* Оставляем курсор */
+    }
+
+    /* Новый контейнер внутри li для Flexbox */
+    .route-list-item-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px 10px 15px; /* Восстанавливаем padding здесь */
+        /* Добавляем стили для hover и active */
+        border-left: 3px solid transparent;
+        transition: background-color 0.2s ease, border-left-color 0.2s ease;
+    }
+
+    .route-list-item:hover .route-list-item-content {
+        background-color: #f8f9fa; /* Светлый фон при ховере */
+        border-left-color: var(--primary-color, #007bff); /* Показываем левый бордюр при ховере */
+    }
+
+    /* Возвращаем стили для активного элемента списка */
+    .route-list-item.active .route-list-item-content {
+        background-color: var(--primary-color, #007bff);
+        color: white;
+        border-left-color: var(--primary-accent-color, #0056b3);
+    }
+
+    /* Имя маршрута - ограничение ширины */
+    .route-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 10px; /* Отступ от значков */
+        flex-grow: 1; /* Занимать доступное место */
+    }
+
+    /* Контейнер для значков */
+    .route-badges {
+        display: flex;
+        align-items: center;
+        gap: 5px; /* Пространство между значками */
+        flex-shrink: 0; /* Не сжиматься */
+    }
+
+    /* Базовый стиль значка */
+    .accuracy-count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        color: white;
+        font-size: 0.75em;
+        font-weight: bold;
+        line-height: 1; /* Убрать лишнюю высоту строки */
+        box-sizing: border-box; /* Обводка не будет увеличивать размер */
+    }
+
+    /* Цвет для средней точности (оранжевый) */
+    .badge-medium {
+        background-color: #fd7e14; /* Bootstrap orange */
+    }
+
+    /* Цвет для низкой точности (красный) */
+    .badge-low {
+        background-color: #dc3545; /* Bootstrap red */
+    }
+
+    .route-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .results-table-container {
+        margin-left: 65px; /* Отступ = новая ширина селектора (50px) + зазор (15px) */
+        width: calc(100% - 65px); /* Скорректировано с 55px */
+        position: relative;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Стили для затемнения - ПЕРЕНЕСЕНЫ НА .results-layout */
+    /*
+    .results-table-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.15); 
+        z-index: 5;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .vertical-route-selector:hover + .results-table-container::after {
+        opacity: 1;
+    }
+    */
+
+    /* --- СТИЛИ ДЛЯ ОВЕРЛЕЯ ЗАТЕМНЕНИЯ --- */
+    .results-layout::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50px; /* Начальное положение - справа от свернутого селектора */
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.08); /* Слегка темный полупрозрачный фон */
+        z-index: 5; /* Ниже селектора (10) и иконки (11), но выше контента */
+        opacity: 0; /* Скрыт по умолчанию */
+        pointer-events: none; /* Не мешает кликам */
+        transition: opacity 0.3s ease-in-out, left 0.3s ease-in-out; /* Плавное появление и сдвиг */
+        border-radius: 0 8px 8px 0; /* Скругляем углы синхронно с layout (кроме левого верхнего/нижнего) */
+    }
+
+    /* Показываем и сдвигаем оверлей при наведении на селектор */
+    .results-layout:has(> #vertical-route-selector:hover)::after {
+        opacity: 1;
+        left: 300px; /* Сдвигаем вправо за раскрытый селектор */
+    }
+    /* -------------------------------------- */
+
+    /* Позиция и стиль КРУГА при раскрытии селектора */
+    .vertical-route-selector:hover .lottie-wrapper {
+        left: 270px; /* Скорректировано: 300px (новая ширина) - 30px (отступ) */
+        background-color: #f8f9fa; /* Возвращаем фон при ховере */
+        box-shadow: 0 0 3px rgba(0,0,0,0.1); /* Возвращаем тень при ховере */
+    }
+
+    /* --- НОВЫЕ СТИЛИ ДЛЯ ТАБЛИЦЫ --- */
+    .table {
+        width: 100%; /* Таблица занимает всю ширину контейнера */
+        border-collapse: collapse; /* Убираем двойные границы */
+        margin-top: 15px; /* Небольшой отступ сверху */
+        font-size: 0.9rem; /* Чуть уменьшим шрифт для компактности */
+        table-layout: fixed; /* Фиксированная ширина столбцов */
+    }
+
+    /* Стиль заголовка таблицы */
+    .table thead th {
+        background-color: #e9ecef; /* Делаем фон темнее */
+        color: #495057; /* Темно-серый текст */
+        text-align: left; /* Выравнивание по левому краю */
+        padding: 12px 15px; /* Отступы */
+        border-bottom: 2px solid #dee2e6; /* Нижняя граница */
+        font-weight: 500; /* Средняя жирность */
+    }
+
+    /* Центрирование ТОЛЬКО номера */
+    .table thead th:first-child,
+    .table tbody td:first-child { /* Убираем :nth-child(5) */
+        text-align: center;
+    }
+
+    /* Задание ширины столбцов */
+    .table thead th:nth-child(1) { width: 5%; }  /* № */
+    .table thead th:nth-child(2) { width: 30%; } /* Исходный адрес */
+    .table thead th:nth-child(3) { width: 30%; } /* Найденный адрес */
+    .table thead th:nth-child(4) { width: 15%; } /* Координаты */
+    .table thead th:nth-child(5) { width: 20%; } /* Точность */
+
+    /* Стиль ячеек таблицы */
+    .table tbody td {
+        padding: 10px 15px; /* Отступы */
+        border-bottom: 1px solid #e9ecef; /* Тонкая серая линия между строками */
+        vertical-align: middle; /* Вертикальное выравнивание по центру */
+        color: #212529; /* Стандартный черный цвет текста */
+        transition: background-color 0.3s ease-in-out, opacity 0.3s ease-out; /* Добавляем opacity в transition */
+        word-break: break-word; /* Перенос длинных слов/строк */
+        /* opacity: 1; /* По умолчанию видимы */
+    }
+
+    /* Класс для затухания ячейки */
+    .cell-fading-out {
+        opacity: 0;
+    }
+
+    /* Стили для иконки редактирования адреса */
+    .edit-icon {
+        opacity: 0; /* Скрыто по умолчанию */
+        margin-left: 8px;
+        cursor: pointer;
+        transition: opacity 0.2s ease-in-out;
+        display: inline-block; /* Чтобы margin работал */
+        vertical-align: middle; /* Выравниваем иконку по вертикали */
+    }
+
+    /* Задаем размер для SVG внутри иконки */
+    .edit-icon svg {
+        width: 18px; /* Или 1em */
+        height: 18  px; /* Или 1em */
+        display: block; /* Убираем лишнее пространство под SVG */
+        fill: currentColor; /* Позволяем цвету наследоваться от родителя (.edit-icon или CSS) */
+        stroke: currentColor; /* Позволяем цвету обводки наследоваться */
+    }
+
+    /* Показываем иконку при наведении на строку */
+    .table tbody tr:hover .edit-icon {
+        opacity: 1;
+    }
+
+    /* Стили для ячейки в режиме редактирования и поля ввода */
+    .table tbody td.editing {
+        padding: 0; /* Убираем внутренние отступы ячейки */
+    }
+    .table tbody td.editing input[type="text"] {
+        width: 100%;
+        padding: 10px 15px; /* Отступы как у ячейки */
+        border: none;
+        background-color: #fff; /* Белый фон для поля */
+        font-size: inherit; /* Наследуем размер шрифта */
+        font-family: inherit; /* Наследуем шрифт */
+        box-sizing: border-box; /* padding не увеличивает ширину */
+        outline: 2px solid var(--primary-color, #007bff); /* Выделяем поле */
+    }
+
+    /* Начальное состояние строк для анимации - ВОЗВРАЩАЕМ */
+    .table tbody tr {
+        opacity: 0;
+        transform: translateY(15px);
+        transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    }
+
+    /* Видимое состояние строк - ВОЗВРАЩАЕМ */
+    .table tbody tr.row-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Чередование цветов строк ("зебра") */
+    .table tbody tr:nth-of-type(even) {
+        background-color: #f8f9fa; /* Слегка серый фон для четных строк */
+    }
+
+    /* Убираем нижнюю границу у последней строки */
+    .table tbody tr:last-of-type td {
+        border-bottom: none;
+    }
+
+    /* Стиль для точности */
+    .table .accuracy-display {
+        display: inline-block; /* Чтобы занимало строку */
+        white-space: normal; /* Разрешаем перенос слов для длинных описаний */
+        /* Можно добавить еще стили для разных типов точности, если нужно */
+    }
+    /* ------------------------------------- */
+
+    /* --- НОВЫЕ СТИЛИ ДЛЯ ВЫДЕЛЕНИЯ СТРОК ПО ТОЧНОСТИ --- */
+
+    /* Выделение для средней точности */
+    .table tbody tr.row-accuracy-medium td {
+        background-color: #fff3e0; /* Светло-оранжевый */
+    }
+    /* Переопределение зебры для четных строк средней точности */
+    .table tbody tr.row-accuracy-medium:nth-of-type(even) td {
+        background-color: #fff3e0; /* Тот же светло-оранжевый */
+    }
+
+    /* Выделение для низкой точности */
+    .table tbody tr.row-accuracy-low td {
+        background-color: #ffebee; /* Светло-красный */
+    }
+    /* Переопределение зебры для четных строк низкой точности */
+    .table tbody tr.row-accuracy-low:nth-of-type(even) td {
+        background-color: #ffebee; /* Тот же светло-красный */
+    }
+
+     /* Опционально: немного затемнить текст на выделенных строках для контраста */
+    .table tbody tr.row-accuracy-medium td,
+    .table tbody tr.row-accuracy-low td {
+        color: #333;
+    }
+    /* ---------------------------------------------------- */
+
+    /* Стили для обертки таблицы для анимации высоты */
+    #table-scroll-wrapper {
+        /* overflow-x и overflow-y заданы инлайново */
+        transition: height 0.4s ease-out; /* Анимация высоты */
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Используем основной контейнер для центрирования и ограничения ширины -->
+  <div class="container">
+      <!-- Структура Шага 3 -->
+      <div id="step-3-content" class="step-content">
+        <div class="card">
+          <h2>Результаты обработки маршрута</h2>
+
+          <!-- Плейсхолдер для карты -->
+          <div id="map-placeholder-container" class="map-placeholder">
+             (Здесь будет карта маршрута)
+          </div>
+
+          <!-- Новый layout для селектора и таблицы -->
+          <div class="results-layout">
+
+             <!-- Перемещаем блок #route-info сюда -->
+             <div id="route-info" style="/* margin-top: 30px; убран */">
+               <div class="route-info-header"> <!-- Обертка для заголовка и кнопки -->
+                 <h3 style="margin: 0;">Информация о маршруте <strong id="route-name-header"></strong></h3> <!-- Убираем margin у h3 -->
+                 <button id="recalculate-button" class="recalculate-btn" title="Пересчитать маршрут">
+                   <div id="recalculate-lottie-container"></div> <!-- Контейнер для Lottie -->
+                 </button> <!-- Кнопка Пересчета -->
+               </div>
+               <div class="route-info-cards">
+                   <div class="result-card">
+                       <div class="result-label">Общее расстояние</div>
+                       <div class="result-value" id="distance-value">-</div>
+                     </div>
+                     <div class="result-card">
+                       <div class="result-label">Время в пути</div>
+                       <div class="result-value" id="duration-value">-</div>
+                     </div>
+                     <div class="result-card">
+                       <div class="result-label">Время на маршруте</div>
+                       <div class="result-value" id="total-route-time-value">-</div>
+                     </div>
+               </div>
+             </div>
+
+            <!-- Новый вертикальный селектор -->
+            <div id="vertical-route-selector" class="vertical-route-selector">
+              <!-- Обертка для Lottie анимации -->
+              <div class="lottie-wrapper">
+                <!-- Контейнер для Lottie анимации -->
+                <div id="lottie-icon-container"></div>
+              </div>
+              <!-- Список маршрутов -->
+              <ul id="route-list" class="route-list">
+                <!-- Элементы списка будут добавлены через JS -->
+              </ul>
+            </div>
+
+            <!-- Контейнер для таблицы (для управления шириной) -->
+            <div class="results-table-container">
+              <!-- Таблица с результатами геокодирования -->
+              <div id="results-container">
+                <h3>Геокодированные адреса</h3>
+                <div id="table-scroll-wrapper" style="overflow-x: auto; overflow-y: hidden;">
+                  <table class="table">
+                     <thead>
+                      <tr>
+                        <th>№</th>
+                        <th>Исходный адрес</th>
+                        <th>Найденный адрес</th>
+                        <th>Координаты</th>
+                        <th>Точность</th>
+                      </tr>
+                    </thead>
+                    <tbody id="geocoder-table">
+                      <tr><td colspan="5" style="text-align: center;">Выберите маршрут из списка слева</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div> <!-- Конец results-layout -->
+
+          <!-- Кнопки -->
+          <div class="buttons-container" style="margin-top: 30px; display: flex; gap: 10px;">
+            <button type="button" class="btn btn-outline">Начать заново</button>
+            <button type="button" class="btn">Резюме</button>
+          </div>
+        </div>
+      </div>
+      <!-- Конец структуры Шага 3 -->
+  </div> <!-- Конец div.container -->
+
+<script>
+  // --- Примерные данные для маршрутов ---
+  const exampleRouteData = {
+    "route1": {
+      name: "Маршрут 1 (Воронеж)",
+      distance: "123 км",
+      duration: "2 ч 15 мин",
+      totalTime: "3 ч 05 мин",
+      points: [
+        { row: 1, input: "г Воронеж, ул Ленина, д 10", found: "Воронеж, улица Ленина, 10", coords: "51.6608, 39.2003", accuracy: "Точный" },
+        { row: 2, input: "гор. Воронеж, Московский пр-кт, 150", found: "Воронеж, Московский проспект, 150", coords: "51.7187, 39.1781", accuracy: "Приблизительный" },
+        { row: 3, input: "Воронеж, наб. Массалитинова, 20", found: "Воронеж, набережная Массалитинова, 20", coords: "51.6721, 39.2115", accuracy: "Точный" }
+      ]
+    },
+    "route2": {
+      name: "Маршрут 2 (Липецк)",
+      distance: "88 км",
+      duration: "1 ч 40 мин",
+      totalTime: "2 ч 30 мин",
+      points: [
+        { row: 1, input: "Липецк, Советская 4", found: "Липецк, Советская улица, 4", coords: "52.6098, 39.5984", accuracy: "Точный" },
+        { row: 3, input: "Липецк, Катукова, вл 51", found: "Липецк, улица Катукова, 51", coords: "52.5738, 39.5328", accuracy: "Точный" },
+        { row: 4, input: "ул. Московская г. Липецк д. 103", found: "Липецк, Московская улица, 103", coords: "52.6260, 39.5419", accuracy: "Точный" },
+        { row: 5, input: "Липецк, Полиграфическая улица, 10", found: "Липецк, Полиграфическая улица, 10", coords: "52.6181, 39.5715", accuracy: "Улица" },
+        { row: 6, input: "Липецк, Гагарина", found: "Липецк, улица Гагарина", coords: "52.6050, 39.5750", accuracy: "Приблизительный" },
+        { row: 2, input: "Липецк пл Петра Великого", found: "Липецк, площадь Петра Великого", coords: "52.6125, 39.6033", accuracy: "Область" },
+        { row: 7, input: "Липецк, город", found: "Липецк", coords: "52.6, 39.5", accuracy: "Город" },
+        { row: 8, input: "Липецкая область", found: "Липецкая область", coords: "52.5, 39.0", accuracy: "Область" }
+      ]
+    },
+    "route3": {
+      name: "Маршрут 3 (Тамбов)",
+      distance: "155 км",
+      duration: "2 ч 50 мин",
+      totalTime: "3 ч 55 мин",
+      points: [
+        { row: 1, input: "Тамбов, ул. Советская, д. 100", found: "Тамбов, Советская улица, 100", coords: "52.7212, 41.4510", accuracy: "Точный" },
+        { row: 2, input: "Тамбов, ул. Мичуринская, 130", found: "Тамбов, Мичуринская улица, 130", coords: "52.7488, 41.4230", accuracy: "Точный" },
+        { row: 3, input: "Тамбов ул Рылеева 50", found: "Тамбов, улица Рылеева, 50", coords: "52.7182, 41.4174", accuracy: "Точный" },
+        { row: 4, input: "Тамбов, бульвар Энтузиастов, 1", found: "Тамбов, бульвар Энтузиастов, 1", coords: "52.7615, 41.4011", accuracy: "Точный" },
+        { row: 5, input: "Тамбов, ул. Бастионная, 29", found: "Тамбов, Бастионная улица, 29", coords: "52.7251, 41.3990", accuracy: "Точный" }
+      ]
+    },
+    "route4": {
+      name: "Маршрут 4 (Курск)",
+      distance: "210 км",
+      duration: "3 ч 30 мин",
+      totalTime: "4 ч 45 мин",
+      points: [
+        { row: 1, input: "Курск, Ленина, 77", found: "Курск, улица Ленина, 77", coords: "51.7383, 36.1950", accuracy: "Точный" },
+        { row: 2, input: "Курск, ул. Карла Маркса, 68", found: "Курск, улица Карла Маркса, 68", coords: "51.7604, 36.1763", accuracy: "Точный" },
+        { row: 3, input: "Курск, ул. 50 лет Октября, 94", found: "Курск, улица 50 лет Октября, 94", coords: "51.7311, 36.1364", accuracy: "Точный" },
+        { row: 4, input: "Курск, проспект Кулакова, 20", found: "Курск, проспект Кулакова, 20", coords: "51.6955, 36.1406", accuracy: "Точный" },
+        { row: 5, input: "Курск, Студенческая улица, 1", found: "Курск, Студенческая улица, 1", coords: "51.7430, 36.1468", accuracy: "Точный" }
+      ]
+    }
+  };
+
+  // --- Элементы DOM --- 
+  const verticalRouteSelector = document.getElementById('vertical-route-selector'); 
+  const routeListContainer = document.getElementById('route-list');
+  const distanceValueEl = document.getElementById('distance-value');
+  const durationValueEl = document.getElementById('duration-value');
+  const totalTimeValueEl = document.getElementById('total-route-time-value');
+  const geocoderTableBody = document.getElementById('geocoder-table');
+  const lottieIconContainer = document.getElementById('lottie-icon-container');
+  const routeNameHeaderEl = document.getElementById('route-name-header');
+  
+  let currentSelectedRouteId = null;
+  let lottiePlayer = null;
+  let recalculateLottiePlayer = null; // Переменная для плеера кнопки
+  let previousDistance = 0; // Переменная для хранения предыдущего расстояния
+  let previousDurationMinutes = 0; // Предыдущее время в пути (мин)
+  let previousTotalTimeMinutes = 0; // Предыдущее время на маршруте (мин)
+
+  // Содержимое SVG иконки карандаша (ЗАМЕНЯЕМ НА НОВЫЙ SVG)
+  const pencilSvgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="#a1abb3" fill-rule="evenodd" d="M6.169 6.331a3 3 0 0 0-.833 1.6l-.338 1.912a1 1 0 0 0 1.159 1.159l1.912-.338a3 3 0 0 0 1.6-.833l3.07-3.07l2-2A.894.894 0 0 0 15 4.13A3.13 3.13 0 0 0 11.87 1a.894.894 0 0 0-.632.262l-2 2l-3.07 3.07Zm3.936-1.814L7.229 7.392a1.5 1.5 0 0 0-.416.8L6.6 9.4l1.208-.213l.057-.01a1.5 1.5 0 0 0 .743-.406l2.875-2.876a1.63 1.63 0 0 0-1.378-1.378m2.558.199a3.143 3.143 0 0 0-1.379-1.38l.82-.82a1.63 1.63 0 0 1 1.38 1.38l-.82.82ZM8 2.25a.75.75 0 0 0-.75-.75H4.5a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h7a3 3 0 0 0 3-3V8.75a.75.75 0 0 0-1.5 0v2.75a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 11.5v-7A1.5 1.5 0 0 1 4.5 3h2.75A.75.75 0 0 0 8 2.25" clip-rule="evenodd"/></svg>`;
+
+  // --- Вспомогательная функция для получения отображения точности --- 
+  function getAccuracyDisplay(accuracy) {
+    if (!accuracy) {
+        // Формат для "Не определено"
+        return '<span class="accuracy-display accuracy-unknown">❓ Не определено</span>';
+    }
+    const accLower = accuracy.toLowerCase();
+    
+    // Обновляем формат вывода СТРОГО по словарю TYPE_DESCRIPTIONS (где возможно)
+    if (accLower.includes('здание')) {
+        return '<span class="accuracy-display accuracy-high">🏠 Здание — высокая точность</span>';
+    } else if (accLower.includes('точный')) { // Общий случай высокой точности
+        return '<span class="accuracy-display accuracy-high">📍 Точка — высокая точность</span>';
+    } else if (accLower.includes('улица')) {
+        return '<span class="accuracy-display accuracy-medium">📍 Улица — средняя точность</span>'; // В словаре для street "📍"
+    } else if (accLower.includes('приблизительный')) { // Используем перекресток как пример средней точности
+        return '<span class="accuracy-display accuracy-medium">🚦 Перекресток — средняя точность</span>';
+    } else if (accLower.includes('город') || accLower.includes('область')) { // Используем населенный пункт для низкой точности
+        return '<span class="accuracy-display accuracy-low">📍 Населенный пункт — низкая точность</span>';
+    } else if (accLower.includes('не найдено') || accLower.includes('ошибка')) {
+         // Формат для ошибки (оставляем простым)
+         return '<span class="accuracy-display accuracy-error">❓ Ошибка</span>';
+    } else {
+        // Формат для неизвестного (оставляем простым)
+        return '<span class="accuracy-display accuracy-unknown">❓ Неизвестно</span>';
+    }
+  }
+
+  // --- НОВЫЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ВРЕМЕНИ ---
+  function parseTimeToMinutes(timeStr) {
+    if (!timeStr || typeof timeStr !== 'string') return 0;
+    let hours = 0;
+    let minutes = 0;
+    const hourMatch = timeStr.match(/(\d+)\s*ч/);
+    const minMatch = timeStr.match(/(\d+)\s*мин/);
+    if (hourMatch) hours = parseInt(hourMatch[1], 10);
+    if (minMatch) minutes = parseInt(minMatch[1], 10);
+    return hours * 60 + minutes;
+  }
+
+  function formatMinutesToTime(totalMinutes) {
+    if (isNaN(totalMinutes) || totalMinutes < 0) return '-';
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.round(totalMinutes % 60); // Округляем минуты
+    let result = '';
+    if (hours > 0) {
+      result += hours + ' ч';
+    }
+    if (minutes > 0) {
+      if (result) result += ' '; // Добавляем пробел, если есть часы
+      result += minutes + ' мин';
+    }
+    if (!result) { // Если получилось 0ч 0мин
+       result = '0 мин';
+    }
+    return result;
+  }
+  // ---------------------------------------------
+
+  // --- Функция обновления данных на странице --- 
+  function updateDisplay(selectedRouteId) {
+    const data = exampleRouteData[selectedRouteId];
+    if (!data) {
+      console.error("Нет данных для маршрута:", selectedRouteId);
+      // Можно очистить поля или показать сообщение
+      distanceValueEl.textContent = '-';
+      durationValueEl.textContent = '-';
+      totalTimeValueEl.textContent = '-';
+      geocoderTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Ошибка: данные для маршрута не найдены.</td></tr>';
+      currentSelectedRouteId = null;
+      // Убираем активный класс со всех элементов списка
+      document.querySelectorAll('.route-list-item.active').forEach(el => el.classList.remove('active'));
+      if (routeNameHeaderEl) routeNameHeaderEl.textContent = '';
+      return;
+    }
+
+    // Обновляем заголовок с именем маршрута
+    if (routeNameHeaderEl) {
+        routeNameHeaderEl.textContent = data.name;
+    }
+
+    // Обновляем инфо-карточки
+    // Анимируем расстояние
+    const newDistance = data.distance; // Строка типа "123 км"
+    animateCounter(distanceValueEl, previousDistance, newDistance, 500, ' км');
+    previousDistance = newDistance; // Сохраняем текущее значение для следующего раза
+
+    // Анимируем время в пути
+    const newDuration = data.duration; 
+    const newDurationMinutes = parseTimeToMinutes(newDuration);
+    animateCounter(durationValueEl, previousDurationMinutes, newDurationMinutes, 500, '', formatMinutesToTime);
+    previousDurationMinutes = newDurationMinutes; // Сохраняем новое значение в минутах
+
+    // Анимируем время на маршруте
+    const newTotalTime = data.totalTime;
+    const newTotalTimeMinutes = parseTimeToMinutes(newTotalTime);
+    animateCounter(totalTimeValueEl, previousTotalTimeMinutes, newTotalTimeMinutes, 500, '', formatMinutesToTime);
+    previousTotalTimeMinutes = newTotalTimeMinutes; // Сохраняем новое значение в минутах
+
+    // Обновляем таблицу
+    geocoderTableBody.innerHTML = ''; // Очищаем таблицу
+    if (data.points && data.points.length > 0) {
+      // Используем forEach с индексом
+      data.points.forEach((point, index) => {
+        const row = document.createElement('tr');
+        // Примечание: строка изначально будет невидима из-за CSS
+
+        row.innerHTML = `
+          <td>${point.row}</td>
+          <td><span class="address-text">${point.input}</span><span class="edit-icon">${pencilSvgIcon}</span></td>
+          <td>${point.found}</td>
+          <td>${point.coords}</td>
+          <td>${getAccuracyDisplay(point.accuracy)}</td>
+        `;
+
+        // Добавляем класс строке в зависимости от точности
+        const accLower = point.accuracy ? point.accuracy.toLowerCase() : '';
+        if (accLower.includes('средняя') || accLower.includes('улица') || accLower.includes('приблизительный') || accLower.includes('перекресток')) {
+            row.classList.add('row-accuracy-medium');
+        } else if (accLower.includes('низкая') || accLower.includes('город') || accLower.includes('область')) {
+            row.classList.add('row-accuracy-low');
+        }
+
+        geocoderTableBody.appendChild(row);
+
+        // ВОЗВРАЩАЕМ логику setTimeout для анимации появления строк
+        const delay = index * 60; // Задержка в мс (60мс между строками)
+        setTimeout(() => {
+            row.classList.add('row-visible');
+        }, delay);
+      });
+
+      // --- ЛОГИКА АНИМАЦИИ ВЫСОТЫ ТАБЛИЦЫ (остается) ---
+      const tableWrapper = document.getElementById('table-scroll-wrapper');
+      if (tableWrapper) {
+          // 1. Запоминаем текущую высоту
+          const currentHeight = tableWrapper.offsetHeight + 'px';
+          
+          // 2. Устанавливаем auto, чтобы измерить нужную высоту
+          tableWrapper.style.height = 'auto';
+          const targetHeight = tableWrapper.scrollHeight + 'px';
+          
+          // 3. Возвращаем старую высоту НЕМЕДЛЕННО (до перерисовки)
+          tableWrapper.style.height = currentHeight;
+          
+          // 4. В следующем кадре устанавливаем целевую высоту для анимации
+          requestAnimationFrame(() => {
+              tableWrapper.style.height = targetHeight;
+          });
+      } else {
+          console.error('#table-scroll-wrapper not found');
+      }
+      // --- КОНЕЦ ЛОГИКИ АНИМАЦИИ ВЫСОТЫ ---
+
+    } else {
+      geocoderTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Нет данных для этого маршрута.</td></tr>';
+      if (routeNameHeaderEl) routeNameHeaderEl.textContent = '';
+      // Если данных нет, тоже нужно анимировать высоту к нулю (или минимальной)
+      const tableWrapper = document.getElementById('table-scroll-wrapper');
+       if (tableWrapper) {
+            const currentHeight = tableWrapper.offsetHeight + 'px';
+            // Устанавливаем 0px как целевую высоту
+            const targetHeight = '0px'; 
+            tableWrapper.style.height = currentHeight;
+            requestAnimationFrame(() => {
+                tableWrapper.style.height = targetHeight;
+            });
+       }
+    }
+
+    // Обновляем активный элемент в списке
+    if (currentSelectedRouteId) {
+      const previousActiveElement = routeListContainer.querySelector(`[data-route-id="${currentSelectedRouteId}"]`);
+      if (previousActiveElement) {
+        previousActiveElement.classList.remove('active');
+      }
+    }
+    const newActiveElement = routeListContainer.querySelector(`[data-route-id="${selectedRouteId}"]`);
+    if (newActiveElement) {
+      newActiveElement.classList.add('active');
+    }
+    currentSelectedRouteId = selectedRouteId;
+  }
+
+  // --- НОВАЯ ФУНКЦИЯ ДЛЯ АНИМАЦИИ ЧИСЕЛ ---
+  function animateCounter(element, start, end, duration, unit = '', formatter = null) {
+    let startTime = null;
+    
+    // Убираем нечисловые символы и парсим в число (или используем как есть, если не строка)
+    const startValue = typeof start === 'number' ? start : parseFloat(String(start).replace(/[^\d.-]/g, '')) || 0;
+    const endValue = typeof end === 'number' ? end : parseFloat(String(end).replace(/[^\d.-]/g, '')) || 0;
+    const range = endValue - startValue;
+
+    // Если значения совпадают, просто устанавливаем и выходим
+    if (range === 0) {
+        // Используем formatter, если он есть, иначе стандартное форматирование
+        element.textContent = formatter ? formatter(endValue) : Math.round(endValue) + unit;
+        return;
+    }
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const currentValue = startValue + range * progress;
+      
+      // Используем formatter, если он есть, иначе стандартное форматирование
+      element.textContent = formatter ? formatter(currentValue) : Math.round(currentValue) + unit;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+         // Убедимся, что финальное значение точное
+         element.textContent = formatter ? formatter(endValue) : Math.round(endValue) + unit;
+      }
+    };
+
+    requestAnimationFrame(step);
+  }
+  // ----------------------------------------
+
+  // --- Функция для инициализации списка маршрутов --- 
+  function initializeRouteList() {
+      routeListContainer.innerHTML = ''; // Очищаем на всякий случай
+      const routeIds = Object.keys(exampleRouteData);
+
+      if (routeIds.length === 0) {
+          routeListContainer.innerHTML = '<li class="route-list-item">Нет доступных маршрутов</li>';
+          return;
+      }
+
+      routeIds.forEach(routeId => {
+          const route = exampleRouteData[routeId];
+          const listItem = document.createElement('li');
+          listItem.classList.add('route-list-item');
+          listItem.setAttribute('data-route-id', routeId); // Добавляем ID для обработчика
+
+          // Подсчет точности для значков
+          let mediumCount = 0;
+          let lowCount = 0;
+          if (route.points && route.points.length > 0) {
+              route.points.forEach(point => {
+                  const accLower = point.accuracy ? point.accuracy.toLowerCase() : '';
+                  // Средняя точность
+                  if (accLower.includes('улица') || accLower.includes('приблизительный') || accLower.includes('перекресток') || accLower.includes('парковка') || accLower.includes('дорога') || accLower.includes('маршрут')) {
+                      mediumCount++;
+                  }
+                  // Низкая и очень низкая точность
+                  else if (accLower.includes('город') || accLower.includes('область') || accLower.includes('район') || accLower.includes('поселение') || accLower.includes('место') || accLower.includes('деление') || accLower.includes('жилой район')) {
+                      lowCount++;
+                  }
+                  // Высокая, ошибка, неизвестно - игнорируем для счетчиков
+              });
+          }
+
+          // Формирование HTML для значков
+          let badgesHtml = '';
+          if (mediumCount > 0) {
+              badgesHtml += `<span class="accuracy-count-badge badge-medium">${mediumCount}</span>`;
+          }
+          if (lowCount > 0) {
+              badgesHtml += `<span class="accuracy-count-badge badge-low">${lowCount}</span>`;
+          }
+
+          // Формирование полного HTML элемента списка
+          listItem.innerHTML = `
+            <div class="route-list-item-content">
+              <span class="route-name">${route.name}</span>
+              <span class="route-badges">${badgesHtml}</span>
+            </div>
+          `;
+          
+          routeListContainer.appendChild(listItem);
+      });
+
+      // Добавляем обработчик кликов на весь список (делегирование)
+      routeListContainer.addEventListener('click', (event) => {
+          const targetItem = event.target.closest('.route-list-item'); // Ищем ближайший элемент списка
+          if (targetItem && targetItem.dataset.routeId) {
+              const selectedRouteId = targetItem.dataset.routeId;
+              if (selectedRouteId !== currentSelectedRouteId) { // Обновляем только если выбрали другой маршрут
+                 updateDisplay(selectedRouteId);
+              }
+          }
+      });
+
+      // Выбираем первый маршрут по умолчанию и отображаем его данные
+      const firstRouteId = routeIds[0];
+      updateDisplay(firstRouteId);
+   }
+
+  // --- Инициализация Lottie анимации --- 
+  function initializeLottie() {
+      if (lottieIconContainer) {
+          lottiePlayer = document.createElement('lottie-player');
+          lottiePlayer.setAttribute('src', '../frontend/static/animations/Animation - 1745303963639.json');
+          lottiePlayer.setAttribute('background', 'transparent');
+          lottiePlayer.setSpeed(1);
+          lottiePlayer.style.width = '100%';
+          lottiePlayer.style.height = '100%';
+
+          try {
+              lottieIconContainer.appendChild(lottiePlayer);
+              console.log('Lottie player created and appended.');
+          } catch (error) {
+               console.error('Error appending lottie-player:', error);
+          }
+          
+          lottiePlayer.addEventListener('ready', () => {
+               console.log('Lottie player ready. Adding direction hover listeners.');
+               // Не устанавливаем начальный кадр
+
+              if (verticalRouteSelector) {
+                  verticalRouteSelector.addEventListener('mouseenter', () => {
+                      console.log('Mouse enter -> Set direction 1 & Play');
+                      if (lottiePlayer) {
+                          lottiePlayer.setDirection(1); // Направление вперед
+                          lottiePlayer.play(); 
+                      }
+                  });
+
+                  verticalRouteSelector.addEventListener('mouseleave', () => {
+                       console.log('Mouse leave -> Set direction -1 & Play');
+                      if (lottiePlayer) {
+                          lottiePlayer.setDirection(-1); // Направление назад
+                          lottiePlayer.play(); 
+                      }
+                  });
+               } else {
+                    console.error('verticalRouteSelector not found when adding hover listeners.');
+               }
+          });
+          
+           lottiePlayer.addEventListener('error', (e) => {
+              console.error('Lottie player error:', e);
+          });
+
+      } else {
+          console.error('lottieIconContainer not found when trying to initialize Lottie.');
+      }
+  }
+
+  // --- Инициализация Lottie для кнопки пересчета ---
+  function initializeRecalculateLottie() {
+      const container = document.getElementById('recalculate-lottie-container');
+      if (container) {
+          recalculateLottiePlayer = document.createElement('lottie-player');
+          recalculateLottiePlayer.setAttribute('src', '../frontend/static/animations/Animation - 1745329291702.json'); // Путь к файлу
+          recalculateLottiePlayer.setAttribute('background', 'transparent');
+          recalculateLottiePlayer.setSpeed(1);
+          recalculateLottiePlayer.style.width = '100%'; // Заполняем контейнер
+          recalculateLottiePlayer.style.height = '100%';
+          // НЕ устанавливаем loop или autoplay
+          
+          try {
+              container.appendChild(recalculateLottiePlayer);
+              console.log('Recalculate Lottie player created and appended.');
+          } catch (error) {
+               console.error('Error appending recalculate lottie-player:', error);
+          }
+          
+           recalculateLottiePlayer.addEventListener('error', (e) => {
+              console.error('Recalculate Lottie player error:', e);
+          });
+
+      } else {
+          console.error('recalculate-lottie-container not found.');
+      }
+  }
+
+  // --- Инициализация при загрузке страницы --- 
+  document.addEventListener('DOMContentLoaded', () => {
+      initializeRouteList();
+      initializeLottie();
+      initializeRecalculateLottie(); // Инициализируем плеер кнопки
+  });
+
+  // --- ОБРАБОТЧИК КНОПКИ ПЕРЕСЧЕТА ---
+  const recalculateBtn = document.getElementById('recalculate-button');
+  if (recalculateBtn) {
+      // Обработчик клика (остается для состояния "пересчета")
+      recalculateBtn.addEventListener('click', () => {
+          const resultsLayout = recalculateBtn.closest('.results-layout');
+          if (!resultsLayout || resultsLayout.classList.contains('recalculating')) {
+              return; // Не запускаем, если не найден layout или уже пересчитывается
+          }
+
+          console.log('Recalculating route...'); // Для отладки
+          
+          // УДАЛЯЕМ запуск анимации отсюда
+          /*
+          if (recalculateLottiePlayer) {
+             recalculateLottiePlayer.stop(); 
+             recalculateLottiePlayer.play();
+          }
+          */
+          
+          resultsLayout.classList.add('recalculating');
+          recalculateBtn.disabled = true;
+
+          // Убираем класс и разблокируем кнопку через 3 секунды
+          setTimeout(() => {
+              resultsLayout.classList.remove('recalculating');
+              recalculateBtn.disabled = false;
+              console.log('Recalculation finished.'); // Для отладки
+          }, 3000);
+      });
+
+      // ДОБАВЛЯЕМ обработчики наведения для анимации
+      recalculateBtn.addEventListener('mouseenter', () => {
+          if (recalculateLottiePlayer) {
+              recalculateLottiePlayer.stop();
+              recalculateLottiePlayer.play();
+          }
+      });
+      
+      // Обработчик mouseleave - опционально, пока не добавляем остановку
+      /*
+      recalculateBtn.addEventListener('mouseleave', () => {
+          if (recalculateLottiePlayer) {
+              // recalculateLottiePlayer.stop(); // Можно раскомментировать, если нужно прерывать
+          }
+      });
+      */
+
+  } else {
+       console.error('#recalculate-button not found');
+  }
+  // -----------------------------------
+
+  // --- РЕДАКТИРОВАНИЕ АДРЕСА В ТАБЛИЦЕ ---
+  function startEditAddress(tdElement) {
+      if (tdElement.classList.contains('editing')) {
+          return; // Уже редактируется
+      }
+
+      const addressSpan = tdElement.querySelector('.address-text');
+      const iconSpan = tdElement.querySelector('.edit-icon');
+      if (!addressSpan) return;
+      
+      const originalText = addressSpan.textContent;
+      
+      // Создаем input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = originalText;
+      input.dataset.originalValue = originalText; // Сохраняем оригинал в data-атрибуте
+
+      // Очищаем ячейку и добавляем input
+      tdElement.innerHTML = ''; 
+      tdElement.appendChild(input);
+      tdElement.classList.add('editing');
+      input.focus();
+
+      // Обработчики для завершения редактирования
+      const finishEditing = () => {
+          endEditAddress(input, tdElement);
+          // Удаляем слушатели после первого срабатывания
+          input.removeEventListener('blur', finishEditing);
+          input.removeEventListener('keydown', handleKeyDown);
+      };
+
+      const handleKeyDown = (event) => {
+          if (event.key === 'Enter') {
+              finishEditing();
+          } else if (event.key === 'Escape') {
+               // Отмена: просто возвращаем оригинальный текст и SVG
+               tdElement.innerHTML = `<span class="address-text">${originalText}</span><span class="edit-icon">${pencilSvgIcon}</span>`;
+               tdElement.classList.remove('editing');
+               input.removeEventListener('blur', finishEditing);
+               input.removeEventListener('keydown', handleKeyDown);
+          }
+      };
+
+      input.addEventListener('blur', finishEditing);
+      input.addEventListener('keydown', handleKeyDown);
+  }
+
+  function endEditAddress(inputElement, tdElement) {
+      const newValue = inputElement.value.trim();
+      const originalText = inputElement.dataset.originalValue;
+
+      tdElement.classList.remove('editing');
+      
+      // Восстанавливаем структуру ячейки с SVG
+      tdElement.innerHTML = `<span class="address-text"></span><span class="edit-icon">${pencilSvgIcon}</span>`;
+      const addressSpan = tdElement.querySelector('.address-text');
+
+      if (newValue !== originalText && newValue !== '') {
+          // Значение изменилось
+          addressSpan.textContent = newValue;
+          
+          // Плавно очищаем соседние ячейки
+          const foundAddressCell = tdElement.nextElementSibling;
+          const coordsCell = foundAddressCell ? foundAddressCell.nextElementSibling : null;
+          const accuracyCell = coordsCell ? coordsCell.nextElementSibling : null;
+          const cellsToClear = [foundAddressCell, coordsCell, accuracyCell].filter(Boolean); // Массив существующих ячеек
+          
+          cellsToClear.forEach(cell => cell.classList.add('cell-fading-out'));
+
+          setTimeout(() => {
+              if(foundAddressCell) foundAddressCell.textContent = '-';
+              if(coordsCell) coordsCell.textContent = '-';
+              if(accuracyCell) accuracyCell.innerHTML = '<span class="accuracy-display accuracy-unknown">❓ Требуется пересчет</span>';
+              
+              // Убираем класс после обновления контента
+              cellsToClear.forEach(cell => cell.classList.remove('cell-fading-out'));
+          }, 300); // Задержка равна длительности transition
+          
+          // Примечание: здесь не обновляем exampleRouteData, изменения визуальные
+
+      } else {
+          // Значение не изменилось или стало пустым, возвращаем оригинал
+          addressSpan.textContent = originalText;
+      }
+  }
+
+  // Делегированный обработчик клика на тело таблицы
+  geocoderTableBody.addEventListener('click', (event) => {
+      const editIcon = event.target.closest('.edit-icon'); // Ищем .edit-icon среди предков кликнутого элемента
+      if (editIcon) { // Если клик был на иконке или внутри нее
+          const td = editIcon.closest('td'); // Находим родительскую ячейку
+          if (td) {
+              startEditAddress(td);
+          }
+      }
+  });
+  // ----------------------------------------
+
+</script>
+
+</body>
+</html> 

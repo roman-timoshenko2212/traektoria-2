@@ -1,0 +1,195 @@
+/* Стили для шапки */
+body {
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif; /* Используем шрифт как в основном файле */
+    margin: 0;
+    background-color: #f5f7fa; /* Фон как в основном файле */
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Добавляем стили для .container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px; /* Можно оставить или убрать, если нужно чтобы шапка прилегала к краям */
+}
+
+/* Переменные для цветов и прочего, если понадобятся */
+:root {
+  --primary: #4a6bef;
+  --primary-dark: #3957cf;
+  --success: #28a745;
+  --success-light: #e9f7ec; /* Светло-зеленый для фона завершенного */
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --gray: #6c757d;
+  --gray-light: #e0e4e8;
+  --gray-medium: #adb5bd;
+  --gray-dark: #6c757d;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --border-radius: 8px;
+  --transition: all 0.3s ease-in-out; /* Плавный переход */
+}
+
+/* Стили для header и logo */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* <<< Центрируем содержимое по горизонтали */
+  padding: 20px 0;
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+.logo {
+  display: flex; /* Оставляем flex для выравнивания, если понадобится */
+  align-items: center;
+  /* gap: 12px; Убираем gap */
+  font-family: 'Montserrat', sans-serif; /* <<< Применяем новый шрифт */
+  font-size: 36px; /* <<< УВЕЛИЧИЛИ РАЗМЕР */
+  font-weight: 700; /* <<< Используем жирное начертание */
+  color: var(--primary);
+  letter-spacing: 1px; /* <<< Можно добавить межбуквенный интервал */
+  text-transform: uppercase; /* <<< Делаем все буквы заглавными */
+}
+
+/* === Стили для НОВЫХ панелей шагов === */
+
+.step-panel-container {
+  display: flex;
+  gap: 15px; /* Расстояние между панелями */
+  margin-bottom: 20px;
+}
+
+.step-panel {
+  flex: 1; /* Панели занимают равное пространство */
+  background-color: #ffffff;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  transition: var(--transition); /* Плавные переходы для всего */
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Для корректного flex-grow */
+}
+
+.step-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.step-panel-icon {
+  flex-shrink: 0; /* Не сжимать иконку */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex; /* Используем inline-flex для центрирования */
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: var(--gray-light);
+  color: var(--gray-dark);
+  transition: var(--transition);
+}
+
+.step-panel-title {
+  font-weight: 500;
+  color: var(--gray-dark);
+  font-size: 15px;
+  transition: var(--transition);
+  white-space: nowrap; /* Предотвратить перенос */
+  overflow: hidden;    /* Скрыть выходящий текст */
+  text-overflow: ellipsis; /* Добавить троеточие */
+}
+
+.step-panel-status {
+  font-size: 13px;
+  color: var(--gray-medium);
+  margin-top: auto; /* Прижимаем статус книзу, если панель растянется */
+  padding-top: 5px;
+}
+
+/* --- Стили для состояний --- */
+
+/* Завершенный шаг */
+.step-panel.completed {
+  background-color: var(--success-light);
+  border-color: var(--success);
+}
+
+.step-panel.completed .step-panel-icon {
+  background-color: var(--success);
+  color: white;
+  font-size: 20px; /* Чуть больше для галочки */
+}
+
+.step-panel.completed .step-panel-title {
+  color: var(--success);
+}
+
+.step-panel.completed .step-panel-status {
+  color: var(--success);
+  font-weight: 500;
+}
+
+/* Активный шаг */
+.step-panel.active {
+  border-color: var(--primary);
+  box-shadow: 0 6px 12px rgba(74, 107, 239, 0.2); /* Более заметная тень */
+  transform: translateY(-2px); /* Небольшой подъем */
+}
+
+.step-panel.active .step-panel-icon {
+  background-color: var(--primary);
+  color: white;
+}
+
+.step-panel.active .step-panel-title {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* Будущий шаг */
+.step-panel.upcoming {
+  background-color: #f8f9fa; /* Слегка серый фон */
+  opacity: 0.7; /* Полупрозрачность */
+}
+
+.step-panel.upcoming .step-panel-icon {
+  background-color: var(--gray-light);
+  color: var(--gray-medium);
+}
+
+.step-panel.upcoming .step-panel-title {
+  color: var(--gray-medium);
+}
+
+/* --- Адаптивность --- */
+@media (max-width: 768px) {
+  .step-panel-container {
+    flex-direction: column; /* Панели друг под другом */
+    gap: 10px;
+  }
+  .logo {
+      font-size: 20px;
+  }
+  .step-panel-title {
+     font-size: 14px;
+  }
+   .step-panel-status {
+     font-size: 12px;
+  }
+}
+
+/* Удаляем старые стили степпера */
+/*
+.stepper, .step, .step::before, .step:first-child::before, .step-circle, .step-text, .step.active .step-circle, .step.active .step-text, .step.completed .step-circle, .step.completed::before {
+    all: unset; 
+}
+*/ 

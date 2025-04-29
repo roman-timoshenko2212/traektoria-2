@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дизайн Шапки</title>
+    <!-- Сюда можно будет подключить CSS -->
+    <link rel="stylesheet" href="header_styles.css">
+    <!-- Добавляем импорт шрифта Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container"> <!-- Обертка контейнером -->
+    <!-- Шапка из основного приложения -->
+    <header class="header">
+        <div class="logo">
+            <!-- <span>🚚</span> Убрали иконку -->
+            <span>ТРАЕКТОРИЯ</span> <!-- Изменили текст -->
+        </div>
+    </header>
+
+    <!-- Новая шапка-панель -->
+    <div class="step-panel-container">
+        <!-- Шаг 1: Завершен -->
+        <div class="step-panel completed" data-step="1">
+            <div class="step-panel-header">
+                <span class="step-panel-icon">✓</span> <!-- Иконка галочки -->
+                <span class="step-panel-title">Загрузка файла</span>
+            </div>
+            <div class="step-panel-status"></div>
+        </div>
+
+        <!-- Шаг 2: Активен -->
+        <div class="step-panel active" data-step="2">
+            <div class="step-panel-header">
+                <span class="step-panel-icon">2</span> <!-- Номер шага -->
+                <span class="step-panel-title">Проверка адресов</span>
+            </div>
+            <!-- Можно добавить описание или индикатор прогресса внутри активного шага -->
+        </div>
+
+        <!-- Шаг 3: Будущий -->
+        <div class="step-panel upcoming" data-step="3">
+            <div class="step-panel-header">
+                <span class="step-panel-icon">3</span> <!-- Номер шага -->
+                <span class="step-panel-title">Результаты</span>
+            </div>
+        </div>
+    </div>
+    <!-- Конец новой шапки -->
+
+    <!-- Кнопки для демонстрации переключения шагов -->
+    <div class="demo-controls" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; justify-content: center; gap: 15px;">
+        <button id="prev-step-btn" class="btn btn-outline">← Назад</button>
+        <button id="next-step-btn" class="btn">Далее →</button>
+    </div>
+
+    <!-- Остальное содержимое страницы (для контекста) -->
+    <main style="padding: 20px;">
+        <p>Основное содержимое страницы...</p>
+    </main>
+</div> <!-- Конец контейнера -->
+
+<!-- Подключаем JS в конце body -->
+<script src="header_script.js"></script>
+
+</body>
+</html> 

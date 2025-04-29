@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Построение маршрутов</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Добавляем импорт шрифта Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+
+  <!-- Загружаем стили приложения -->
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+  <link rel="stylesheet" href="/static/css/step3_results.css">
+  
+  <!-- Leaflet JS (должен быть ПЕРЕД routing machine и app.js) -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Leaflet Routing Machine JS -->
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+  <!-- Lottie (Bodymovin) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Верхняя часть шапки (логотип) -->
+    <header class="header">
+        <div class="logo">
+            <!-- <span>🚚</span> Убрали иконку -->
+            <span>ТРАЕКТОРИЯ</span> <!-- Изменили текст -->
+        </div>
+    </header>
+
+    <!-- Новая шапка-панель -->
+    <div class="step-panel-container">
+        <!-- Шаг 1 -->
+        <div class="step-panel active" data-step="1"> <!-- Начальное состояние - Шаг 1 активен -->
+            <div class="step-panel-header">
+                <span class="step-panel-icon">1</span>
+                <span class="step-panel-title">Загрузка файла</span>
+            </div>
+            <div class="step-panel-status"></div>
+        </div>
+        <!-- Шаг 2 -->
+        <div class="step-panel upcoming" data-step="2">
+            <div class="step-panel-header">
+                <span class="step-panel-icon">2</span>
+                <span class="step-panel-title">Проверка адресов</span>
+            </div>
+        </div>
+        <!-- Шаг 3 -->
+        <div class="step-panel upcoming" data-step="3">
+            <div class="step-panel-header">
+                <span class="step-panel-icon">3</span>
+                <span class="step-panel-title">Результаты</span>
+            </div>
+        </div>
+    </div>
+    <!-- Конец новой шапки -->
+
+    <!-- Оверлей для загрузки -->
+    <div id="loading" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000;">
+      <div class="spinner"></div>
+      <p id="loading-message" style="margin-top: 16px; font-weight: 500;">Загрузка...</p>
+    </div>
+
+    <!-- Контейнер для отображения ошибок -->
+    <div id="error-container" class="hidden">
+      <span id="error-message">Произошла ошибка.</span>
+    </div>
+
+    <!-- Контейнер для ПОСТОЯННОГО отображения последней ошибки -->
+    <div id="persistent-error-log" 
+         style="margin-top: 15px; padding: 10px; border: 1px solid red; background-color: #ffeeee; color: red; font-family: monospace; white-space: pre-wrap; display: none;">
+      Последняя ошибка:
+    </div>
+
+    <!-- Шаг 1: Загрузка файла -->
+    <div id="step-1-content" class="step-content">
+      <div class="card">
+        <h2>Загрузите Excel-файл с маршрутами</h2>
+        <p style="margin-bottom: 20px; color: #666;">Перетащите файл в область ниже или нажмите для выбора файла с вашего компьютера.</p>
+        
+        <div id="upload-area" class="upload-area">
+          <!-- Старую разметку заменяем -->
+          <!-- 
+          <p class="upload-title">Перетащите файл сюда</p>
+          <p>или <span class="upload-click-target">кликните для выбора</span></p>
+          <p class="upload-formats">Поддерживаемые форматы: .xlsx, .xls</p> 
+          -->
+          
+          <!-- Новая разметка с Lottie -->
+          <div id="lottie-container"></div> <!-- Контейнер для анимации -->
+          <p class="upload-text">Перетащите файл сюда или кликните для выбора</p>
+          <p class="upload-formats">Поддерживаемые форматы: .xlsx, .xls</p> <!-- Добавили строку форматов -->
+          <!-- Конец новой разметки -->
+
+          <input type="file" id="file-input" accept=".xlsx, .xls" style="display: none;">
+        </div>
+
+        <!-- Поле: Время на точку (мин) -->
+        <div class="input-group" style="margin-top: 25px; margin-bottom: 20px;">
+            <label for="service-time-input" class="input-label">Время на точку (мин):</label>
+            <input type="number" id="service-time-input" name="service_time_per_stop_minutes" class="input time-input" placeholder="мин" min="0">
+        </div>
+        <!-- Конец поля -->
+
+        <!-- Контейнер для поля Даты и кнопки Далее -->
+        <div class="buttons-container" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <!-- Поле: Дата отчета -->
+            <div class="input-group" style="margin: 0; flex-grow: 0; /* Убираем авто-растягивание */">
+                <label for="report-date-input" class="input-label" style="margin-bottom: 0; /* Убираем лишний отступ */">Дата отчета:</label>
+                <input type="date" id="report-date-input" name="report_date" class="input date-input" style="width: auto; /* Авто-ширина */">
+            </div>
+            <!-- Конец поля -->
+
+            <button type="button" id="step-1-next-btn" class="btn" disabled>Далее</button>
+        </div>
+        <!-- Конец контейнера -->
+
+      </div>
+    </div>
+
+    <!-- Шаг 2: Проверка адресов -->
+    <div id="step-2-content" class="step-content hidden">
+      <div class="card">
+        <h2>Проверка адресов</h2>
+        <p style="margin-bottom: 20px; color: #666;">Некоторые адреса требуют проверки. Вы можете внести исправления ниже.</p>
+        
+        <div id="exceptions-container" class="hidden">
+          <form id="corrections-form">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Маршрут</th>
+                  <th>Адрес</th>
+                  <th>Исправленный адрес</th>
+                </tr>
+              </thead>
+              <tbody id="exceptions-table"></tbody>
+            </table>
+            
+            <div class="buttons-container">
+              <button type="button" class="btn btn-outline" data-step="1">Назад</button>
+              <button type="submit" class="btn">Продолжить</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="correction-success" class="hidden" style="margin-top: 20px; padding: 12px; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; border-radius: 8px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="color: #28a745; font-size: 24px;">✅</span>
+            <div>
+              <h3 style="margin: 0; color: #28a745;">Адреса проверены</h3>
+              <p style="margin: 8px 0 0 0;">Исправлено адресов: <span id="correction-count">0</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 3: Результаты -->
+    <div id="step-3-content" class="step-content hidden">
+        <div class="card">
+          <h2>Результаты обработки маршрута</h2>
+
+          <!-- ИЗМЕНЯЕМ ID ПЛЕЙСХОЛДЕРА КАРТЫ -->
+          <div id="map-container" class="map-container hidden">
+             <!-- Контент карты будет добавлен JS -->
+          </div>
+
+          <!-- Новый layout для селектора и таблицы -->
+          <div class="results-layout">
+
+             <!-- Перемещаем блок #route-info сюда -->
+             <div id="route-info" style="/* margin-top: 30px; убран */">
+               <div class="route-info-header"> <!-- Обертка для заголовка и кнопки -->
+                 <h3 style="margin: 0;">Информация о маршруте <strong id="route-name-header"></strong></h3> <!-- Убираем margin у h3 -->
+                 <button id="recalculate-button" class="recalculate-btn" title="Пересчитать маршрут">
+                   <div id="recalculate-lottie-container"></div> <!-- Контейнер для Lottie -->
+                 </button> <!-- Кнопка Пересчета -->
+               </div>
+               <div class="route-info-cards">
+                   <div class="result-card">
+                       <div class="result-label">Общее расстояние</div>
+                       <div class="result-value" id="distance-value">-</div>
+                     </div>
+                     <div class="result-card">
+                       <div class="result-label">Время в пути</div>
+                       <div class="result-value" id="duration-value">-</div>
+                     </div>
+                     <div class="result-card">
+                       <div class="result-label">Время на маршруте</div>
+                       <div class="result-value" id="total-route-time-value">-</div>
+                     </div>
+               </div>
+             </div>
+
+            <!-- Новый вертикальный селектор -->
+            <div id="vertical-route-selector" class="vertical-route-selector">
+              <!-- Обертка для Lottie анимации -->
+              <div class="lottie-wrapper">
+                <!-- Контейнер для Lottie анимации -->
+                <div id="lottie-icon-container"></div>
+              </div>
+              <!-- Список маршрутов -->
+              <ul id="route-list" class="route-list">
+                <!-- Элементы списка будут добавлены через JS -->
+              </ul>
+            </div>
+
+            <!-- Контейнер для таблицы (для управления шириной) -->
+            <div class="results-table-container">
+              <!-- Таблица с результатами геокодирования -->
+              <div id="results-container">
+                <h3>Геокодированные адреса</h3>
+                <div id="table-scroll-wrapper" style="overflow-x: auto;">
+                  <table class="table">
+                     <thead>
+                      <tr>
+                        <th>№</th>
+                        <th>Исходный адрес</th>
+                        <th>Найденный адрес</th>
+                        <th>Координаты</th>
+                        <th>Точность</th>
+                      </tr>
+                    </thead>
+                    <tbody id="geocoder-table">
+                      <tr><td colspan="5" style="text-align: center;">Выберите маршрут из списка слева</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div> <!-- Конец results-layout -->
+
+          <!-- Кнопки (оставляем кнопки из старого дизайна, если нужно) -->
+           <div class="buttons-container" style="margin-top: 30px; display: flex; gap: 10px;">
+            <button type="button" class="btn btn-outline" data-step="1">Начать заново</button>
+            <button type="button" id="show-summary-btn" class="btn">Резюме</button>
+          </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно с резюме -->
+    <div id="summary-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Резюме по всем маршрутам</h3>
+          <button id="close-modal" class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+          <!-- Удаленный блок -->
+          <!-- 
+          <div style="margin-bottom: 15px; font-size: 0.9em;">
+            <strong>Время на точку (установлено):</strong> <span id="summary-global-service-time">Н/Д</span> мин.
+          </div>
+          -->
+
+          <table class="table" id="summary-table">
+            <thead>
+              <!-- Заголовки будут добавлены динамически из JS -->
+            </thead>
+            <tbody>
+                <!-- Строки будут добавлены динамически из JS -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Добавляем футер для кнопки -->
+        <div class="modal-footer">
+            <button id="export-summary-btn" class="btn btn-export">Экспорт XLSX</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Основной скрипт -->
+  <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+  <script src="{{ url_for('static', path='/js/step2_corrections.js') }}"></script>
+  <script src="{{ url_for('static', path='/js/step3_results.js') }}"></script>
+</body>
+</html>

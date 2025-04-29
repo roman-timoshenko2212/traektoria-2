@@ -1,0 +1,159 @@
+{
+  "route_name": "Богучарский район, Воронежская обл.",
+  "points_count": 11,
+  "calculation_time": "2025-04-24 15:44:46",
+  "total_distance": 1220648,
+  "total_duration": 61638,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 50.422095,
+        "lon": 40.349645
+      },
+      "distance": 180365,
+      "duration": 7822,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 50.422095,
+        "lon": 40.349645
+      },
+      "to_point": {
+        "lat": 50.080005,
+        "lon": 40.303772
+      },
+      "distance": 72284,
+      "duration": 4037,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 50.080005,
+        "lon": 40.303772
+      },
+      "to_point": {
+        "lat": 49.931646,
+        "lon": 40.547302
+      },
+      "distance": 30807,
+      "duration": 1769,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 49.931646,
+        "lon": 40.547302
+      },
+      "to_point": {
+        "lat": 49.704034,
+        "lon": 39.831057
+      },
+      "distance": 63731,
+      "duration": 3199,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 49.704034,
+        "lon": 39.831057
+      },
+      "to_point": {
+        "lat": 51.614938,
+        "lon": 39.194272
+      },
+      "distance": 272590,
+      "duration": 12930,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 51.614938,
+        "lon": 39.194272
+      },
+      "to_point": {
+        "lat": 49.889076,
+        "lon": 39.641581
+      },
+      "distance": 240086,
+      "duration": 11432,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 49.889076,
+        "lon": 39.641581
+      },
+      "to_point": {
+        "lat": 49.973143,
+        "lon": 39.952802
+      },
+      "distance": 34436,
+      "duration": 2589,
+      "status": "OK"
+    },
+    {
+      "from_index": 7,
+      "to_index": 8,
+      "from_point": {
+        "lat": 49.973143,
+        "lon": 39.952802
+      },
+      "to_point": {
+        "lat": 49.90377,
+        "lon": 39.418682
+      },
+      "distance": 54369,
+      "duration": 4147,
+      "status": "OK"
+    },
+    {
+      "from_index": 8,
+      "to_index": 9,
+      "from_point": {
+        "lat": 49.90377,
+        "lon": 39.418682
+      },
+      "to_point": {
+        "lat": 50.155408,
+        "lon": 39.669585
+      },
+      "distance": 53902,
+      "duration": 3438,
+      "status": "OK"
+    },
+    {
+      "from_index": 9,
+      "to_index": 10,
+      "from_point": {
+        "lat": 50.155408,
+        "lon": 39.669585
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 218078,
+      "duration": 10275,
+      "status": "OK"
+    }
+  ]
+}

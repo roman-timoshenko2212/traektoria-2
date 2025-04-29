@@ -1,0 +1,1005 @@
+/* Основные стили для веб-интерфейса */
+:root {
+  --primary: #4a6bef;
+  --primary-dark: #3957cf;
+  --success: #28a745;
+  --success-light: #e9f7ec; /* Светло-зеленый */
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --gray-light: #e0e4e8;
+  --gray-medium: #adb5bd;
+  --gray-dark: #6c757d;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Сделали тень мягче */
+  --border-radius: 8px;
+  --transition: all 0.3s ease-in-out; /* Плавный переход */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центрируем */
+  padding: 20px 0; /* Убираем боковые */
+  background-color: white; /* Вернул белый фон */
+  margin-bottom: 20px;
+  /* border-bottom: 2px solid var(--primary); Убрал полоску */
+  border-radius: var(--border-radius); /* Добавил скругление */
+  box-shadow: var(--shadow); /* Добавил легкую тень для отделения */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif; /* Новый шрифт */
+  font-size: 36px; /* Увеличен */
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.step-container {
+  display: flex;
+  margin-bottom: 40px;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: calc(-50% + 20px);
+  right: calc(50% + 20px);
+  height: 3px;
+  background: #e0e4e8;
+  z-index: 0;
+}
+
+.step:first-child::before {
+  display: none;
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #e0e4e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+  font-weight: bold;
+}
+
+.step-text {
+  font-size: 14px;
+  color: var(--gray);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.step.active .step-circle {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+.step.active .step-text {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.step.completed .step-circle {
+  border-color: var(--success);
+  background: var(--success);
+  color: white;
+}
+
+.step.completed::before {
+  background: var(--success);
+}
+
+.upload-area {
+  border: 2px dashed #ccc;
+  border-radius: var(--border-radius);
+  padding: 40px;
+  text-align: center;
+  background-color: #f8f9fa;
+  transition: var(--transition);
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.upload-area:hover, .upload-area.dragover {
+  border-color: var(--primary);
+  background-color: rgba(74, 107, 239, 0.05);
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: var(--success);
+}
+
+.btn-success:hover {
+  background: #218838;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-outline:hover {
+  background: rgba(74, 107, 239, 0.1);
+  color: var(--primary-dark);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e4e8;
+  vertical-align: top;
+  white-space: normal;
+}
+
+.table th {
+  font-weight: 500;
+  color: var(--gray);
+  background-color: #f8f9fa;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #e0e4e8;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(74, 107, 239, 0.2);
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-success {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: var(--success);
+}
+
+.badge-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #d39e00;
+}
+
+.badge-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--danger);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(74, 107, 239, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.map-container {
+  height: 400px;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.result-card {
+  flex: 1 1 150px;
+  padding: 16px;
+  border: 1px solid #e0e4e8;
+  border-radius: var(--border-radius);
+  background-color: #f8f9fa;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+}
+
+.result-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.result-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 8px;
+}
+
+.result-label {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .stepper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .step {
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .step::before {
+    display: none;
+  }
+  
+  .step-text {
+    text-align: left;
+  }
+  
+  .buttons-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+/* Стили для модального окна */
+.modal {
+  /* display: flex; */ /* Убираем flex-центровку */
+  /* align-items: center; */
+  /* justify-content: center; */
+  display: block; /* Возвращаем блочное отображение по умолчанию */
+  position: fixed; /* Остается на месте при прокрутке страницы */
+  z-index: 1000; /* Поверх всего */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Возвращаем overflow: auto для всего модального окна */
+  background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон */
+}
+
+/* Этот класс отвечает за скрытие */
+.modal.hidden {
+  display: none !important; /* Используем !important на всякий случай */
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto; /* Возвращаем margin для центрирования и отступа */
+  padding: 30px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 80%; /* Ширина окна */
+  max-width: 1000px; /* Максимальная ширина */
+  position: relative;
+  display: flex; /* Оставляем flexbox для внутренней структуры */
+  flex-direction: column; /* Элементы в колонку */
+  max-height: 80vh; /* Ограничиваем высоту окна */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.4em;
+  color: var(--text-primary);
+}
+
+.close-button {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+}
+
+/* ---- НОВЫЕ СТИЛИ ---- */
+.modal-body {
+  overflow-y: auto; /* Добавляем прокрутку ТОЛЬКО для тела модалки */
+  flex-grow: 1; /* Занимает все доступное пространство по высоте */
+  padding-right: 15px; /* Небольшой отступ справа, чтобы скроллбар не наезжал */
+  margin-right: -15px; /* Компенсируем отступ, чтобы таблица была полной ширины */
+}
+
+.modal-footer {
+  padding-top: 20px;
+  margin-top: auto; /* Прижимает футер к низу flex-контейнера */
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end; /* Кнопка справа */
+  background-color: #fff; /* Фон, чтобы контент под ним не просвечивал */
+}
+/* ---- КОНЕЦ НОВЫХ СТИЛЕЙ ---- */
+
+.table tr.selected {
+  background-color: #e8f4ff;
+}
+
+.table tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.route-selector-container {
+  margin-bottom: 20px;
+}
+
+.route-select {
+  width: 100%; 
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.route-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(74, 107, 239, 0.2);
+}
+
+.error-value {
+  color: var(--danger) !important;
+  font-weight: 500;
+}
+
+/* Стили для контейнера ошибок */
+#error-container {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: var(--border-radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#error-container:before {
+  content: "⚠️";
+  font-size: 18px;
+}
+
+#error-message {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Специфичные стили для таблицы проверки адресов */
+#exceptions-table {
+  table-layout: fixed; /* Фиксируем макет таблицы для управления шириной */
+  width: 100%;
+}
+
+#exceptions-table th:nth-child(1), /* Маршрут */
+#exceptions-table td:nth-child(1) {
+  width: 25%; /* Задаем ширину для колонки Маршрут */
+}
+
+#exceptions-table th:nth-child(2), /* Адрес */
+#exceptions-table td:nth-child(2),
+#exceptions-table th:nth-child(3), /* Исправленный адрес */
+#exceptions-table td:nth-child(3) {
+  width: 37.5%; /* Задаем одинаковую ширину для колонок с адресами */
+  word-break: break-word; /* Перенос длинных слов */
+  white-space: normal; /* Убеждаемся, что перенос включен */
+  vertical-align: middle; /* Выравниваем по центру вертикально для лучшего вида */
+}
+
+#exceptions-table td {
+   padding-top: 16px; /* Добавляем отступ сверху для ячеек */
+   padding-bottom: 16px; /* Добавляем отступ снизу для ячеек */
+}
+
+#exceptions-table .input {
+  /* Стили для поля ввода */
+}
+
+/* --- Стили для модального окна Сводки --- */
+#summary-modal .modal-content {
+    width: 90%; /* <<< Оставляем процент для адаптивности */
+    max-width: 1100px; /* <<< Уменьшаем максимальную ширину до референса */
+    border-radius: 8px; /* <<< Добавляем скругление углов */
+}
+
+/* --- Удаляем СТАРЫЕ стили для #summary-table --- */
+/* (Все старые правила для #summary-table, th, td, input и т.д. будут удалены ниже) */
+
+/* --- Начало НОВЫХ стилей из summary_design_preview.html (с УСИЛЕННЫМ селектором) --- */
+.modal-body #summary-table { /* <--- Добавлено .modal-body */
+    width: 100%;
+    border-collapse: collapse; 
+    margin-top: 15px;
+    font-size: 14px; 
+    table-layout: fixed; /* <<< ДОБАВЛЕНО: Финальная версия */
+}
+
+/* Заголовок таблицы */
+.modal-body #summary-table thead th { /* <--- Добавлено .modal-body */
+    text-align: left;
+    font-weight: 500; 
+    color: #555; 
+    padding: 12px 15px; 
+    border-bottom: 2px solid #e5e7eb; 
+    background-color: #f9fafb; 
+    white-space: normal; /* <<< ИСПРАВЛЕНО: Разрешаем перенос */
+    vertical-align: middle; /* <<< Добавлено из предпросмотра */
+}
+
+/* Ячейки таблицы */
+.modal-body #summary-table tbody td { /* <--- Добавлено .modal-body */
+    padding: 14px 15px; 
+    border-bottom: 1px solid #f0f2f5; 
+    vertical-align: middle; 
+}
+
+/* Убираем границу у последней строки */
+.modal-body #summary-table tbody tr:last-child td { /* <--- Добавлено .modal-body */
+    border-bottom: none;
+}
+
+/* Чередование строк для читаемости */
+.modal-body #summary-table tbody tr:nth-child(even) { /* <--- Добавлено .modal-body */
+     background-color: #fcfcfd; 
+}
+
+/* Колонки с выравниванием И ШИРИНОЙ */
+/* Маршрут (1) */
+.modal-body #summary-table th:nth-child(1),
+.modal-body #summary-table td:nth-child(1) {
+     width: 20%; /* <<< Уменьшено еще раз */
+     white-space: normal; 
+}
+/* ФИО водителя (2) */
+.modal-body #summary-table th:nth-child(2),
+.modal-body #summary-table td:nth-child(2) {
+    width: 15%; /* <<< Исправлено */
+    white-space: normal; 
+}
+/* Расстояние (км) (3) */
+.modal-body #summary-table th:nth-child(3),
+.modal-body #summary-table td:nth-child(3) {
+    width: 9%; /* <<< Финальная версия */
+    text-align: right;
+}
+/* Время на маршруте (4) */
+.modal-body #summary-table th:nth-child(4) { /* <<< Убрали td из селектора */
+    width: 9%; /* <<< Финальная версия */
+    /* white-space: nowrap; <<< УДАЛЕНО (наследуется normal из th) */
+    padding-right: 15px; 
+}
+.modal-body #summary-table td:nth-child(4) { /* <<< НОВОЕ правило ТОЛЬКО для td */
+    white-space: nowrap; /* Оставляем для td (ячейка не должна переноситься) */
+}
+
+/* Расстояние по отчету (5) */
+.modal-body #summary-table th:nth-child(5),
+.modal-body #summary-table td:nth-child(5) {
+    width: 10%; /* <<< Уменьшено */
+    text-align: right; 
+     padding-left: 15px; 
+}
+/* Время по отчету (6) */
+.modal-body #summary-table th:nth-child(6),
+.modal-body #summary-table td:nth-child(6) {
+     width: 13%; /* <<< Увеличено */
+     white-space: nowrap;
+}
+/* Разница, км (7) */
+.modal-body #summary-table th:nth-child(7),
+.modal-body #summary-table td:nth-child(7) {
+     width: 8%; /* <<< Финальная версия */
+     text-align: right;
+     padding-left: 15px; 
+}
+/* Разница, время (8) */
+.modal-body #summary-table th:nth-child(8),
+.modal-body #summary-table td:nth-child(8) {
+     width: 8%; /* <<< Финальная версия */
+     text-align: right;
+     /* white-space: nowrap; Убрано, т.к. заголовок может переноситься */
+}
+/* Кол-во точек (9) */
+.modal-body #summary-table th:nth-child(9),
+.modal-body #summary-table td:nth-child(9) {
+     width: 8%; /* <<< Увеличено еще раз */
+     text-align: right;
+     /* white-space: nowrap; Убрано, т.к. заголовок может переноситься */
+}
+
+/* --- Стили для инпутов внутри таблицы --- */
+.modal-body #summary-table .input-cell { /* <--- Добавлено .modal-body */
+     padding-top: 8px;    
+     padding-bottom: 8px;
+}
+
+/* Общие стили для всех number-инпутов в таблице (БЕЗ ширины) */
+.modal-body #summary-table input[type="number"] { /* <--- Добавлено .modal-body */
+    border: none; 
+    border-bottom: 1px solid #d1d5db; 
+    padding: 6px 4px; 
+    text-align: right; 
+    font-family: inherit; 
+    font-size: 14px;
+    line-height: normal; 
+    background-color: transparent; 
+    border-radius: 0; 
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    vertical-align: middle; 
+}
+
+/* Отдельно задаем ширину для инпута расстояния */
+.modal-body #summary-table .distance-input { /* <--- Добавлено .modal-body */
+    width: 90%; /* <<< Адаптивная ширина */
+    max-width: 80px; /* Ограничим максимальную ширину */
+}
+
+/* Ширина для инпутов времени */
+.modal-body #summary-table .hours-input,
+.modal-body #summary-table .minutes-input { 
+    width: 40%; /* <<< Адаптивная ширина */
+    max-width: 45px; /* Ограничим максимальную ширину */
+}
+
+/* Стиль для плейсхолдера времени */
+.modal-body #summary-table .hours-input::placeholder,
+.modal-body #summary-table .minutes-input::placeholder { /* <--- Добавлено .modal-body */
+    color: #b0b8c1; 
+    opacity: 1; 
+    text-align: right; 
+}
+
+.modal-body #summary-table input[type="number"]:focus { /* <--- Добавлено .modal-body */
+    outline: none;
+    border-color: #4a6bef; 
+     box-shadow: 0 1px 0 #4a6bef;
+}
+
+/* Убираем стрелочки у number инпутов (кроссбраузерно) */
+.modal-body #summary-table input[type=number]::-webkit-inner-spin-button, /* <--- Добавлено .modal-body */
+.modal-body #summary-table input[type=number]::-webkit-outer-spin-button { /* <--- Добавлено .modal-body */
+    -webkit-appearance: none;
+    margin: 0;
+}
+.modal-body #summary-table input[type=number] { /* <--- Добавлено .modal-body */
+    -moz-appearance: textfield; /* Firefox */
+}
+
+/* Ячейка для времени по отчету */
+.modal-body #summary-table .report-duration-cell { /* <--- Добавлено .modal-body */
+    white-space: nowrap; 
+}
+
+/* Метки ч/мин */
+.modal-body #summary-table .duration-label { /* <--- Добавлено .modal-body */
+    font-size: 12px; 
+    color: #6b7280; 
+    margin-left: 2px;  
+    margin-right: 8px; 
+    vertical-align: middle; 
+     display: inline; 
+}
+.modal-body #summary-table .duration-label:last-of-type { /* <--- Добавлено .modal-body */
+     margin-right: 0;
+}
+
+/* Ячейки с разницами */
+.modal-body #summary-table .difference-cell { /* <--- Добавлено .modal-body */
+    font-weight: 500; 
+    white-space: nowrap;
+}
+/* Цвет для знака разницы */
+.modal-body #summary-table .difference-cell.positive { /* <--- Добавлено .modal-body */
+     color: #10b981; 
+}
+.modal-body #summary-table .difference-cell.negative { /* <--- Добавлено .modal-body */
+     color: #ef4444; 
+ }
+/* --- Конец новых стилей --- */
+
+/* Скрытие спиннера при добавлении/удалении класса hidden */
+.spinner-border.hidden {
+    display: none;
+}
+
+.route-list-item {
+    cursor: pointer;
+}
+
+/* --- Стили для контейнера кнопки Экспорт --- */
+.card-actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end; /* Кнопку вправо */
+}
+
+/* --- Стили для кнопки Экспорт в XLSX (из предпросмотра) --- */
+.btn-export {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: #4a6bef; /* Основной синий */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none; /* Убираем подчеркивание у ссылки */
+    transition: background-color 0.2s ease;
+}
+.btn-export:hover {
+    background-color: #3957cf; /* Темнее при наведении */
+}
+
+/* --- Стили для группы ввода (метка + поле) --- */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Расстояние между меткой и полем */
+    flex-wrap: wrap; /* Перенос на новую строку на маленьких экранах */
+}
+
+.input-label {
+    font-weight: 500;
+    color: #333;
+    flex-shrink: 0; /* Не сжимать метку */
+}
+
+/* --- Общие стили для input --- */
+.input {
+    width: 100%; /* По умолчанию на всю ширину */
+    padding: 10px 16px;
+    border: 1px solid #e0e4e8;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+/* --- Стили для специфичного инпута времени на точку --- */
+.time-input {
+    width: 120px; /* Устанавливаем фиксированную ширину */
+    flex-grow: 0; /* Не растягивать */
+    text-align: right; /* Выравниваем текст (и плейсхолдер) вправо */
+}
+
+/* Убираем стрелки у number инпута */
+.time-input[type=number]::-webkit-inner-spin-button, 
+.time-input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+.time-input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* Стиль плейсхолдера */
+.time-input::placeholder {
+    color: #b0b8c1; /* Светло-серый */
+    opacity: 1; 
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(74, 107, 239, 0.2);
+}
+
+/* НОВЫЕ СТИЛИ ДЛЯ КАРТОЧЕК ИНФОРМАЦИИ О МАРШРУТЕ */
+.route-info-cards {
+  display: flex;
+  gap: 20px; /* Расстояние между карточками */
+  flex-wrap: wrap; /* Перенос на новую строку при нехватке места */
+  margin-top: 15px;
+}
+
+.result-card {
+  flex: 1 1 150px; /* Разрешаем расти, сжиматься, базовая ширина 150px */
+  /* min-width: 150px; Убрал, так как flex-basis уже задает минимальную ширину */
+  padding: 16px;
+  border: 1px solid #e0e4e8;
+  border-radius: var(--border-radius);
+  background-color: #f8f9fa;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+/* КОНЕЦ НОВЫХ СТИЛЕЙ */
+
+/* === Стили для НОВЫХ панелей шагов === */
+
+.step-panel-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.step-panel {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.step-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.step-panel-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: var(--gray-light);
+  color: var(--gray-dark);
+  transition: var(--transition);
+}
+
+.step-panel-title {
+  font-weight: 500;
+  color: var(--gray-dark);
+  font-size: 15px;
+  transition: var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.step-panel-status {
+  font-size: 13px;
+  color: var(--gray-medium);
+  margin-top: auto;
+  padding-top: 5px;
+  /* min-height: 1em; Чтобы панель не прыгала при удалении статуса */
+}
+
+/* Завершенный шаг */
+.step-panel.completed {
+  background-color: var(--success-light);
+  border-color: var(--success);
+}
+.step-panel.completed .step-panel-icon {
+  background-color: var(--success);
+  color: white;
+  font-size: 20px;
+}
+.step-panel.completed .step-panel-title {
+  color: var(--success);
+}
+/* .step-panel.completed .step-panel-status { */
+/*   color: var(--success); */
+/*   font-weight: 500; */
+/* } */
+
+/* Активный шаг */
+.step-panel.active {
+  border-color: var(--primary);
+  box-shadow: 0 6px 12px rgba(74, 107, 239, 0.2);
+  transform: translateY(-2px);
+}
+.step-panel.active .step-panel-icon {
+  background-color: var(--primary);
+  color: white;
+}
+.step-panel.active .step-panel-title {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* Будущий шаг */
+.step-panel.upcoming {
+  background-color: #f8f9fa;
+  opacity: 0.7;
+}
+.step-panel.upcoming .step-panel-icon {
+  background-color: var(--gray-light);
+  color: var(--gray-medium);
+}
+.step-panel.upcoming .step-panel-title {
+  color: var(--gray-medium);
+}
+
+/* === Конец стилей для НОВЫХ панелей шагов === */
+
+/* Обновляем адаптивность */
+@media (max-width: 768px) {
+  /* Старые стили для адаптивности шапки - КОММЕНТИРУЕМ */
+  /*
+  .stepper {
+    padding: 15px;
+  }
+  .step {
+     Можно добавить стили для маленьких экранов, если нужно 
+  }
+  .step::before {
+     Уменьшаем или скрываем линию 
+  }
+  .step-text {
+    font-size: 12px; 
+  }
+  */
+
+  /* Новые стили для адаптивности панелей */
+  .step-panel-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .step-panel-title {
+     font-size: 14px;
+  }
+   .step-panel-status {
+     font-size: 12px;
+  }
+  /* Конец новых стилей */
+
+  .header {
+      padding: 15px 0;
+  }
+  .logo {
+      font-size: 20px;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+} 

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Предпросмотр дизайна Резюме</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            max-width: 1100px;
+            margin: auto;
+            position: relative; /* Нужно для позиционирования крестика */
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 500;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* --- Стили для НОВОЙ таблицы резюме --- */
+        .summary-table-modern {
+            width: 100%;
+            border-collapse: collapse; /* Убираем двойные линии */
+            margin-top: 15px;
+            font-size: 14px; /* Немного уменьшим шрифт для компактности */
+            table-layout: fixed; /* <<< ДОБАВЛЕНО: Фиксированный макет таблицы */
+        }
+
+        /* Заголовок таблицы */
+        .summary-table-modern thead th {
+            text-align: left;
+            font-weight: 500; /* Делаем жирнее */
+            color: #555; /* Менее резкий черный */
+            padding: 12px 15px; /* Больше вертикального и горизонтального отступа */
+            border-bottom: 2px solid #e5e7eb; /* Более заметная граница снизу */
+            background-color: #f9fafb; /* Очень легкий фон */
+            white-space: normal; /* Разрешаем перенос в заголовках */
+            vertical-align: middle; /* Выравнивание по вертикали */
+        }
+
+        /* Ячейки таблицы */
+        .summary-table-modern tbody td {
+            padding: 14px 15px; /* Больше вертикального отступа */
+            border-bottom: 1px solid #f0f2f5; /* Очень светлая граница */
+            vertical-align: middle; /* Убеждаемся, что выравнивание по центру применено */
+        }
+
+        /* Убираем границу у последней строки */
+        .summary-table-modern tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Чередование строк для читаемости */
+        .summary-table-modern tbody tr:nth-child(even) {
+             background-color: #fcfcfd; /* Вернем чередование */
+        }
+
+        /* Колонки с выравниванием И ШИРИНОЙ */
+        /* Маршрут (1) */
+        .summary-table-modern th:nth-child(1),
+        .summary-table-modern td:nth-child(1) {
+             width: 22%; /* <<< Уменьшено */
+             white-space: normal; 
+        }
+        /* --- НОВОЕ: ФИО водителя (2) --- */
+        .summary-table-modern th:nth-child(2),
+        .summary-table-modern td:nth-child(2) {
+            width: 15%; /* <<< Уменьшено */
+            white-space: normal; 
+        }
+        /* --- КОНЕЦ НОВОГО --- */
+        
+        /* Расстояние (км) (3) */
+        .summary-table-modern th:nth-child(3),
+        .summary-table-modern td:nth-child(3) {
+            width: 9%; /* <<< Скорректировано */
+            text-align: right;
+        }
+        /* Время на маршруте (4) */
+        .summary-table-modern th:nth-child(4),
+        .summary-table-modern td:nth-child(4) {
+            width: 9%; /* <<< Скорректировано */
+            white-space: nowrap;
+            padding-right: 15px; 
+        }
+        /* Расстояние по отчету (5) */
+         .summary-table-modern th:nth-child(5),
+        .summary-table-modern td:nth-child(5) {
+            width: 12%; /* <<< Увеличено */
+            text-align: right; 
+             padding-left: 15px; 
+        }
+        /* Время по отчету (6) */
+        .summary-table-modern th:nth-child(6),
+        .summary-table-modern td:nth-child(6) {
+             width: 11%; /* <<< Скорректировано */
+             white-space: nowrap;
+        }
+        /* Разница, км (7) */
+        .summary-table-modern th:nth-child(7),
+        .summary-table-modern td:nth-child(7) {
+             width: 8%; /* <<< Скорректировано */
+             text-align: right;
+             padding-left: 15px; 
+        }
+        /* Разница, время (8) */
+        .summary-table-modern th:nth-child(8),
+        .summary-table-modern td:nth-child(8) {
+             width: 8%; /* <<< Возвращено */
+             text-align: right;
+        }
+        /* --- НОВОЕ: Кол-во точек (9) --- */
+        .summary-table-modern th:nth-child(9),
+        .summary-table-modern td:nth-child(9) {
+             width: 6%; /* <<< Увеличено */
+             text-align: right;
+        }
+        /* --- КОНЕЦ НОВОГО --- */
+
+        /* Старые правила выравнивания можно упростить/удалить, т.к. все задано выше */
+        .summary-table-modern .number-cell {}
+        .summary-table-modern .time-cell {}
+        .summary-table-modern th.number-header {}
+        .summary-table-modern th.time-header {}
+
+        /* --- Стили для инпутов внутри таблицы --- */
+        .summary-table-modern .input-cell {
+             padding-top: 8px;    /* Уменьшаем паддинг для ячеек с инпутами */
+             padding-bottom: 8px;
+             /* vertical-align: middle; - должно наследоваться от td */
+        }
+
+        /* Общие стили для всех number-инпутов в таблице (БЕЗ ширины) */
+        .summary-table-modern input[type="number"] {
+            border: none; 
+            border-bottom: 1px solid #d1d5db; 
+            padding: 6px 4px; 
+            text-align: right;
+            font-size: 14px;
+            line-height: inherit; 
+            background-color: transparent; 
+            border-radius: 0; 
+            /* width: 60px; - УБИРАЕМ ОБЩУЮ ШИРИНУ ОТСЮДА */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            vertical-align: middle; 
+        }
+        
+        /* Отдельно задаем ширину для инпута расстояния */
+        .summary-table-modern .distance-input {
+            width: 60px; 
+        }
+
+        /* Ширина для инпутов времени */
+        .summary-table-modern .hours-input,
+        .summary-table-modern .minutes-input {
+            width: 30px; /* Устанавливаем ширину 30px (было 24px) */
+        }
+
+        /* Стиль для плейсхолдера времени - ДОБАВЛЕНО */
+        .summary-table-modern .hours-input::placeholder,
+        .summary-table-modern .minutes-input::placeholder {
+            color: #b0b8c1; /* Светло-серый цвет */
+            opacity: 1; /* Убеждаемся, что он не прозрачный */
+            text-align: right; /* Выравниваем плейсхолдер тоже */
+        }
+
+        .summary-table-modern input[type="number"]:focus {
+            outline: none;
+            border-color: #4a6bef; /* Цвет при фокусе */
+            /* Можно добавить легкую тень для акцента */
+             box-shadow: 0 1px 0 #4a6bef;
+        }
+
+        /* Убираем стрелочки у number инпутов (кроссбраузерно) */
+        .summary-table-modern input[type=number]::-webkit-inner-spin-button,
+        .summary-table-modern input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .summary-table-modern input[type=number] {
+            -moz-appearance: textfield; /* Firefox */
+        }
+
+        /* Ячейка для времени по отчету - Убираем flex */
+        .summary-table-modern .report-duration-cell {
+            white-space: nowrap; 
+            /* display: flex; - Убираем */
+            /* align-items: center; - Убираем */
+            /* gap: 4px; - Убираем */
+        }
+
+        /* Метки ч/мин */
+        .summary-table-modern .duration-label {
+            font-size: 12px; /* Меньше */
+            color: #6b7280; /* Серый */
+            margin-left: 2px;  /* Отступ слева от метки */
+            margin-right: 8px; /* Отступ после метки */
+            /* line-height: 1; - Убираем, пусть наследуется */
+            vertical-align: middle; /* !!! Оставляем */
+             display: inline; /* !!! Делаем просто inline */
+        }
+        .summary-table-modern .duration-label:last-of-type {
+             margin-right: 0;
+        }
+
+        /* Ячейки с разницами */
+        .summary-table-modern .difference-cell {
+            font-weight: 500; /* Слегка выделяем */
+            white-space: nowrap;
+        }
+        /* Опционально: цвет для знака */
+        .summary-table-modern .difference-cell.positive {
+             color: #10b981; /* Зеленый для плюса - ВОЗВРАЩАЕМ */
+        }
+         .summary-table-modern .difference-cell.negative {
+             color: #ef4444; /* Красный для минуса - ВОЗВРАЩАЕМ */
+         }
+
+        /* --- Стили для добавленных кнопок --- */
+        .card-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end; /* Кнопку вправо */
+        }
+
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: #4a6bef;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none; /* Для ссылки */
+            transition: background-color 0.2s ease;
+        }
+        .btn-export:hover {
+            background-color: #3957cf;
+        }
+
+        .close-preview-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            font-weight: 300;
+            color: #999;
+            cursor: pointer;
+            line-height: 1;
+            padding: 5px;
+        }
+        .close-preview-btn:hover {
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <button class="close-preview-btn" title="Закрыть предпросмотр">&times;</button>
+    <h2>Резюме по всем маршрутам (Предпросмотр дизайна)</h2>
+
+    <table class="summary-table-modern">
+        <thead>
+            <tr>
+                <th>Маршрут</th>
+                <th>ФИО водителя</th>
+                <th class="number-header">Расстояние (км)</th>
+                <th class="time-header">Время</th>
+                <th class="number-header">Расстояние по отчету (км)</th>
+                <th class="time-header">Время по отчету</th>
+                <th class="number-header">Разница, км</th>
+                <th class="time-header">Разница, время</th>
+                <th>Кол-во точек</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Хохольский район, Воронежская обл.</td>
+                <td>—</td>
+                <td class="number-cell">117</td>
+                <td class="time-cell">2 ч 53 мин</td>
+                <td class="input-cell number-cell">
+                    <input type="number" class="distance-input" value="150" placeholder="км">
+                </td>
+                <td class="input-cell report-duration-cell">
+                    <input type="number" class="hours-input" value="4" placeholder="ч">
+                    <span class="duration-label">ч</span>
+                    <input type="number" class="minutes-input" value="20" placeholder="мин">
+                    <span class="duration-label">мин</span>
+                </td>
+                <td class="difference-cell number-cell positive">+33.00</td>
+                <td class="difference-cell time-cell positive">+1 ч 26 мин</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Липецк 2</td>
+                <td>—</td>
+                <td class="number-cell">598</td>
+                <td class="time-cell">9 ч 5 мин</td>
+                 <td class="input-cell number-cell">
+                    <input type="number" class="distance-input" value="590" placeholder="км">
+                </td>
+                <td class="input-cell report-duration-cell">
+                    <input type="number" class="hours-input" value="9" placeholder="ч">
+                    <span class="duration-label">ч</span>
+                    <input type="number" class="minutes-input" value="00" placeholder="мин">
+                    <span class="duration-label">мин</span>
+                </td>
+                <td class="difference-cell number-cell negative">-8.00</td>
+                <td class="difference-cell time-cell negative">-0 ч 5 мин</td>
+                <td>5</td>
+            </tr>
+             <tr>
+                <td>Мичуринск, Тамбовская обл.</td>
+                <td>—</td>
+                <td class="number-cell">350</td>
+                <td class="time-cell">5 ч 10 мин</td>
+                 <td class="input-cell number-cell">
+                    <input type="number" class="distance-input" placeholder="км">
+                </td>
+                <td class="input-cell report-duration-cell">
+                    <input type="number" class="hours-input" placeholder="ч">
+                    <span class="duration-label">ч</span>
+                    <input type="number" class="minutes-input" placeholder="мин">
+                    <span class="duration-label">мин</span>
+                </td>
+                <td class="difference-cell number-cell">—</td>
+                <td class="difference-cell time-cell">—</td>
+                <td>8</td>
+            </tr>
+             <tr>
+                <td>Другой маршрут для примера</td>
+                <td>—</td>
+                <td class="number-cell">85.5</td>
+                <td class="time-cell">1 ч 30 мин</td>
+                 <td class="input-cell number-cell">
+                    <input type="number" class="distance-input" value="85.5" placeholder="км">
+                </td>
+                <td class="input-cell report-duration-cell">
+                    <input type="number" class="hours-input" value="1" placeholder="ч">
+                    <span class="duration-label">ч</span>
+                    <input type="number" class="minutes-input" value="30" placeholder="мин">
+                    <span class="duration-label">мин</span>
+                </td>
+                <td class="difference-cell number-cell">0.00</td>
+                <td class="difference-cell time-cell">+0 ч 0 мин</td>
+                <td>2</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Кнопка экспорта -->
+    <div class="card-actions">
+        <a href="#" class="btn-export">Экспорт в XLSX</a>
+    </div>
+</div>
+
+</body>
+</html> 

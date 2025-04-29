@@ -1,0 +1,369 @@
+{
+  "route_name": "Россошанский район, Воронежская обл.",
+  "points_count": 25,
+  "calculation_time": "2025-04-24 15:45:03",
+  "total_distance": 481724,
+  "total_duration": 25941,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 50.597494,
+        "lon": 39.61947
+      },
+      "distance": 183540,
+      "duration": 9437,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 50.597494,
+        "lon": 39.61947
+      },
+      "to_point": {
+        "lat": 50.405453,
+        "lon": 39.63825
+      },
+      "distance": 29301,
+      "duration": 1767,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 50.405453,
+        "lon": 39.63825
+      },
+      "to_point": {
+        "lat": 50.404008,
+        "lon": 39.65261
+      },
+      "distance": 2020,
+      "duration": 244,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 50.404008,
+        "lon": 39.65261
+      },
+      "to_point": {
+        "lat": 50.404452,
+        "lon": 39.645693
+      },
+      "distance": 691,
+      "duration": 95,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 50.404452,
+        "lon": 39.645693
+      },
+      "to_point": {
+        "lat": 50.399095,
+        "lon": 39.639897
+      },
+      "distance": 2120,
+      "duration": 246,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 50.399095,
+        "lon": 39.639897
+      },
+      "to_point": {
+        "lat": 50.204554,
+        "lon": 39.557913
+      },
+      "distance": 26576,
+      "duration": 1576,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 50.204554,
+        "lon": 39.557913
+      },
+      "to_point": {
+        "lat": 50.217189,
+        "lon": 39.56055
+      },
+      "distance": 1589,
+      "duration": 132,
+      "status": "OK"
+    },
+    {
+      "from_index": 7,
+      "to_index": 8,
+      "from_point": {
+        "lat": 50.217189,
+        "lon": 39.56055
+      },
+      "to_point": {
+        "lat": 50.212131,
+        "lon": 39.560021
+      },
+      "distance": 866,
+      "duration": 82,
+      "status": "OK"
+    },
+    {
+      "from_index": 8,
+      "to_index": 9,
+      "from_point": {
+        "lat": 50.212131,
+        "lon": 39.560021
+      },
+      "to_point": {
+        "lat": 50.214274,
+        "lon": 39.556724
+      },
+      "distance": 380,
+      "duration": 46,
+      "status": "OK"
+    },
+    {
+      "from_index": 9,
+      "to_index": 10,
+      "from_point": {
+        "lat": 50.214274,
+        "lon": 39.556724
+      },
+      "to_point": {
+        "lat": 50.20025,
+        "lon": 39.566251
+      },
+      "distance": 2116,
+      "duration": 214,
+      "status": "OK"
+    },
+    {
+      "from_index": 10,
+      "to_index": 11,
+      "from_point": {
+        "lat": 50.20025,
+        "lon": 39.566251
+      },
+      "to_point": {
+        "lat": 50.201184,
+        "lon": 39.580428
+      },
+      "distance": 1016,
+      "duration": 108,
+      "status": "OK"
+    },
+    {
+      "from_index": 11,
+      "to_index": 12,
+      "from_point": {
+        "lat": 50.201184,
+        "lon": 39.580428
+      },
+      "to_point": {
+        "lat": 50.201009,
+        "lon": 39.587376
+      },
+      "distance": 564,
+      "duration": 60,
+      "status": "OK"
+    },
+    {
+      "from_index": 12,
+      "to_index": 13,
+      "from_point": {
+        "lat": 50.201009,
+        "lon": 39.587376
+      },
+      "to_point": {
+        "lat": 50.208868,
+        "lon": 39.562131
+      },
+      "distance": 3330,
+      "duration": 266,
+      "status": "OK"
+    },
+    {
+      "from_index": 13,
+      "to_index": 14,
+      "from_point": {
+        "lat": 50.208868,
+        "lon": 39.562131
+      },
+      "to_point": {
+        "lat": 50.19725,
+        "lon": 39.542905
+      },
+      "distance": 2562,
+      "duration": 273,
+      "status": "OK"
+    },
+    {
+      "from_index": 14,
+      "to_index": 15,
+      "from_point": {
+        "lat": 50.19725,
+        "lon": 39.542905
+      },
+      "to_point": {
+        "lat": 50.197412,
+        "lon": 39.542169
+      },
+      "distance": 55,
+      "duration": 7,
+      "status": "OK"
+    },
+    {
+      "from_index": 15,
+      "to_index": 16,
+      "from_point": {
+        "lat": 50.197412,
+        "lon": 39.542169
+      },
+      "to_point": {
+        "lat": 50.205861,
+        "lon": 39.551675
+      },
+      "distance": 1613,
+      "duration": 193,
+      "status": "OK"
+    },
+    {
+      "from_index": 16,
+      "to_index": 17,
+      "from_point": {
+        "lat": 50.205861,
+        "lon": 39.551675
+      },
+      "to_point": {
+        "lat": 50.19803,
+        "lon": 39.538702
+      },
+      "distance": 1838,
+      "duration": 212,
+      "status": "OK"
+    },
+    {
+      "from_index": 17,
+      "to_index": 18,
+      "from_point": {
+        "lat": 50.19803,
+        "lon": 39.538702
+      },
+      "to_point": {
+        "lat": 50.196969,
+        "lon": 39.539468
+      },
+      "distance": 137,
+      "duration": 20,
+      "status": "OK"
+    },
+    {
+      "from_index": 18,
+      "to_index": 19,
+      "from_point": {
+        "lat": 50.196969,
+        "lon": 39.539468
+      },
+      "to_point": {
+        "lat": 50.207938,
+        "lon": 39.506533
+      },
+      "distance": 3221,
+      "duration": 341,
+      "status": "OK"
+    },
+    {
+      "from_index": 19,
+      "to_index": 20,
+      "from_point": {
+        "lat": 50.207938,
+        "lon": 39.506533
+      },
+      "to_point": {
+        "lat": 50.207938,
+        "lon": 39.506533
+      },
+      "distance": 0,
+      "duration": 0,
+      "status": "OK"
+    },
+    {
+      "from_index": 20,
+      "to_index": 21,
+      "from_point": {
+        "lat": 50.207938,
+        "lon": 39.506533
+      },
+      "to_point": {
+        "lat": 50.286845,
+        "lon": 39.300696
+      },
+      "distance": 20453,
+      "duration": 1176,
+      "status": "OK"
+    },
+    {
+      "from_index": 21,
+      "to_index": 22,
+      "from_point": {
+        "lat": 50.286845,
+        "lon": 39.300696
+      },
+      "to_point": {
+        "lat": 50.280856,
+        "lon": 39.317724
+      },
+      "distance": 1718,
+      "duration": 210,
+      "status": "OK"
+    },
+    {
+      "from_index": 22,
+      "to_index": 23,
+      "from_point": {
+        "lat": 50.280856,
+        "lon": 39.317724
+      },
+      "to_point": {
+        "lat": 50.713821,
+        "lon": 39.407202
+      },
+      "distance": 56143,
+      "duration": 2356,
+      "status": "OK"
+    },
+    {
+      "from_index": 23,
+      "to_index": 24,
+      "from_point": {
+        "lat": 50.713821,
+        "lon": 39.407202
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 139875,
+      "duration": 6880,
+      "status": "OK"
+    }
+  ]
+}
