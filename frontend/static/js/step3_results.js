@@ -1044,38 +1044,56 @@ function startEditAddress(tdElement) {
 
     const addressSpan = tdElement.querySelector('.address-text');
     const editIcon = tdElement.querySelector('.edit-icon'); // Находим и иконку
-    
+
     // --- ИЗМЕНЕНО: Проверяем наличие обоих элементов --- 
     if (!addressSpan || !editIcon) {
         console.error("[startEditAddress] Could not find addressSpan or editIcon within the cell.");
         return;
     }
-    
+
     const originalText = addressSpan.textContent;
-    
-    // Создаем input
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = originalText;
-    input.dataset.originalValue = originalText; // Сохраняем оригинал в data-атрибуте
-    input.dataset.isProcessing = "false"; // Флаг для отслеживания состояния обработки
-    input.dataset.isEscapePressed = "false"; // Флаг для отслеживания нажатия Escape
-    
+
+    // --- ИЗМЕНЕНИЕ: Создаем textarea вместо input ---
+    const textarea = document.createElement('textarea');
+    textarea.value = originalText;
+    textarea.dataset.originalValue = originalText; // Сохраняем оригинал в data-атрибуте
+    textarea.dataset.isProcessing = "false"; // Флаг для отслеживания состояния обработки
+    textarea.dataset.isEscapePressed = "false"; // Флаг для отслеживания нажатия Escape
+    textarea.rows = 1; // Начинаем с одной строки
+    textarea.className = 'edit-address-textarea'; // Класс для стилизации
+    textarea.style.overflowY = 'hidden'; // Скрываем скроллбар по умолчанию
+    textarea.style.resize = 'none'; // Запрещаем ручное изменение размера
+    textarea.style.width = '100%'; // Занимаем всю ширину ячейки (может потребоваться CSS)
+    textarea.style.boxSizing = 'border-box';
+    textarea.style.display = 'block';
+    // --- КОНЕЦ ИЗМЕНЕНИЯ ---
+
     // Маркировка для предотвращения гонки событий
     let isFinishingEdit = false;
 
-    // --- ИЗМЕНЕНО: Скрываем существующие элементы и добавляем input, не очищая innerHTML --- 
-    // // Очищаем ячейку и добавляем input (УДАЛЕНО)
-    // tdElement.innerHTML = ''; 
-    // tdElement.appendChild(input);
-    
+    // --- ИЗМЕНЕНО: Скрываем существующие элементы и добавляем textarea, не очищая innerHTML --- 
     tdElement.classList.add('editing');
     addressSpan.style.display = 'none'; // Скрываем текст
     editIcon.style.display = 'none'; // Скрываем иконку
-    tdElement.appendChild(input); // Добавляем input
+    tdElement.appendChild(textarea); // Добавляем textarea
+    // --- КОНЕЦ ИЗМЕНЕНИЯ --- 
+
+    textarea.focus();
+
+    // --- ДОБАВЛЕНО: Функция и слушатель для авто-ресайза textarea ---
+    const autoResizeTextarea = () => {
+        textarea.style.height = 'auto'; // Сбрасываем высоту
+        // --- ИЗМЕНЕНИЕ: Добавляем чтение offsetHeight для возможного форсирования reflow ---
+        const forceReflow = textarea.offsetHeight; // Читаем свойство
+        // --- КОНЕЦ ИЗМЕНЕНИЯ ---
+        textarea.style.height = (textarea.scrollHeight) + 'px'; // Устанавливаем по содержимому
+    };
+    autoResizeTextarea(); // Вызываем сразу
+    // --- ИЗМЕНЕНИЕ: Добавляем небольшой setTimeout для повторного вызова --- 
+    setTimeout(autoResizeTextarea, 10); // Повторный вызов после небольшой задержки
     // --- КОНЕЦ ИЗМЕНЕНИЯ ---
-    
-    input.focus();
+    textarea.addEventListener('input', autoResizeTextarea);
+    // --- КОНЕЦ ДОБАВЛЕНИЯ ---
 
     // Обработчики для завершения редактирования
     const finishEditing = (isEscaped = false) => {
@@ -1083,14 +1101,14 @@ function startEditAddress(tdElement) {
         if (isFinishingEdit) {
             return;
         }
-        
+
         // Устанавливаем флаг обработки
         isFinishingEdit = true;
-        
+
         // Если нажат Escape, отмечаем это
         if (isEscaped) {
-            input.dataset.isEscapePressed = "true";
-            
+            textarea.dataset.isEscapePressed = "true"; // Используем textarea
+
             // Для Escape сразу восстанавливаем исходное состояние
             tdElement.innerHTML = `<span class="address-text">${originalText}</span><span class="edit-icon">${pencilSvgIcon}</span>`;
             tdElement.classList.remove('editing');
@@ -1098,19 +1116,20 @@ function startEditAddress(tdElement) {
         } else {
             // Для обычного завершения редактирования вызываем endEditAddress
             setTimeout(() => {
-                endEditAddress(input, tdElement, isEscaped); // Передаем флаг isEscaped
+                endEditAddress(textarea, tdElement, isEscaped); // Передаем textarea и флаг isEscaped
             }, 10);
         }
-        
+
         // В любом случае удаляем слушатели
-        input.removeEventListener('blur', handleBlur);
-        input.removeEventListener('keydown', handleKeyDown);
+        textarea.removeEventListener('blur', handleBlur);
+        textarea.removeEventListener('keydown', handleKeyDown);
+        textarea.removeEventListener('input', autoResizeTextarea); // Удаляем и слушатель ресайза
     };
-    
+
     // Отдельный обработчик для blur
     const handleBlur = () => {
         // Если это не отмена по Escape
-        if (input.dataset.isEscapePressed !== "true") {
+        if (textarea.dataset.isEscapePressed !== "true") { // Используем textarea
             finishEditing(false);
         }
     };
@@ -1118,35 +1137,39 @@ function startEditAddress(tdElement) {
     // Обработчик клавиатурных событий
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            event.preventDefault(); // Предотвращаем возможное стандартное поведение
+            event.preventDefault(); // Предотвращаем перенос строки в textarea
             finishEditing(false);
         } else if (event.key === 'Escape') {
             event.preventDefault();
             event.stopPropagation();
             finishEditing(true);
         }
+        // --- ДОБАВЛЕНО: Вызов ресайза после нажатия любой клавиши ---
+        // Используем setTimeout, чтобы дать время символу появиться
+        setTimeout(autoResizeTextarea, 0);
+        // --- КОНЕЦ ДОБАВЛЕНИЯ ---
     };
 
     // Устанавливаем обработчики с оптимизированной логикой
-    input.addEventListener('blur', handleBlur); // handleBlur вызовет endEditAddress(input, tdElement, false)
-    input.addEventListener('keydown', handleKeyDown); // handleKeyDown вызовет endEditAddress(input, tdElement, isEscaped)
+    textarea.addEventListener('blur', handleBlur); // handleBlur вызовет endEditAddress(textarea, tdElement, false)
+    textarea.addEventListener('keydown', handleKeyDown); // handleKeyDown вызовет endEditAddress(textarea, tdElement, isEscaped)
 }
 
-// --- ИЗМЕНЕНО: endEditAddress теперь принимает input, td, и isEscaped --- 
-function endEditAddress(inputElement, tdElement, isEscaped = false) {
+// --- ИЗМЕНЕНО: endEditAddress теперь принимает textareaElement, tdElement, и isEscaped --- 
+function endEditAddress(textareaElement, tdElement, isEscaped = false) { // Меняем inputElement на textareaElement
     console.log(`[endEditAddress] Called. isEscaped: ${isEscaped}`); // Лог начала
-    
+
     // Находим нужные элементы внутри tdElement
     const addressSpan = tdElement.querySelector('.address-text');
     const editIcon = tdElement.querySelector('.edit-icon');
-    
-    // Проверяем, существует ли еще tdElement, inputElement, addressSpan, editIcon в DOM
-    if (!tdElement || !tdElement.parentNode || !inputElement || !inputElement.parentNode || !addressSpan || !editIcon) {
-        console.warn("[endEditAddress] One or more elements (td, input, span, icon) no longer exist in DOM. Aborting.");
+
+    // Проверяем, существует ли еще tdElement, textareaElement, addressSpan, editIcon в DOM
+    if (!tdElement || !tdElement.parentNode || !textareaElement || !textareaElement.parentNode || !addressSpan || !editIcon) { // Меняем inputElement
+        console.warn("[endEditAddress] One or more elements (td, textarea, span, icon) no longer exist in DOM. Aborting.");
         // Попытка безопасного восстановления, если возможно
         if (tdElement && !addressSpan) { 
-            // Если ячейка есть, а спана нет, пытаемся восстановить из input (если он еще есть)
-            const originalValue = inputElement?.dataset?.originalValue || '' ;
+            // Если ячейка есть, а спана нет, пытаемся восстановить из textarea (если он еще есть)
+            const originalValue = textareaElement?.dataset?.originalValue || '' ; // Меняем inputElement
             tdElement.innerHTML = `<span class="address-text">${originalValue}</span><span class="edit-icon">${pencilSvgIcon}</span>`;
         } else if (tdElement && addressSpan && !editIcon) {
              // Если есть спан, но нет иконки
@@ -1156,16 +1179,18 @@ function endEditAddress(inputElement, tdElement, isEscaped = false) {
              tdElement.appendChild(icon);
         }
         if (tdElement) tdElement.classList.remove('editing');
-        if (inputElement && inputElement.parentNode) inputElement.parentNode.removeChild(inputElement);
+        if (textareaElement && textareaElement.parentNode) textareaElement.parentNode.removeChild(textareaElement); // Меняем inputElement
         return;
      }
 
-    const newValue = inputElement.value.trim();
-    const originalText = inputElement.dataset.originalValue || "";
+    // --- ИЗМЕНЕНИЕ: Получаем значения из textareaElement ---
+    const newValue = textareaElement.value.trim();
+    const originalText = textareaElement.dataset.originalValue || "";
+    // --- КОНЕЦ ИЗМЕНЕНИЯ ---
 
-    // --- ИЗМЕНЕНО: Сначала удаляем input и показываем скрытые элементы --- 
-    // Удаляем input
-    tdElement.removeChild(inputElement);
+    // --- ИЗМЕНЕНО: Сначала удаляем textarea и показываем скрытые элементы --- 
+    // Удаляем textarea
+    tdElement.removeChild(textareaElement); // Меняем inputElement
     // Показываем обратно текст и иконку
     addressSpan.style.display = ''; // Возвращаем display по умолчанию
     editIcon.style.display = ''; // Возвращаем display по умолчанию
@@ -1195,8 +1220,10 @@ function endEditAddress(inputElement, tdElement, isEscaped = false) {
     // Валидация: проверяем, не пустой ли адрес
     if (newValue === '') {
         console.log("[endEditAddress] New value is empty. Marking as invalid.");
-        // Подсвечиваем пустое поле адреса красным
-        tdElement.classList.add('invalid-address');
+        // --- ИЗМЕНЕНИЕ: Добавляем класс к СТРОКЕ (tr) --- 
+        // Подсвечиваем всю строку красным
+        if (rowElement) rowElement.classList.add('address-invalid');
+        // --- КОНЕЦ ИЗМЕНЕНИЯ --- 
         // Оставляем пустой текст
         addressSpan.textContent = '';
         // Отмечаем в modifiedAddresses, если нужно
@@ -1220,6 +1247,10 @@ function endEditAddress(inputElement, tdElement, isEscaped = false) {
     if (newValue !== originalText) {
         console.log(`[endEditAddress] Value changed from "${originalText}" to "${newValue}". Saving.`);
         addressSpan.textContent = newValue;
+
+        // --- ИЗМЕНЕНИЕ: Убираем класс подсветки со СТРОКИ (tr) --- 
+        if (rowElement) rowElement.classList.remove('address-invalid');
+        // --- КОНЕЦ ИЗМЕНЕНИЯ ---
 
         // Сохраняем измененный адрес в структуре modifiedAddresses
         if (!modifiedAddresses[currentSelectedRouteId]) {
@@ -1268,6 +1299,9 @@ function endEditAddress(inputElement, tdElement, isEscaped = false) {
         // Значение не изменилось (и не пустое)
         console.log("[endEditAddress] Value not changed. Reverting text (just in case).");
         addressSpan.textContent = originalText; // Просто оставляем как было
+        // --- ИЗМЕНЕНИЕ: Убираем класс подсветки со СТРОКИ (tr) --- 
+        if (rowElement) rowElement.classList.remove('address-invalid');
+        // --- КОНЕЦ ИЗМЕНЕНИЯ ---
     }
 }
 
@@ -1441,17 +1475,19 @@ function addNewAddressRow(insertBeforeIndex = -1) {
     const newRow = document.createElement('tr');
     newRow.classList.add('add-point-row'); // Строка изначально скрыта CSS
 
-    // Формируем базовый HTML для строки (без кнопки +)
+    // --- ИЗМЕНЕНИЕ: Убираем div.cell-content-wrapper --- 
+    // Формируем HTML для строки, аналогично updateDisplay
     newRow.innerHTML = `
         <td class="row-number text-center" style="position:relative;">
             <span class="visibility-icon">${eyeSvgIcon}</span>
             <span class="row-index"></span>
         </td>
-        <td><div class="cell-content-wrapper"><span class="address-text"></span><span class="edit-icon">${pencilSvgIcon}</span></div></td>
-        <td><div class="cell-content-wrapper">-</div></td>
-        <td><div class="cell-content-wrapper">-</div></td>
-        <td><div class="cell-content-wrapper"><span class="accuracy-tag tag-unknown">❓ Требуется ввод адреса</span></div></td>
+        <td><span class="address-text"></span><span class="edit-icon">${pencilSvgIcon}</span></td>
+        <td>-</td>
+        <td>-</td>
+        <td><span class="accuracy-tag tag-unknown">❓ Требуется ввод адреса</span></td>
     `;
+    // --- КОНЕЦ ИЗМЕНЕНИЯ --- 
 
     // Добавляем кнопку "+" отдельно, чтобы обработчик был корректным
     const addRowBtn = document.createElement('button');

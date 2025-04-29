@@ -373,14 +373,14 @@ body {
 }
 
 .table th {
-  font-weight: 500;
-  color: var(--gray);
-  background-color: #f8f9fa;
+  background-color: var(--light);
+  color: var(--dark);
+  font-weight: 600;
 }
 
 .input {
   width: 100%;
-  padding: 10px 16px;
+  padding: 10px 12px;
   border: 1px solid #e0e4e8;
   border-radius: var(--border-radius);
   font-size: 16px;
@@ -637,7 +637,7 @@ body {
   font-weight: 500;
 }
 
-/* Специфичные стили для таблицы проверки адресов */
+/* Стили для контейнера ошибок */
 #exceptions-table {
   table-layout: fixed;
   width: 100%; /* Убедимся, что ширина 100% */
@@ -952,7 +952,7 @@ body {
 /* --- Общие стили для input --- */
 .input {
     width: 100%;
-    padding: 10px 16px;
+    padding: 10px 12px;
     border: 1px solid #e0e4e8;
     border-radius: var(--border-radius);
     font-size: 16px;
@@ -1238,4 +1238,27 @@ body {
 
 .modal-body #summary-table .comment-input:hover:not(:focus) {
   border-color: #bbb;
+} 
+
+/* Стили для textarea при редактировании адреса */
+.edit-address-textarea {
+    font-family: inherit; /* Наследуем шрифт таблицы */
+    font-size: inherit;   /* Наследуем размер шрифта таблицы */
+    line-height: 1.5;     /* Немного увеличим для читаемости */
+    padding: 8px 10px;    /* Внутренние отступы как у ячейки */
+    border: 1px solid var(--primary); /* Рамка как при фокусе */
+    border-radius: 4px;
+    width: 100%;
+    min-height: 38px; /* Минимальная высота, сравнимая с input */
+    resize: none;       /* Запрет ручного изменения размера */
+    overflow-y: hidden; /* Скрываем вертикальный скролл */
+    box-sizing: border-box;
+    display: block;
+    /* Добавляем transition для возможной анимации высоты */
+    transition: height 0.1s ease-out; 
+}
+
+/* Убираем padding у ячейки в режиме редактирования, чтобы textarea прилегал */
+#geocoder-table td.editing {
+    padding: 0;
 } 

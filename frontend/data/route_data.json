@@ -7352,65 +7352,82 @@
       "route_name": "Хохольский район, Воронежская обл.",
       "geocoder_output": [
         {
-          "input": "Офис РТК",
           "excel_row": "СТАРТ",
+          "route_name": "Хохольский район, Воронежская обл.",
+          "input": "Офис РТК",
           "found": true,
-          "lat": 51.686288,
-          "lon": 39.266546,
           "type": "office",
           "description": "Офис РТК",
-          "original_index_from_request": 0
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
         },
         {
+          "excel_row": 3,
+          "route_name": "Хохольский район, Воронежская обл.",
           "input": "396840, Воронежская область, Хохольский район, рабочий поселок Хохольский, Дорожная улица, 2Б",
-          "excel_row": "",
           "found": "Дорожная улица, 2Б",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
           "lat": 51.595844,
           "lon": 38.760662,
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 1
+          "error": null
         },
         {
-          "input": "Кольцовская улица, 36, Воронеж, 394036",
-          "excel_row": "",
-          "found": "Кольцовская улица, 36",
-          "lat": 51.672854,
-          "lon": 39.199392,
+          "excel_row": 4,
+          "route_name": "Хохольский район, Воронежская обл.",
+          "input": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21",
+          "found": "Центральная улица, 21",
           "type": "exact",
           "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 2
+          "lat": 51.561287,
+          "lon": 38.756167,
+          "error": null
         },
         {
-          "input": "Офис РТК",
           "excel_row": "ФИНИШ",
+          "route_name": "Хохольский район, Воронежская обл.",
+          "input": "Офис РТК",
           "found": true,
-          "lat": 51.686288,
-          "lon": 39.266546,
           "type": "office",
           "description": "Офис РТК",
-          "original_index_from_request": 3
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
         }
       ],
       "route_points": [
         {
           "lat": 51.686288,
-          "lon": 39.266546
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
         },
         {
+          "lon": 38.760662,
           "lat": 51.595844,
-          "lon": 38.760662
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "396840, Воронежская область, Хохольский район, рабочий поселок Хохольский, Дорожная улица, 2Б"
         },
         {
-          "lat": 51.672854,
-          "lon": 39.199392
+          "lon": 38.756167,
+          "lat": 51.561287,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21"
         },
         {
           "lat": 51.686288,
-          "lon": 39.266546
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
         }
       ],
       "distance_data": {
+        "route_name": "Хохольский район, Воронежская обл.",
+        "points_count": 4,
+        "calculation_time": "2025-04-29 12:23:29",
+        "total_distance": 103,
+        "total_duration": 9114,
         "segments": [
           {
             "from_index": 0,
@@ -7435,43 +7452,40 @@
               "lon": 38.760662
             },
             "to_point": {
-              "lat": 51.672854,
-              "lon": 39.199392
+              "lat": 51.561287,
+              "lon": 38.756167
             },
-            "distance": 38199,
-            "duration": 2913,
+            "distance": 5370,
+            "duration": 413,
             "status": "OK"
           },
           {
             "from_index": 2,
             "to_index": 3,
             "from_point": {
-              "lat": 51.672854,
-              "lon": 39.199392
+              "lat": 51.561287,
+              "lon": 38.756167
             },
             "to_point": {
               "lat": 51.686288,
               "lon": 39.266546
             },
-            "distance": 6856,
-            "duration": 987,
+            "distance": 52589,
+            "duration": 4275,
             "status": "OK"
           }
         ],
-        "total_distance": 90,
-        "total_duration": 8326,
-        "formatted_distance": "90 км",
-        "formatted_duration": "2 ч 18 мин"
+        "formatted_distance": "103 км",
+        "formatted_duration": "2 ч 31 мин"
       },
       "number_of_stops": 2,
-      "total_route_time_formatted": "2 ч 18 мин",
+      "total_route_time_formatted": "Н/Д",
       "global_service_time_minutes": 15
     }
   },
   "summary": {
     "Хохольский_район,_Воронежская_обл.": {
       "original_name": "Хохольский район, Воронежская обл.",
-      "driver_name": "Зябкин Николай Николаевич",
       "distance": 103,
       "duration_seconds": 9114,
       "duration_formatted": "2 ч 31 мин",
@@ -7481,10 +7495,9 @@
       "report_duration_minutes": null,
       "distance_difference": null,
       "time_difference_formatted": "+3 ч 1 мин",
-      "time_difference_seconds": 10914,
       "total_route_time_seconds": 10914,
       "total_route_time_formatted": "3 ч 1 мин",
-      "comment": ""
+      "time_difference_seconds": 10914
     }
   },
   "drivers": {

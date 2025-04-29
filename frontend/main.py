@@ -711,32 +711,68 @@ def get_route_data_endpoint(route_name: str = Path(...)):
     try:
         logging.info(f"Getting route data for '{original_route_name}'")
         file_name = sanitize_filename(original_route_name)
-        geocoded_file = os.path.join(GEOCODED_RESULTS_FOLDER, f"geocoded_results_{file_name}.csv")
-        route_results_file = os.path.join(ROUTE_RESULTS_FOLDER, f"route_results_{file_name}.json")
+        # --- ИЗМЕНЕНО: Определяем пути к обоим форматам ---
+        geocoded_json_file = os.path.join(GEOCODED_RESULTS_FOLDER, f"{file_name}_geocoded.json")
+        geocoded_csv_file = os.path.join(GEOCODED_RESULTS_FOLDER, f"geocoded_results_{file_name}.csv")
+        distance_data_json_file = os.path.join(ROUTE_RESULTS_FOLDER, f"{file_name}_distance_data.json") # Приоритет для пересчитанных
+        route_results_json_file = os.path.join(ROUTE_RESULTS_FOLDER, f"route_results_{file_name}.json") # Старый файл от process_route
+        # --- КОНЕЦ ИЗМЕНЕНИЯ ---
         summary_item = route_data.summary.get(file_name, {}) # Получаем заранее
 
-        # Ищем файл с результатами
+        # --- ИЗМЕНЕНО: Чтение файла с результатами расстояний (приоритет _distance_data.json) ---
         distance_data = {}
-        if os.path.exists(route_results_file):
-            logging.info(f"Found route results file: {route_results_file}")
-            try:
-                with open(route_results_file, 'r', encoding='utf-8') as f:
-                    distance_data = json.load(f)
+        distance_file_to_read = None
 
-                # Форматируем данные для фронтенда
+        if os.path.exists(distance_data_json_file):
+            distance_file_to_read = distance_data_json_file
+            logging.info(f"Found distance data file: {distance_file_to_read}")
+        elif os.path.exists(route_results_json_file):
+            distance_file_to_read = route_results_json_file
+            logging.warning(f"Distance data file not found, falling back to route results: {distance_file_to_read}")
+        else:
+            logging.warning(f"Neither distance_data nor route_results file found for route {original_route_name}")
+            distance_data = {"error": True, "error_message": f"Файлы с данными о расстоянии не найдены для {original_route_name}"}
+
+        if distance_file_to_read:
+            try:
+                with open(distance_file_to_read, 'r', encoding='utf-8') as f:
+                    distance_data_loaded = json.load(f) # Загружаем данные
+
+                # --- ВАЖНО: Копируем загруженные данные в distance_data ---
+                # Это необходимо, чтобы дальнейшая логика форматирования работала
+                # с правильным объектом, даже если он пустой.
+                if isinstance(distance_data_loaded, dict):
+                     distance_data = distance_data_loaded.copy()
+                else:
+                     # Если формат не словарь, логируем ошибку и используем пустой словарь
+                     logging.error(f"Invalid format in distance file {distance_file_to_read}. Expected dict, got {type(distance_data_loaded)}.")
+                     distance_data = {}
+
+                # Форматируем данные для фронтенда (остальная логика без изменений)
                 if 'total_distance' in distance_data and distance_data['total_distance'] is not None:
                     try:
-                        distance_meters = float(distance_data['total_distance'])
-                        distance_km_rounded = round(distance_meters / 1000)
+                        # --- ИЗМЕНЕНО: Обработка как КМ, так и метров ---
+                        # total_distance может быть уже в КМ (округленных) или в метрах
+                        distance_val = float(distance_data['total_distance'])
+                        # Если значение большое (>10000), скорее всего это метры, конвертируем и округляем
+                        if distance_val > 10000:
+                             distance_km_rounded = round(distance_val / 1000)
+                             print(f"   [Dist Format] Detected meters ({distance_val}), converting to rounded km: {distance_km_rounded}")
+                        else:
+                             # Иначе считаем, что это уже округленные КМ
+                             distance_km_rounded = int(distance_val)
+                             print(f"   [Dist Format] Detected km ({distance_val}), using as int: {distance_km_rounded}")
+
                         distance_data['formatted_distance'] = f"{distance_km_rounded} км"
+                        # Сохраняем округленные КМ для консистентности
                         distance_data['total_distance'] = distance_km_rounded
-                    except (ValueError, TypeError):
-                        print(f"⚠️ Не удалось преобразовать total_distance: {distance_data['total_distance']}")
+                    except (ValueError, TypeError) as e_dist:
+                        print(f"⚠️ Не удалось преобразовать total_distance '{distance_data['total_distance']}': {e_dist}")
                         distance_data['formatted_distance'] = "Ошибка"
                         distance_data['total_distance'] = None
                 else:
                     distance_data['formatted_distance'] = "Н/Д"
-                    distance_data['total_distance'] = None
+                    distance_data['total_distance'] = None # Убедимся, что None, если ключа нет
 
                 if 'total_duration' in distance_data and distance_data['total_duration'] is not None:
                     try:
@@ -744,34 +780,74 @@ def get_route_data_endpoint(route_name: str = Path(...)):
                         hours = total_seconds // 3600
                         minutes = (total_seconds % 3600) // 60
                         formatted_duration = f"{hours} ч {minutes} мин" if hours > 0 else f"{minutes} мин"
+                        # Коррекция для 0 секунд
+                        if total_seconds == 0: formatted_duration = "0 мин"
                         distance_data['formatted_duration'] = formatted_duration
+                        # Убедимся, что total_duration остается в секундах
                         distance_data['total_duration'] = total_seconds
-                    except (ValueError, TypeError):
-                         print(f"⚠️ Не удалось преобразовать total_duration: {distance_data['total_duration']}")
+                    except (ValueError, TypeError) as e_dur:
+                         print(f"⚠️ Не удалось преобразовать total_duration '{distance_data['total_duration']}': {e_dur}")
                          distance_data['formatted_duration'] = "Ошибка"
                          distance_data['total_duration'] = None
                 else:
                     distance_data['formatted_duration'] = "Н/Д"
-                    distance_data['total_duration'] = None
+                    distance_data['total_duration'] = None # Убедимся, что None
+
             except Exception as e:
-                logging.error(f"Error reading route results for {original_route_name}: {e}")
+                logging.error(f"Error reading distance/route results file {distance_file_to_read} for {original_route_name}: {e}")
                 distance_data = {"error": True, "error_message": f"Ошибка чтения файла результатов: {str(e)}"}
-        else:
-            logging.warning(f"Route results file not found for route {original_route_name}")
-            distance_data = {"error": True, "error_message": f"Route results file not found for {original_route_name}"}
+        # --- КОНЕЦ ИЗМЕНЕНИЯ ЧТЕНИЯ ФАЙЛА РАССТОЯНИЙ ---
 
-
-        # Чтение geocoded_data
+        # --- ИЗМЕНЕНО: Чтение geocoded_data (приоритет JSON) ---
         geocoded_data = []
         route_points = [] # Будет содержать только точки с валидными lat/lon
         number_of_stops_actual = 0
+        geocoded_data_source = None # 'json' или 'csv'
+
         try:
-            if os.path.exists(geocoded_file):
-                 geocoded_df = pd.read_csv(geocoded_file)
-                 geocoded_df.replace([np.nan, np.inf, -np.inf], None, inplace=True)
-                 for _, row in geocoded_df.iterrows():
-                     point_data = row.to_dict()
-                     geocoded_data.append(point_data) # Добавляем все строки для таблицы
+            # 1. Пытаемся прочитать JSON
+            if os.path.exists(geocoded_json_file):
+                logging.info(f"Attempting to load geocoded data from JSON: {geocoded_json_file}")
+                try:
+                    with open(geocoded_json_file, 'r', encoding='utf-8') as f_json:
+                        loaded_data = json.load(f_json)
+                        if isinstance(loaded_data, list) and all(isinstance(item, dict) for item in loaded_data):
+                            geocoded_data = loaded_data # Используем данные из JSON
+                            geocoded_data_source = 'json'
+                            print(f"   Successfully loaded {len(geocoded_data)} points from JSON.")
+                        else:
+                            logging.error(f"Invalid format in {geocoded_json_file}. Expected list of dicts.")
+                except Exception as e_json:
+                    logging.error(f"Error reading {geocoded_json_file}: {e_json}. Falling back to CSV.")
+
+            # 2. Если JSON не прочитан, пытаемся прочитать CSV
+            if not geocoded_data and os.path.exists(geocoded_csv_file):
+                logging.warning(f"JSON not found or invalid. Attempting to load from CSV: {geocoded_csv_file}")
+                try:
+                    geocoded_df = pd.read_csv(geocoded_csv_file)
+                    geocoded_df.replace([np.nan, np.inf, -np.inf], None, inplace=True) # Заменяем NaN/inf на None
+                    geocoded_data = geocoded_df.to_dict('records') # Конвертируем в список словарей
+                    geocoded_data_source = 'csv'
+                    print(f"   Successfully loaded {len(geocoded_data)} points from CSV.")
+                    # --- Опционально: Конвертировать и сохранить CSV в JSON ---
+                    # try:
+                    #     with open(geocoded_json_file, 'w', encoding='utf-8') as f_conv:
+                    #         json.dump(geocoded_data, f_conv, ensure_ascii=False, indent=4)
+                    #     print(f"   Successfully converted and saved data to {geocoded_json_file}")
+                    # except Exception as e_conv:
+                    #     logging.warning(f"Could not save converted CSV data to JSON ({geocoded_json_file}): {e_conv}")
+                    # --- Конец опциональной конвертации ---
+                except Exception as e_csv:
+                    logging.error(f"Error reading or processing CSV file {geocoded_csv_file}: {e_csv}")
+                    geocoded_data = [] # Оставляем пустым при ошибке CSV
+
+            # 3. Если нет ни JSON, ни CSV
+            elif not geocoded_data:
+                logging.warning(f"Could not find geocoded file (JSON or CSV) for route {original_route_name}")
+
+            # 4. Обработка прочитанных geocoded_data (если они есть)
+            if geocoded_data:
+                 for point_data in geocoded_data:
                      # Добавляем в route_points только если есть валидные координаты
                      if 'lon' in point_data and 'lat' in point_data and point_data['lon'] is not None and point_data['lat'] is not None:
                         try:
@@ -785,35 +861,41 @@ def get_route_data_endpoint(route_name: str = Path(...)):
                                      'address': point_data.get('description', point_data.get('input', '')),
                                      'original_address': point_data.get('input', '')
                                  })
+                             else: # Логгируем некорректный диапазон
+                                 print(f"⚠️ Invalid coordinate range in geocoded_data for {original_route_name}: lat={lat}, lon={lon}")
                         except (ValueError, TypeError):
-                             print(f"⚠️ Невалидные координаты в geocoded_file для {original_route_name}: {point_data.get('lat')}, {point_data.get('lon')}")
+                             print(f"⚠️ Invalid coordinate types in geocoded_data for {original_route_name}: {point_data.get('lat')}, {point_data.get('lon')}")
 
-
-                 number_of_stops_actual = len(route_points) # Считаем только точки с координатами
+                 # Считаем точки с координатами (без офиса, т.к. он еще не добавлен)
+                 number_of_stops_actual = len(route_points)
 
                  # Обновляем количество точек в summary, если оно расходится и пересчитываем
-                 if file_name in route_data.summary: 
-                     if route_data.summary[file_name].get("number_of_stops") != number_of_stops_actual:
-                         print(f"⚠️ Обновление кол-ва точек для {original_route_name} с {route_data.summary[file_name].get('number_of_stops')} на {number_of_stops_actual}")
+                 if file_name in route_data.summary:
+                     # --- ИЗМЕНЕНО: Сравниваем с number_of_stops_actual (без офиса) ---
+                     current_summary_stops = route_data.summary[file_name].get("number_of_stops")
+                     if current_summary_stops is None or current_summary_stops != number_of_stops_actual:
+                         print(f"⚠️ Обновление кол-ва точек для {original_route_name} с {current_summary_stops} на {number_of_stops_actual}")
                          route_data.summary[file_name]["number_of_stops"] = number_of_stops_actual
                          route_data._recalculate_summary_fields(file_name)
                          route_data.save_to_disk() # Сохраняем изменение
                          summary_item = route_data.summary.get(file_name, {}) # Обновляем локальный summary_item
+                     # --- КОНЕЦ ИЗМЕНЕНИЯ ---
                  else:
                      logging.warning(f"Route {original_route_name} (sanitized: {file_name}) not found in summary data.")
-
-            else:
-                 logging.warning(f"Could not find geocoded file for route {original_route_name}")
+            else: # Если geocoded_data пуст
                  number_of_stops_actual = 0
-                 geocoded_data = []
                  route_points = []
+
         except Exception as e:
-             logging.error(f"Error reading geocoding data for {original_route_name}: {e}")
+             # Ловим общую ошибку чтения/обработки геокодированных данных
+             logging.error(f"Error processing geocoding data for {original_route_name}: {e}")
              geocoded_data = []
              route_points = []
              number_of_stops_actual = 0
+        # --- КОНЕЦ ИЗМЕНЕНИЯ ЧТЕНИЯ GEOCODED_DATA ---
 
         # --- ДОБАВЛЕНИЕ ОФИСА РТК В НАЧАЛО И КОНЕЦ СПИСКОВ ДЛЯ ФРОНТЕНДА ---
+        # (Эта логика остается без изменений, т.к. она работает с уже прочитанными geocoded_data и route_points)
         try:
             office_loc = config.OFFICE_LOCATION
             if office_loc and "lat" in office_loc and "lon" in office_loc:
@@ -861,12 +943,13 @@ def get_route_data_endpoint(route_name: str = Path(...)):
 
 
         # Возвращаем данные, включая оригинальное имя маршрута и новые поля
+        # Используем number_of_stops_actual (без офиса) для поля number_of_stops
         return {
             "route_name": original_route_name,
             "geocoder_output": geocoded_data, # <--- Теперь с офисом
             "route_points": route_points,     # <--- Теперь с офисом
             "distance_data": distance_data,
-            "number_of_stops": summary_item.get("number_of_stops", number_of_stops_actual), 
+            "number_of_stops": summary_item.get("number_of_stops", number_of_stops_actual), # Берем из summary или актуальное (без офиса)
             "total_route_time_formatted": summary_item.get("total_route_time_formatted", "Н/Д"),
             "global_service_time_minutes": route_data.global_service_time_minutes
         }
@@ -1122,8 +1205,18 @@ async def upload_excel(file: UploadFile,
             parsed_path = os.path.join(PARSED_ADDRESSES_FOLDER, f"parsed_addresses_{file_name}.csv")
             geocoded_path = os.path.join(GEOCODED_RESULTS_FOLDER, f"geocoded_results_{file_name}.csv")
             route_results_path = os.path.join(ROUTE_RESULTS_FOLDER, f"route_results_{file_name}.json")
+            # --- ДОБАВЛЕНО: Пути к JSON файлам от пересчета ---
+            geocoded_recalc_json_path = os.path.join(GEOCODED_RESULTS_FOLDER, f"{file_name}_geocoded.json")
+            distance_recalc_json_path = os.path.join(ROUTE_RESULTS_FOLDER, f"{file_name}_distance_data.json")
+            # --- КОНЕЦ ДОБАВЛЕНИЯ ---
             
-            files_to_delete = [parsed_path, geocoded_path, route_results_path]
+            files_to_delete = [
+                 parsed_path,
+                 geocoded_path,
+                 route_results_path,
+                 geocoded_recalc_json_path, # Добавляем JSON для удаления
+                 distance_recalc_json_path # Добавляем JSON для удаления
+            ]
             deleted_something_for_route = False
 
             # Удаляем файлы
@@ -2100,6 +2193,16 @@ async def recalculate_route_endpoint(data: RecalculateRequest):
     route_data.save_to_disk()
     print(f"Updated route data in memory and saved for: {route_name}")
     
+    # --- ДОБАВЛЕНО: Обновляем общую сводку ---
+    try:
+        print("Updating overall summary after recalculation...")
+        route_data.get_summary() # Этот вызов пересчитает и сохранит route_summary.json
+        print("Overall summary updated.")
+    except Exception as e_summary_update:
+        # Логируем ошибку, но не прерываем отправку ответа клиенту
+        print(f"ERROR updating overall summary after recalculation: {e_summary_update}")
+    # --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
     # --- Формируем финальный ответ для клиента --- 
     # Используем только что рассчитанные/сохраненные данные
     final_response = {
