@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initApp();
 });
 
+// --- НАЧАЛО: Глобальная переменная для последнего контрола --- 
+let latestRoutingControl = null;
+// --- КОНЕЦ --- 
+
 // Возвращаем переменные Leaflet
 let map = null;
 let markers = []; 
@@ -725,6 +729,10 @@ window.showMap = function(points) {
   clearMapMarkers(); // Эта функция теперь проверяет map внутри
   // --- ИЗМЕНЕНИЕ: Более безопасное удаление старого контрола --- 
   if (routingControl) {
+       // --- ДОБАВЛЕНО: Сбрасываем ссылку на последний контрол ПЕРЕД удалением старого ---
+       latestRoutingControl = null;
+       // --- КОНЕЦ --- 
+
        // --- ЛОГИ ОСТАВЛЯЕМ ПОКА --- 
        console.log('[showMap Cleanup] Attempting to remove routingControl. Map object:', map);
        console.log('[showMap Cleanup] routingControl object before removal:', routingControl);
@@ -800,15 +808,31 @@ window.showMap = function(points) {
     }
     // --- КОНЕЦ ИЗМЕНЕНИЯ ---
     try {
+        // --- НАЧАЛО: Явное создание и настройка роутера (с routingOptions) ---
+        const osrmRouter = L.Routing.osrmv1({
+            serviceUrl: 'https://router.project-osrm.org/route/v1', // Стандартный URL OSRM
+            profile: 'driving',                                  // Профиль вождения
+            routingOptions: { // <-- Вкладываем опции для URL сюда
+                 steps: false,                                         // НЕ запрашивать шаги
+                 alternatives: false,                                  // НЕ запрашивать альтернативы
+                 overview: 'simplified'                                // Упрощенная геометрия
+            }
+            // Можно добавить и другие опции OSRMv1, если нужно (например, requestParameters для кастомных параметров)
+        });
+        // --- КОНЕЦ ---
+
         routingControl = L.Routing.control({
             waypoints: waypoints, // Используем исходный массив
+            router: osrmRouter, // <-- Используем наш настроенный роутер
+            // --- УБИРАЕМ эти опции отсюда, т.к. они теперь в роутере ---
+            // steps: false,
+            // alternatives: false,
+            // overview: 'simplified',
+            // --- КОНЕЦ УБРАННЫХ ОПЦИЙ ---
             routeWhileDragging: false, 
-            showAlternatives: false,   
+            showAlternatives: false,   // Эта опция LRM для ОТОБРАЖЕНИЯ, не для запроса
             fitSelectedRoutes: false, // Не масштабировать карту под маршрут автоматически (сделаем вручную)
             show: false,             // Не показывать панель инструкций маршрута
-            steps: false,            // НЕ запрашивать пошаговые инструкции
-            alternatives: false,     // НЕ запрашивать альтернативные маршруты
-            overview: 'simplified',  // Запрашивать только упрощенную геометрию
             lineOptions: {
                 styles: [{ color: '#4a6bef', opacity: 0.8, weight: 5 }] // Стиль линии
             },
@@ -824,15 +848,31 @@ window.showMap = function(points) {
             },
             addWaypoints: false,       // Запретить добавление точек кликом
             draggableWaypoints: false, // Запретить перетаскивание точек
-            useZoomParameter: false
+            useZoomParameter: false,
+            autoRoute: false // <-- ДОБАВЛЯЕМ эту опцию, чтобы отключить авто-пересчет
         }).addTo(map);
         console.log("L.Routing.control успешно добавлен на карту");
+        latestRoutingControl = routingControl; // <-- Запоминаем самый свежий контрол
+
+        // --- НАЧАЛО: Запускаем маршрутизацию вручную --- 
+        if (routingControl) {
+             routingControl.route();
+             console.log("Ручной запуск routingControl.route() выполнен.");
+        }
+        // --- КОНЕЦ --- 
 
         // Флаг для отслеживания успешного 'routesfound'
         routingControl._routesFoundSuccessfully = false;
 
         // Ждем, пока маршрут будет построен, чтобы получить границы
         routingControl.on('routesfound', function(e) {
+            // --- НАЧАЛО: Проверка на устаревшее событие --- 
+            if (this !== latestRoutingControl) {
+                console.warn("[routesfound handler] Событие от старого routingControl проигнорировано.");
+                return; 
+            }
+            // --- КОНЕЦ --- 
+
             console.log("[app.js] Event: routesfound");
             routingControl._routesFoundSuccessfully = true; // Устанавливаем флаг
             // --- ДОБАВЛЕНО: Скрываем индикатор загрузки --- 
