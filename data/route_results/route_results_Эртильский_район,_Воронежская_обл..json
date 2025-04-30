@@ -1,9 +1,9 @@
 {
   "route_name": "Эртильский район, Воронежская обл.",
   "points_count": 6,
-  "calculation_time": "2025-04-29 17:13:51",
-  "total_distance": 518380,
-  "total_duration": 29134,
+  "calculation_time": "2025-04-30 10:25:57",
+  "total_distance": 518366,
+  "total_duration": 28996,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.8399,
         "lon": 39.940141
       },
-      "distance": 64235,
-      "duration": 4098,
+      "distance": 64221,
+      "duration": 4045,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 40.723214
       },
       "distance": 141427,
-      "duration": 7296,
+      "duration": 7286,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.230678
       },
       "distance": 160630,
-      "duration": 8252,
+      "duration": 8227,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 40.137389
       },
       "distance": 86865,
-      "duration": 5569,
+      "duration": 5548,
       "status": "OK"
     },
     {
@@ -77,9 +77,9 @@
         "lon": 39.266546
       },
       "distance": 65223,
-      "duration": 3919,
+      "duration": 3890,
       "status": "OK"
     }
   ],
-  "start_time_used": "2025-04-22T08:00:00Z"
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

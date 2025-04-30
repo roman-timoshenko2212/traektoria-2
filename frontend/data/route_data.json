@@ -498,408 +498,6 @@
       "total_route_time_formatted": "Н/Д",
       "global_service_time_minutes": 20
     },
-    "Эртильский_район,_Воронежская_обл.": {
-      "route_name": "Эртильский район, Воронежская обл.",
-      "geocoder_output": [
-        {
-          "input": "Офис РТК",
-          "excel_row": "СТАРТ",
-          "found": true,
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "type": "office",
-          "description": "Офис РТК",
-          "original_index_from_request": 0
-        },
-        {
-          "input": "396110, Воронежская область, Верхнехавский район, село Верхняя Хава, Ленина улица, 46А",
-          "excel_row": "",
-          "found": "улица Ленина, 46а",
-          "lat": 51.8399,
-          "lon": 39.940141,
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 1
-        },
-        {
-          "input": "проезд Калинина, 19, рабочий посёлок Таловая, Воронежская область",
-          "excel_row": "",
-          "found": "проезд Калинина, 19",
-          "lat": 51.11472,
-          "lon": 40.719919,
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 2
-        },
-        {
-          "input": "Ленинский проспект, 1д Левобережный район, Воронеж, 394029",
-          "excel_row": "",
-          "found": "Левый берег, торгово-развлекательный центр",
-          "lat": 51.633419,
-          "lon": 39.230678,
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 3
-        },
-        {
-          "input": "396140, Воронежская область, рабочий поселок Панино, Первомайская улица, 21",
-          "excel_row": "",
-          "found": "Первомайская улица, 21",
-          "lat": 51.654759,
-          "lon": 40.137389,
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 4
-        },
-        {
-          "input": "Офис РТК",
-          "excel_row": "ФИНИШ",
-          "found": true,
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "type": "office",
-          "description": "Офис РТК",
-          "original_index_from_request": 5
-        }
-      ],
-      "route_points": [
-        {
-          "lat": 51.686288,
-          "lon": 39.266546
-        },
-        {
-          "lat": 51.8399,
-          "lon": 39.940141
-        },
-        {
-          "lat": 51.11472,
-          "lon": 40.719919
-        },
-        {
-          "lat": 51.633419,
-          "lon": 39.230678
-        },
-        {
-          "lat": 51.654759,
-          "lon": 40.137389
-        },
-        {
-          "lat": 51.686288,
-          "lon": 39.266546
-        }
-      ],
-      "distance_data": {
-        "segments": [
-          {
-            "from_index": 0,
-            "to_index": 1,
-            "from_point": {
-              "lat": 51.686288,
-              "lon": 39.266546
-            },
-            "to_point": {
-              "lat": 51.8399,
-              "lon": 39.940141
-            },
-            "distance": 64235,
-            "duration": 4098,
-            "status": "OK"
-          },
-          {
-            "from_index": 1,
-            "to_index": 2,
-            "from_point": {
-              "lat": 51.8399,
-              "lon": 39.940141
-            },
-            "to_point": {
-              "lat": 51.11472,
-              "lon": 40.719919
-            },
-            "distance": 141266,
-            "duration": 7288,
-            "status": "OK"
-          },
-          {
-            "from_index": 2,
-            "to_index": 3,
-            "from_point": {
-              "lat": 51.11472,
-              "lon": 40.719919
-            },
-            "to_point": {
-              "lat": 51.633419,
-              "lon": 39.230678
-            },
-            "distance": 156536,
-            "duration": 8529,
-            "status": "OK"
-          },
-          {
-            "from_index": 3,
-            "to_index": 4,
-            "from_point": {
-              "lat": 51.633419,
-              "lon": 39.230678
-            },
-            "to_point": {
-              "lat": 51.654759,
-              "lon": 40.137389
-            },
-            "distance": 86865,
-            "duration": 5569,
-            "status": "OK"
-          },
-          {
-            "from_index": 4,
-            "to_index": 5,
-            "from_point": {
-              "lat": 51.654759,
-              "lon": 40.137389
-            },
-            "to_point": {
-              "lat": 51.686288,
-              "lon": 39.266546
-            },
-            "distance": 65223,
-            "duration": 3919,
-            "status": "OK"
-          }
-        ],
-        "total_distance": 514,
-        "total_duration": 29403,
-        "formatted_distance": "514 км",
-        "formatted_duration": "8 ч 10 мин"
-      },
-      "number_of_stops": 4,
-      "total_route_time_formatted": "8 ч 10 мин",
-      "global_service_time_minutes": 15
-    },
-    "Тамбов,_Тамбовская_обл.": {
-      "route_name": "Тамбов, Тамбовская обл.",
-      "geocoder_output": [
-        {
-          "excel_row": "СТАРТ",
-          "route_name": "Тамбов, Тамбовская обл.",
-          "input": "Офис РТК",
-          "found": true,
-          "type": "office",
-          "description": "Офис РТК",
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "error": null
-        },
-        {
-          "input": "392028, Тамбовская область, город Тамбов, Ипподромная улица, 22а",
-          "found": "Ипподромная улица, 22а",
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 52.738379,
-          "lon": 41.410542,
-          "error": "",
-          "excel_row": "11",
-          "route_name": "Тамбов, Тамбовская обл."
-        },
-        {
-          "input": "392018, Тамбовская область, город Тамбов, Мичуринская улица, 48",
-          "found": "Мичуринская улица, 48",
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 52.737307,
-          "lon": 41.437628,
-          "error": "",
-          "excel_row": "12",
-          "route_name": "Тамбов, Тамбовская обл."
-        },
-        {
-          "excel_row": "ФИНИШ",
-          "route_name": "Тамбов, Тамбовская обл.",
-          "input": "Офис РТК",
-          "found": true,
-          "type": "office",
-          "description": "Офис РТК",
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "error": null
-        }
-      ],
-      "route_points": [
-        {
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "address": "Офис РТК",
-          "original_address": "Офис РТК"
-        },
-        {
-          "lon": 41.410542,
-          "lat": 52.738379,
-          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "392028, Тамбовская область, город Тамбов, Ипподромная улица, 22а"
-        },
-        {
-          "lon": 41.437628,
-          "lat": 52.737307,
-          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "392018, Тамбовская область, город Тамбов, Мичуринская улица, 48"
-        },
-        {
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "address": "Офис РТК",
-          "original_address": "Офис РТК"
-        }
-      ],
-      "distance_data": {
-        "route_name": "Тамбов, Тамбовская обл.",
-        "points_count": 4,
-        "calculation_time": "2025-04-29 17:13:52",
-        "total_distance": 438,
-        "total_duration": 22064,
-        "segments": [
-          {
-            "from_index": 0,
-            "to_index": 1,
-            "from_point": {
-              "lat": 51.686288,
-              "lon": 39.266546
-            },
-            "to_point": {
-              "lat": 52.738379,
-              "lon": 41.410542
-            },
-            "distance": 219928,
-            "duration": 11143,
-            "status": "OK"
-          },
-          {
-            "from_index": 1,
-            "to_index": 2,
-            "from_point": {
-              "lat": 52.738379,
-              "lon": 41.410542
-            },
-            "to_point": {
-              "lat": 52.737307,
-              "lon": 41.437628
-            },
-            "distance": 2903,
-            "duration": 421,
-            "status": "OK"
-          },
-          {
-            "from_index": 2,
-            "to_index": 3,
-            "from_point": {
-              "lat": 52.737307,
-              "lon": 41.437628
-            },
-            "to_point": {
-              "lat": 51.686288,
-              "lon": 39.266546
-            },
-            "distance": 215460,
-            "duration": 10500,
-            "status": "OK"
-          }
-        ],
-        "start_time_used": "2025-04-22T08:00:00Z",
-        "formatted_distance": "438 км",
-        "formatted_duration": "6 ч 7 мин"
-      },
-      "number_of_stops": 0,
-      "total_route_time_formatted": "Н/Д",
-      "global_service_time_minutes": 15
-    },
-    "Хохольский_район,_Воронежская_обл.": {
-      "route_name": "Хохольский район, Воронежская обл.",
-      "geocoder_output": [
-        {
-          "input": "Офис РТК",
-          "excel_row": "СТАРТ",
-          "found": true,
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "type": "office",
-          "description": "Офис РТК",
-          "original_index_from_request": 0
-        },
-        {
-          "input": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21",
-          "excel_row": "",
-          "found": "Центральная улица, 21",
-          "lat": 51.561287,
-          "lon": 38.756167,
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_index_from_request": 2
-        },
-        {
-          "input": "Офис РТК",
-          "excel_row": "ФИНИШ",
-          "found": true,
-          "lat": 51.686288,
-          "lon": 39.266546,
-          "type": "office",
-          "description": "Офис РТК",
-          "original_index_from_request": 3
-        }
-      ],
-      "route_points": [
-        {
-          "lat": 51.686288,
-          "lon": 39.266546
-        },
-        {
-          "lat": 51.561287,
-          "lon": 38.756167
-        },
-        {
-          "lat": 51.686288,
-          "lon": 39.266546
-        }
-      ],
-      "distance_data": {
-        "segments": [
-          {
-            "from_index": 0,
-            "to_index": 1,
-            "from_point": {
-              "lat": 51.686288,
-              "lon": 39.266546
-            },
-            "to_point": {
-              "lat": 51.561287,
-              "lon": 38.756167
-            },
-            "distance": 55380,
-            "duration": 4900,
-            "status": "OK"
-          },
-          {
-            "from_index": 1,
-            "to_index": 2,
-            "from_point": {
-              "lat": 51.561287,
-              "lon": 38.756167
-            },
-            "to_point": {
-              "lat": 51.686288,
-              "lon": 39.266546
-            },
-            "distance": 52589,
-            "duration": 4591,
-            "status": "OK"
-          }
-        ],
-        "total_distance": 108,
-        "total_duration": 9491,
-        "formatted_distance": "108 км",
-        "formatted_duration": "2 ч 38 мин"
-      },
-      "number_of_stops": 1,
-      "total_route_time_formatted": "2 ч 38 мин",
-      "global_service_time_minutes": 15
-    },
     "Липецк_2": {
       "route_name": "Липецк 2",
       "geocoder_output": [
@@ -8108,301 +7706,500 @@
       "number_of_stops": 0,
       "total_route_time_formatted": "Н/Д",
       "global_service_time_minutes": 20
+    },
+    "Эртильский_район,_Воронежская_обл.": {
+      "route_name": "Эртильский район, Воронежская обл.",
+      "geocoder_output": [
+        {
+          "excel_row": "СТАРТ",
+          "route_name": "Эртильский район, Воронежская обл.",
+          "input": "Офис РТК",
+          "found": true,
+          "type": "office",
+          "description": "Офис РТК",
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
+        },
+        {
+          "input": "396110, Воронежская область, Верхнехавский район, село Верхняя Хава, улица Ленина, 46А",
+          "found": "улица Ленина, 46а",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 51.8399,
+          "lon": 39.940141,
+          "error": "",
+          "excel_row": "6",
+          "route_name": "Эртильский район, Воронежская обл."
+        },
+        {
+          "input": "397482, Воронежская область, Таловский район, рабочий поселок Таловая",
+          "found": "Таловая",
+          "type": "locality",
+          "description": "<span class=\"accuracy-tag tag-locality\">🏘️ Населенный пункт — средняя точность</span>",
+          "lat": 51.110405,
+          "lon": 40.723214,
+          "error": "",
+          "excel_row": "7",
+          "route_name": "Эртильский район, Воронежская обл."
+        },
+        {
+          "input": "Ленинский проспект, 1д Левобережный район, Воронеж, 394029",
+          "found": "Левый берег, торгово-развлекательный центр",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 51.633419,
+          "lon": 39.230678,
+          "error": "",
+          "excel_row": "8",
+          "route_name": "Эртильский район, Воронежская обл."
+        },
+        {
+          "input": "396140, Воронежская область, рабочий поселок Панино, Первомайская улица, 21",
+          "found": "Первомайская улица, 21",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 51.654759,
+          "lon": 40.137389,
+          "error": "",
+          "excel_row": "9",
+          "route_name": "Эртильский район, Воронежская обл."
+        },
+        {
+          "excel_row": "ФИНИШ",
+          "route_name": "Эртильский район, Воронежская обл.",
+          "input": "Офис РТК",
+          "found": true,
+          "type": "office",
+          "description": "Офис РТК",
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
+        }
+      ],
+      "route_points": [
+        {
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
+        },
+        {
+          "lon": 39.940141,
+          "lat": 51.8399,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "396110, Воронежская область, Верхнехавский район, село Верхняя Хава, улица Ленина, 46А"
+        },
+        {
+          "lon": 40.723214,
+          "lat": 51.110405,
+          "address": "<span class=\"accuracy-tag tag-locality\">🏘️ Населенный пункт — средняя точность</span>",
+          "original_address": "397482, Воронежская область, Таловский район, рабочий поселок Таловая"
+        },
+        {
+          "lon": 39.230678,
+          "lat": 51.633419,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "Ленинский проспект, 1д Левобережный район, Воронеж, 394029"
+        },
+        {
+          "lon": 40.137389,
+          "lat": 51.654759,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "396140, Воронежская область, рабочий поселок Панино, Первомайская улица, 21"
+        },
+        {
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
+        }
+      ],
+      "distance_data": {
+        "route_name": "Эртильский район, Воронежская обл.",
+        "points_count": 6,
+        "calculation_time": "2025-04-30 10:25:57",
+        "total_distance": 518,
+        "total_duration": 28996,
+        "segments": [
+          {
+            "from_index": 0,
+            "to_index": 1,
+            "from_point": {
+              "lat": 51.686288,
+              "lon": 39.266546
+            },
+            "to_point": {
+              "lat": 51.8399,
+              "lon": 39.940141
+            },
+            "distance": 64221,
+            "duration": 4045,
+            "status": "OK"
+          },
+          {
+            "from_index": 1,
+            "to_index": 2,
+            "from_point": {
+              "lat": 51.8399,
+              "lon": 39.940141
+            },
+            "to_point": {
+              "lat": 51.110405,
+              "lon": 40.723214
+            },
+            "distance": 141427,
+            "duration": 7286,
+            "status": "OK"
+          },
+          {
+            "from_index": 2,
+            "to_index": 3,
+            "from_point": {
+              "lat": 51.110405,
+              "lon": 40.723214
+            },
+            "to_point": {
+              "lat": 51.633419,
+              "lon": 39.230678
+            },
+            "distance": 160630,
+            "duration": 8227,
+            "status": "OK"
+          },
+          {
+            "from_index": 3,
+            "to_index": 4,
+            "from_point": {
+              "lat": 51.633419,
+              "lon": 39.230678
+            },
+            "to_point": {
+              "lat": 51.654759,
+              "lon": 40.137389
+            },
+            "distance": 86865,
+            "duration": 5548,
+            "status": "OK"
+          },
+          {
+            "from_index": 4,
+            "to_index": 5,
+            "from_point": {
+              "lat": 51.654759,
+              "lon": 40.137389
+            },
+            "to_point": {
+              "lat": 51.686288,
+              "lon": 39.266546
+            },
+            "distance": 65223,
+            "duration": 3890,
+            "status": "OK"
+          }
+        ],
+        "start_time_used": "2025-04-23T08:00:00Z",
+        "formatted_distance": "518 км",
+        "formatted_duration": "8 ч 3 мин"
+      },
+      "number_of_stops": 0,
+      "total_route_time_formatted": "Н/Д",
+      "global_service_time_minutes": 15
+    },
+    "Тамбов,_Тамбовская_обл.": {
+      "route_name": "Тамбов, Тамбовская обл.",
+      "geocoder_output": [
+        {
+          "excel_row": "СТАРТ",
+          "route_name": "Тамбов, Тамбовская обл.",
+          "input": "Офис РТК",
+          "found": true,
+          "type": "office",
+          "description": "Офис РТК",
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
+        },
+        {
+          "input": "392028, Тамбовская область, город Тамбов, Ипподромная улица, 22а",
+          "found": "Ипподромная улица, 22а",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 52.738379,
+          "lon": 41.410542,
+          "error": "",
+          "excel_row": "11",
+          "route_name": "Тамбов, Тамбовская обл."
+        },
+        {
+          "input": "392018, Тамбовская область, город Тамбов, Мичуринская улица, 48",
+          "found": "Мичуринская улица, 48",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 52.737307,
+          "lon": 41.437628,
+          "error": "",
+          "excel_row": "12",
+          "route_name": "Тамбов, Тамбовская обл."
+        },
+        {
+          "excel_row": "ФИНИШ",
+          "route_name": "Тамбов, Тамбовская обл.",
+          "input": "Офис РТК",
+          "found": true,
+          "type": "office",
+          "description": "Офис РТК",
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
+        }
+      ],
+      "route_points": [
+        {
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
+        },
+        {
+          "lon": 41.410542,
+          "lat": 52.738379,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "392028, Тамбовская область, город Тамбов, Ипподромная улица, 22а"
+        },
+        {
+          "lon": 41.437628,
+          "lat": 52.737307,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "392018, Тамбовская область, город Тамбов, Мичуринская улица, 48"
+        },
+        {
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
+        }
+      ],
+      "distance_data": {
+        "route_name": "Тамбов, Тамбовская обл.",
+        "points_count": 4,
+        "calculation_time": "2025-04-30 10:25:58",
+        "total_distance": 438,
+        "total_duration": 21902,
+        "segments": [
+          {
+            "from_index": 0,
+            "to_index": 1,
+            "from_point": {
+              "lat": 51.686288,
+              "lon": 39.266546
+            },
+            "to_point": {
+              "lat": 52.738379,
+              "lon": 41.410542
+            },
+            "distance": 219914,
+            "duration": 11053,
+            "status": "OK"
+          },
+          {
+            "from_index": 1,
+            "to_index": 2,
+            "from_point": {
+              "lat": 52.738379,
+              "lon": 41.410542
+            },
+            "to_point": {
+              "lat": 52.737307,
+              "lon": 41.437628
+            },
+            "distance": 2903,
+            "duration": 426,
+            "status": "OK"
+          },
+          {
+            "from_index": 2,
+            "to_index": 3,
+            "from_point": {
+              "lat": 52.737307,
+              "lon": 41.437628
+            },
+            "to_point": {
+              "lat": 51.686288,
+              "lon": 39.266546
+            },
+            "distance": 215460,
+            "duration": 10423,
+            "status": "OK"
+          }
+        ],
+        "start_time_used": "2025-04-23T08:00:00Z",
+        "formatted_distance": "438 км",
+        "formatted_duration": "6 ч 5 мин"
+      },
+      "number_of_stops": 0,
+      "total_route_time_formatted": "Н/Д",
+      "global_service_time_minutes": 15
+    },
+    "Хохольский_район,_Воронежская_обл.": {
+      "route_name": "Хохольский район, Воронежская обл.",
+      "geocoder_output": [
+        {
+          "excel_row": "СТАРТ",
+          "route_name": "Хохольский район, Воронежская обл.",
+          "input": "Офис РТК",
+          "found": true,
+          "type": "office",
+          "description": "Офис РТК",
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
+        },
+        {
+          "input": "396840, Воронежская область, Хохольский район, рабочий поселок Хохольский, Дорожная улица, 2Б",
+          "found": "Дорожная улица, 2Б",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 51.595844,
+          "lon": 38.760662,
+          "error": "",
+          "excel_row": "3",
+          "route_name": "Хохольский район, Воронежская обл."
+        },
+        {
+          "input": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21",
+          "found": "Центральная улица, 21",
+          "type": "exact",
+          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "lat": 51.561287,
+          "lon": 38.756167,
+          "error": "",
+          "excel_row": "4",
+          "route_name": "Хохольский район, Воронежская обл."
+        },
+        {
+          "excel_row": "ФИНИШ",
+          "route_name": "Хохольский район, Воронежская обл.",
+          "input": "Офис РТК",
+          "found": true,
+          "type": "office",
+          "description": "Офис РТК",
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "error": null
+        }
+      ],
+      "route_points": [
+        {
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
+        },
+        {
+          "lon": 38.760662,
+          "lat": 51.595844,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "396840, Воронежская область, Хохольский район, рабочий поселок Хохольский, Дорожная улица, 2Б"
+        },
+        {
+          "lon": 38.756167,
+          "lat": 51.561287,
+          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
+          "original_address": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21"
+        },
+        {
+          "lat": 51.686288,
+          "lon": 39.266546,
+          "address": "Офис РТК",
+          "original_address": "Офис РТК"
+        }
+      ],
+      "distance_data": {
+        "route_name": "Хохольский район, Воронежская обл.",
+        "points_count": 4,
+        "calculation_time": "2025-04-30 10:42:19",
+        "total_distance": 103,
+        "total_duration": 9488,
+        "segments": [
+          {
+            "from_index": 0,
+            "to_index": 1,
+            "from_point": {
+              "lat": 51.686288,
+              "lon": 39.266546
+            },
+            "to_point": {
+              "lat": 51.595844,
+              "lon": 38.760662
+            },
+            "distance": 45558,
+            "duration": 4729,
+            "status": "OK"
+          },
+          {
+            "from_index": 1,
+            "to_index": 2,
+            "from_point": {
+              "lat": 51.595844,
+              "lon": 38.760662
+            },
+            "to_point": {
+              "lat": 51.561287,
+              "lon": 38.756167
+            },
+            "distance": 4989,
+            "duration": 424,
+            "status": "OK"
+          },
+          {
+            "from_index": 2,
+            "to_index": 3,
+            "from_point": {
+              "lat": 51.561287,
+              "lon": 38.756167
+            },
+            "to_point": {
+              "lat": 51.686288,
+              "lon": 39.266546
+            },
+            "distance": 52589,
+            "duration": 4335,
+            "status": "OK"
+          }
+        ],
+        "start_time_used": "2025-04-23T08:00:00Z",
+        "formatted_distance": "103 км",
+        "formatted_duration": "2 ч 38 мин"
+      },
+      "number_of_stops": 0,
+      "total_route_time_formatted": "Н/Д",
+      "global_service_time_minutes": 15
     }
   },
   "summary": {
-    "1_срочно_вне_плана": {
-      "original_name": "1 срочно вне плана",
-      "driver_name": "водитель по договору",
-      "distance": 945,
-      "duration_seconds": 39989,
-      "duration_formatted": "11 ч 6 мин",
-      "number_of_stops": 1,
+    "Хохольский_район,_Воронежская_обл.": {
+      "original_name": "Хохольский район, Воронежская обл.",
+      "driver_name": "Зябкин Николай Николаевич",
+      "distance": 103,
+      "duration_seconds": 9488,
+      "duration_formatted": "2 ч 38 мин",
+      "number_of_stops": 2,
       "report_distance": null,
       "report_duration_hours": null,
       "report_duration_minutes": null,
       "distance_difference": null,
-      "time_difference_formatted": "+11 ч 26 мин",
-      "time_difference_seconds": 41189,
-      "total_route_time_seconds": 41189,
-      "total_route_time_formatted": "11 ч 26 мин",
-      "comment": ""
-    },
-    "Тульская_2_область": {
-      "original_name": "Тульская 2 область",
-      "driver_name": "Медведев Александр Иванович",
-      "distance": 679,
-      "duration_seconds": 32214,
-      "duration_formatted": "8 ч 56 мин",
-      "number_of_stops": 7,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+11 ч 16 мин",
-      "time_difference_seconds": 40614,
-      "total_route_time_seconds": 40614,
-      "total_route_time_formatted": "11 ч 16 мин",
-      "comment": ""
-    },
-    "Курск_2": {
-      "original_name": "Курск 2",
-      "driver_name": "Пьяных Олег Леонидович",
-      "distance": 740,
-      "duration_seconds": 42943,
-      "duration_formatted": "11 ч 55 мин",
-      "number_of_stops": 14,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+16 ч 35 мин",
-      "time_difference_seconds": 59743,
-      "total_route_time_seconds": 59743,
-      "total_route_time_formatted": "16 ч 35 мин",
-      "comment": ""
-    },
-    "Курск_3": {
-      "original_name": "Курск 3",
-      "driver_name": "Воронин Александр Александрович",
-      "distance": 626,
-      "duration_seconds": 36126,
-      "duration_formatted": "10 ч 2 мин",
-      "number_of_stops": 13,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+14 ч 22 мин",
-      "time_difference_seconds": 51726,
-      "total_route_time_seconds": 51726,
-      "total_route_time_formatted": "14 ч 22 мин",
-      "comment": ""
-    },
-    "Воронеж_ЛБ": {
-      "original_name": "Воронеж ЛБ",
-      "driver_name": "Попков Сергей Андреевич",
-      "distance": 56,
-      "duration_seconds": 5272,
-      "duration_formatted": "1 ч 27 мин",
-      "number_of_stops": 6,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+3 ч 27 мин",
-      "time_difference_seconds": 12472,
-      "total_route_time_seconds": 12472,
-      "total_route_time_formatted": "3 ч 27 мин",
-      "comment": ""
-    },
-    "Тульская_область": {
-      "original_name": "Тульская область",
-      "driver_name": "Дударев Александр Владимирович",
-      "distance": 472,
-      "duration_seconds": 30005,
-      "duration_formatted": "8 ч 20 мин",
-      "number_of_stops": 16,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+13 ч 40 мин",
-      "time_difference_seconds": 49205,
-      "total_route_time_seconds": 49205,
-      "total_route_time_formatted": "13 ч 40 мин",
-      "comment": ""
-    },
-    "Новоусманский_район,_Воронежская_обл.": {
-      "original_name": "Новоусманский район, Воронежская обл.",
-      "driver_name": "Погибельный Василий Васильевич",
-      "distance": 94,
-      "duration_seconds": 7414,
-      "duration_formatted": "2 ч 3 мин",
-      "number_of_stops": 6,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+4 ч 3 мин",
-      "time_difference_seconds": 14614,
-      "total_route_time_seconds": 14614,
-      "total_route_time_formatted": "4 ч 3 мин",
-      "comment": ""
-    },
-    "Интернет_магазин": {
-      "original_name": "Интернет магазин",
-      "driver_name": "Пешков Иван Владимирович",
-      "distance": 48,
-      "duration_seconds": 7119,
-      "duration_formatted": "1 ч 58 мин",
-      "number_of_stops": 9,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+4 ч 58 мин",
-      "time_difference_seconds": 17919,
-      "total_route_time_seconds": 17919,
-      "total_route_time_formatted": "4 ч 58 мин",
-      "comment": ""
-    },
-    "Воронеж,_Воронежская_обл.": {
-      "original_name": "Воронеж, Воронежская обл.",
-      "driver_name": "Поминов Александр Николаевич",
-      "distance": 42,
-      "duration_seconds": 5688,
-      "duration_formatted": "1 ч 34 мин",
-      "number_of_stops": 10,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+4 ч 54 мин",
-      "time_difference_seconds": 17688,
-      "total_route_time_seconds": 17688,
-      "total_route_time_formatted": "4 ч 54 мин",
-      "comment": ""
-    },
-    "Волгоград,_Волгоградская_обл.": {
-      "original_name": "Волгоград, Волгоградская обл.",
-      "driver_name": "Яськов Сергей Николаевич",
-      "distance": 724,
-      "duration_seconds": 37095,
-      "duration_formatted": "10 ч 18 мин",
-      "number_of_stops": 11,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+13 ч 58 мин",
-      "time_difference_seconds": 50295,
-      "total_route_time_seconds": 50295,
-      "total_route_time_formatted": "13 ч 58 мин",
-      "comment": ""
-    },
-    "Уварово,_Тамбовская_обл.": {
-      "original_name": "Уварово, Тамбовская обл.",
-      "driver_name": "Новичихин Евгений Владимирович",
-      "distance": 718,
-      "duration_seconds": 37596,
-      "duration_formatted": "10 ч 26 мин",
-      "number_of_stops": 9,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+13 ч 26 мин",
-      "time_difference_seconds": 48396,
-      "total_route_time_seconds": 48396,
-      "total_route_time_formatted": "13 ч 26 мин",
-      "comment": ""
-    },
-    "Богучарский_район,_Воронежская_обл.": {
-      "original_name": "Богучарский район, Воронежская обл.",
-      "driver_name": "Поплавский Владимир Николаевич",
-      "distance": 1236,
-      "duration_seconds": 64045,
-      "duration_formatted": "17 ч 47 мин",
-      "number_of_stops": 9,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+20 ч 47 мин",
-      "time_difference_seconds": 74845,
-      "total_route_time_seconds": 74845,
-      "total_route_time_formatted": "20 ч 47 мин",
-      "comment": ""
-    },
-    "Воронеж_4": {
-      "original_name": "Воронеж 4",
-      "driver_name": "Зубков Алексей Андреевич",
-      "distance": 197,
-      "duration_seconds": 9423,
-      "duration_formatted": "2 ч 37 мин",
-      "number_of_stops": 1,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+2 ч 57 мин",
-      "time_difference_seconds": 10623,
-      "total_route_time_seconds": 10623,
-      "total_route_time_formatted": "2 ч 57 мин",
-      "comment": ""
-    },
-    "Бутурлиновский_район,_Воронежская_обл.": {
-      "original_name": "Бутурлиновский район, Воронежская обл.",
-      "driver_name": "Красавин Юрий Иванович",
-      "distance": 595,
-      "duration_seconds": 29546,
-      "duration_formatted": "8 ч 12 мин",
-      "number_of_stops": 14,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+12 ч 52 мин",
-      "time_difference_seconds": 46346,
-      "total_route_time_seconds": 46346,
-      "total_route_time_formatted": "12 ч 52 мин",
-      "comment": ""
-    },
-    "Россошанский_район,_Воронежская_обл.": {
-      "original_name": "Россошанский район, Воронежская обл.",
-      "driver_name": "Иванов Владимир Викторович",
-      "distance": 495,
-      "duration_seconds": 27486,
-      "duration_formatted": "7 ч 38 мин",
-      "number_of_stops": 23,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+15 ч 18 мин",
-      "time_difference_seconds": 55086,
-      "total_route_time_seconds": 55086,
-      "total_route_time_formatted": "15 ч 18 мин",
-      "comment": ""
-    },
-    "Борисоглебский_район,_Воронежская_обл.": {
-      "original_name": "Борисоглебский район, Воронежская обл.",
-      "driver_name": "Колесников Михаил Михайлович",
-      "distance": 677,
-      "duration_seconds": 36954,
-      "duration_formatted": "10 ч 15 мин",
-      "number_of_stops": 21,
-      "report_distance": null,
-      "report_duration_hours": null,
-      "report_duration_minutes": null,
-      "distance_difference": null,
-      "time_difference_formatted": "+17 ч 15 мин",
-      "time_difference_seconds": 62154,
-      "total_route_time_seconds": 62154,
-      "total_route_time_formatted": "17 ч 15 мин",
+      "time_difference_formatted": "+3 ч 8 мин",
+      "time_difference_seconds": 11288,
+      "total_route_time_seconds": 11288,
+      "total_route_time_formatted": "3 ч 8 мин",
       "comment": ""
     }
   },
   "drivers": {
-    "1_срочно_вне_плана": "водитель по договору",
-    "Тульская_2_область": "Медведев Александр Иванович",
-    "Курск_2": "Пьяных Олег Леонидович",
-    "Курск_3": "Воронин Александр Александрович",
-    "Воронеж_ЛБ": "Попков Сергей Андреевич",
-    "Тульская_область": "Дударев Александр Владимирович",
-    "Новоусманский_район,_Воронежская_обл.": "Погибельный Василий Васильевич",
-    "Интернет_магазин": "Пешков Иван Владимирович",
-    "Воронеж,_Воронежская_обл.": "Поминов Александр Николаевич",
-    "Волгоград,_Волгоградская_обл.": "Яськов Сергей Николаевич",
-    "Уварово,_Тамбовская_обл.": "Новичихин Евгений Владимирович",
-    "Богучарский_район,_Воронежская_обл.": "Поплавский Владимир Николаевич",
-    "Воронеж_4": "Зубков Алексей Андреевич",
-    "Бутурлиновский_район,_Воронежская_обл.": "Красавин Юрий Иванович",
-    "Россошанский_район,_Воронежская_обл.": "Иванов Владимир Викторович",
-    "Борисоглебский_район,_Воронежская_обл.": "Колесников Михаил Михайлович"
+    "Хохольский_район,_Воронежская_обл.": "Зябкин Николай Николаевич"
   },
-  "current_file": "Маршруты 15.04.2025.xlsx",
-  "global_service_time_minutes": 20,
-  "report_date_str": "2025-04-15"
+  "current_file": "journal_route_mini — копия.xlsx",
+  "global_service_time_minutes": 15,
+  "report_date_str": ""
 }

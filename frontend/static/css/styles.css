@@ -1261,4 +1261,54 @@ body {
 /* Убираем padding у ячейки в режиме редактирования, чтобы textarea прилегал */
 #geocoder-table td.editing {
     padding: 0;
-} 
+}
+
+/* --- Стили для оверлея карты --- */
+.map-container {
+  position: relative; /* Чтобы позиционировать оверлеи */
+}
+
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачный фон */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 10; /* Выше карты, но ниже модальных окон */
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.map-overlay.hidden {
+  display: none;
+}
+
+#map-error-message {
+  color: #dc3545; /* Красный цвет для ошибки */
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+#map-retry-button {
+  /* Дополнительные стили для кнопки, если нужно */
+}
+
+/* Маленький спиннер для карты */
+.spinner-small {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #4a6bef; /* Цвет спиннера */
+  animation: spin 1s ease infinite;
+  margin-bottom: 10px; /* Отступ от текста */
+}
+
+/* Ключевые кадры для анимации остаются те же */
+/* @keyframes spin { ... } */ 

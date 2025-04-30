@@ -171,7 +171,18 @@
 
           <!-- ИЗМЕНЯЕМ ID ПЛЕЙСХОЛДЕРА КАРТЫ -->
           <div id="map-container" class="map-container hidden">
-             <!-- Контент карты будет добавлен JS -->
+             <!-- Контент карты будет добавлен JS (элемент div#map) -->
+             <!-- ДОБАВЛЕНО: Элементы для ошибки OSRM -->
+             <div id="map-error-overlay" class="map-overlay hidden">
+                <div id="map-error-message"></div>
+                <button id="map-retry-button" class="btn btn-small">Повторить</button>
+             </div>
+             <!-- ДОБАВЛЕНО: Индикатор загрузки карты -->
+             <div id="map-loading-indicator" class="map-overlay hidden">
+                 <div class="spinner-small"></div>
+                 <span>Загрузка маршрута...</span>
+             </div>
+             <!-- КОНЕЦ ДОБАВЛЕНИЯ -->
           </div>
 
           <!-- Новый layout для селектора и таблицы -->

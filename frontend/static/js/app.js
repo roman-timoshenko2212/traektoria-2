@@ -62,6 +62,7 @@ function initApp() {
   setupSummaryModal();
   setupStep1NextButton();
   initLottieAnimation(); // Инициализируем Lottie при запуске
+  setupMapRetryButton(); // <-- ДОБАВЛЕНО
 }
 
 // Функция инициализации Lottie анимации
@@ -620,17 +621,64 @@ function initMapContainer(preInit = false) {
   }
 }
 
+// --- Новые вспомогательные функции для управления оверлеями карты ---
+function showMapLoadingIndicator() {
+    const indicator = document.getElementById('map-loading-indicator');
+    const errorOverlay = document.getElementById('map-error-overlay');
+    if (indicator) indicator.classList.remove('hidden');
+    if (errorOverlay) errorOverlay.classList.add('hidden'); // Скрываем ошибку, если она была
+}
+
+function hideMapLoadingIndicator() {
+    const indicator = document.getElementById('map-loading-indicator');
+    if (indicator) indicator.classList.add('hidden');
+}
+
+function showMapErrorOverlay(message) {
+    console.log("[showMapErrorOverlay] Called with message:", message); // <-- ЛОГ 1
+    const errorOverlay = document.getElementById('map-error-overlay');
+    const errorMessageEl = document.getElementById('map-error-message');
+    const indicator = document.getElementById('map-loading-indicator');
+    
+    // --- ДОБАВЛЕН ЛОГ ПОИСКА ЭЛЕМЕНТОВ ---
+    console.log("[showMapErrorOverlay] Found elements:", {
+         errorOverlay: !!errorOverlay,
+         errorMessageEl: !!errorMessageEl,
+         indicator: !!indicator
+    });
+    // --- КОНЕЦ ЛОГА ---
+    
+    if (errorOverlay && errorMessageEl) {
+        errorMessageEl.textContent = message || 'Не удалось построить маршрут на карте.';
+        errorOverlay.classList.remove('hidden');
+        console.log("[showMapErrorOverlay] Removed 'hidden' class from errorOverlay."); // <-- ЛОГ 2
+    } else {
+        console.error("[showMapErrorOverlay] Could not find error overlay or message element."); // <-- ЛОГ 3
+    }
+    if (indicator) indicator.classList.add('hidden'); // Скрываем загрузку, если она была
+}
+
+function hideMapErrorOverlay() {
+    const errorOverlay = document.getElementById('map-error-overlay');
+    if (errorOverlay) errorOverlay.classList.add('hidden');
+}
+// --- Конец новых функций ---
+
 // Возвращаем исходную функцию showMap (или близкую к ней)
 // ИЗМЕНЕНО: делаем функцию глобальной
 window.showMap = function(points) {
-    // throw new Error("Искусственная ошибка рендеринга карты"); // Временная строка для теста - УДАЛЕНО
     console.log("Вызвана функция showMap (Leaflet) с точками:", points);
-  const mapContainerParent = document.getElementById('map-container');
+    const mapContainerParent = document.getElementById('map-container');
 
-  if (!mapContainerParent) {
+    // --- ДОБАВЛЕНО: Показываем индикатор загрузки и скрываем ошибку в начале ---
+    showMapLoadingIndicator(); 
+    // --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
+    if (!mapContainerParent) {
        console.error("Не найден контейнер #map-container для карты.");
-       return; // Не можем продолжить без контейнера
-  }
+       hideMapLoadingIndicator(); // Скрываем загрузку при ошибке
+       return; 
+    }
   
   if (!points || points.length < 2) {
     console.warn("Недостаточно точек для отображения маршрута на карте.");
@@ -758,6 +806,9 @@ window.showMap = function(points) {
             showAlternatives: false,   
             fitSelectedRoutes: false, // Не масштабировать карту под маршрут автоматически (сделаем вручную)
             show: false,             // Не показывать панель инструкций маршрута
+            steps: false,            // НЕ запрашивать пошаговые инструкции
+            alternatives: false,     // НЕ запрашивать альтернативные маршруты
+            overview: 'simplified',  // Запрашивать только упрощенную геометрию
             lineOptions: {
                 styles: [{ color: '#4a6bef', opacity: 0.8, weight: 5 }] // Стиль линии
             },
@@ -777,18 +828,38 @@ window.showMap = function(points) {
         }).addTo(map);
         console.log("L.Routing.control успешно добавлен на карту");
 
+        // Флаг для отслеживания успешного 'routesfound'
+        routingControl._routesFoundSuccessfully = false;
+
         // Ждем, пока маршрут будет построен, чтобы получить границы
         routingControl.on('routesfound', function(e) {
             console.log("[app.js] Event: routesfound");
+            routingControl._routesFoundSuccessfully = true; // Устанавливаем флаг
             // --- ДОБАВЛЕНО: Скрываем индикатор загрузки --- 
-            const loadingIndicator = document.getElementById('map-loading-indicator'); // Получаем снова, т.к. в другом scope
-            if (loadingIndicator) loadingIndicator.classList.add('hidden');
-            // --- Конец скрытия индикатора --- 
+            hideMapLoadingIndicator();
+            // Скрываем оверлей ошибки, если он был показан ранее
+            hideMapErrorOverlay(); 
+            // --- Конец добавления --- 
 
             const routes = e.routes;
-            if (routes.length > 0) {
+            if (routes.length > 0 && routes[0].coordinates) { // <-- Проверяем наличие координат
               console.log('[app.js] Route found, summary:', routes[0].summary);
               
+              // --- НАЧАЛО: Рисуем линию маршрута вручную --- 
+              // Сначала удаляем старую линию, если она была (на всякий случай)
+              if (polyline && map) {
+                  map.removeLayer(polyline);
+                  polyline = null;
+              }
+              // Создаем новую полилинию
+              polyline = L.polyline(routes[0].coordinates, {
+                  color: '#4a6bef', 
+                  opacity: 0.8, 
+                  weight: 5 
+              }).addTo(map);
+              console.log('[app.js] Route polyline drawn manually.');
+              // --- КОНЕЦ: Рисуем линию маршрута вручную --- 
+
               // --- ИЗМЕНЕНИЕ: Убираем повторное масштабирование карты --- 
               /* 
               // Пытаемся подогнать карту под маршрут (можно и не делать, т.к. уже подогнали по маркерам)
@@ -810,25 +881,47 @@ window.showMap = function(points) {
 
             } else {
                console.warn('[app.js] routesfound event fired, but no routes array found.');
-               showRouteError("Маршрут не найден сервисом маршрутизации.");
+               // --- ИЗМЕНЕНО: Показываем ошибку через оверлей --- 
+               showMapErrorOverlay("Маршрут не найден сервисом маршрутизации.");
+               // showRouteError("Маршрут не найден сервисом маршрутизации."); // Старый вызов убираем
             }
-             hideError(); // Скрываем ОБЩЕЕ сообщение об ошибке, если маршрут найден
+             // hideError(); // Старый вызов общего сообщения об ошибке убираем
         });
         routingControl.on('routingerror', function(e) {
-            console.error("Ошибка маршрутизации Leaflet Routing Machine:", e); 
-            showRouteError(`Ошибка построения маршрута: ${e.error?.message || 'Неизвестная ошибка'}`);
-            
-            // Если маршрут не строится, все равно покажем точки
-            // Используем исходный 'waypoints'
-            // НЕ ВЫЗЫВАЕМ fitBounds здесь, чтобы избежать ошибки
-            console.warn("Маршрут не построен, fitBounds пропускается. Проверьте отображение маркеров.");
-            /* Убираем попытку масштабирования
-            if (markers.length > 0) {
-                 map.fitBounds(L.featureGroup(markers).getBounds(), {padding: [60, 60], maxZoom: 15});
-            } else if (waypoints && waypoints.length > 0) { 
-                 map.fitBounds(L.latLngBounds(waypoints), {padding: [60, 60], maxZoom: 15});
+            console.error("Ошибка маршрутизации Leaflet Routing Machine:", e);
+
+            // Проверяем флаг: если маршрут уже был найден, просто логируем и выходим
+            if (routingControl._routesFoundSuccessfully) {
+                console.warn("[routingerror handler] Ошибка возникла ПОСЛЕ успешного события 'routesfound'. Маршрут НЕ будет очищен.");
+                return; // Ничего не делаем, чтобы не стирать маршрут
             }
-            */
+
+            // --- ЭТОТ КОД ВЫПОЛНИТСЯ, ТОЛЬКО ЕСЛИ 'routesfound' НЕ БЫЛО --- 
+            const errorMsg = e.error?.message || 'Неизвестная ошибка OSRM';
+            // Формируем более детальное сообщение
+            let displayError = `Не удалось построить маршрут на карте.`;
+            if (errorMsg.includes('timeout')) {
+                 displayError += ' (Таймаут запроса к OSRM)';
+            } else if (e.error?.status) {
+                 displayError += ` (Ошибка ${e.error.status})`;
+            }
+            
+            // --- ДОБАВЛЕНЫ ЛОГИ ДО/ПОСЛЕ ВЫЗОВА --- 
+            console.log("[routingerror handler] Before calling showMapErrorOverlay. Error message:", displayError); // <-- ЛОГ 4
+            showMapErrorOverlay(displayError); // Вызываем функцию показа оверлея
+            console.log("[routingerror handler] After calling showMapErrorOverlay."); // <-- ЛОГ 5
+            // --- КОНЕЦ ДОБАВЛЕНИЯ ЛОГОВ ---
+            
+            // Попытка очистить контрол для предотвращения TypeError
+            try {
+                if (routingControl) {
+                    console.log("[routingerror handler] Попытка очистить маршрут через setWaypoints(null)...");
+                    routingControl.setWaypoints(null);
+                }
+            } catch (clearError) {
+                console.error("[routingerror handler] Ошибка при попытке очистки routingControl:", clearError);
+            }
+            // --- КОНЕЦ ДОБАВЛЕНИЯ ---
         });
 
   } catch (e) {
@@ -1017,7 +1110,7 @@ function clearMapMarkers() {
   });
   markers = []; // Очищаем массив
   
-  // Удаляем полилинию, если она есть
+  // Удаляем полилинию, если она есть (используем глобальную переменную polyline)
   if (polyline && map) {
         map.removeLayer(polyline);
         polyline = null;
@@ -1974,3 +2067,43 @@ function handleCommentInput(event) {
   autoResizeTextarea(event.target);
   handleSummaryInputChange(event); // Вызываем стандартный обработчик изменений
 }
+
+// --- Обработчик кнопки Повторить --- 
+function setupMapRetryButton() {
+    const retryButton = document.getElementById('map-retry-button');
+    if (retryButton) {
+        retryButton.addEventListener('click', () => {
+            console.log("Map Retry button clicked.");
+            // Получаем ID текущего выбранного маршрута
+            const currentRouteId = window.currentSelectedRouteId; // Используем глобальную переменную из step3_results
+            if (!currentRouteId) {
+                console.error("Cannot retry map route: current route ID not found.");
+                showMapErrorOverlay("Не удалось определить текущий маршрут для повтора.");
+                return;
+            }
+            // Получаем данные для этого маршрута
+            const routeData = window.currentRoutesData[currentRouteId]; // Используем глобальные данные
+            if (!routeData || !routeData.route_points) {
+                console.error("Cannot retry map route: route data or points not found for", currentRouteId);
+                showMapErrorOverlay("Не найдены точки маршрута для повтора.");
+                return;
+            }
+            
+            console.log(`Retrying map for routeId: ${currentRouteId} with ${routeData.route_points.length} points.`);
+            // Скрываем оверлей ошибки, показываем загрузку и вызываем showMap
+            hideMapErrorOverlay();
+            showMapLoadingIndicator();
+            // Передаем точки в showMap для повторной попытки
+            // Оборачиваем в try...catch на всякий случай
+            try {
+                 window.showMap(routeData.route_points);
+            } catch (retryMapError) {
+                 console.error("Error during map retry attempt:", retryMapError);
+                 showMapErrorOverlay(`Ошибка при повторной попытке построения маршрута: ${retryMapError.message || 'Неизвестная ошибка'}`);
+            }
+        });
+    } else {
+         console.warn("Map retry button (#map-retry-button) not found.");
+    }
+}
+// --- КОНЕЦ ОБРАБОТЧИКА --- 

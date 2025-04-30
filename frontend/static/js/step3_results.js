@@ -123,12 +123,23 @@ window.initStep3UI = function(routesData) {
              window.showMap(firstRouteData.route_points);
              } catch (mapError) {
                  console.error(`[step3_results.js] Error during initial window.showMap call for routeId ${firstRouteId}:`, mapError);
-                 // Скрываем только контейнер карты
+                 // --- ДОБАВЛЕНО: Показать сообщение об ошибке на карте --- 
                  const mapContainer = document.getElementById('map-container');
-                 if (mapContainer) mapContainer.classList.add('hidden');
-                 // Очищаем маркеры, если функция есть
-                 if (typeof window.clearMapMarkers === 'function') {
+                 const mapElement = document.getElementById('map');
+                 if (mapContainer) {
+                     mapContainer.classList.remove('hidden'); // Показываем контейнер карты
+                     if (mapElement) {
+                         // Показываем сообщение внутри карты
+                         mapElement.innerHTML = `<div style="padding: 20px; text-align: center; color: red;">Не удалось отобразить маршрут на карте: ${mapError.message || 'Неизвестная ошибка'}</div>`;
+                     }
+                 }
+                 // Очищаем маркеры, если функция есть и карта была инициализирована
+                 if (typeof window.clearMapMarkers === 'function' && window.map) {
+                     try {
                      window.clearMapMarkers();
+                     } catch (clearError) {
+                         console.error("[step3_results.js] Error clearing map markers after showMap error:", clearError);
+                     }
                  }
              }
              // --- КОНЕЦ ИЗМЕНЕНИЯ --- 
@@ -701,6 +712,39 @@ function updateDisplay(selectedRouteId) {
         console.warn("[step3_results.js] Function loadSummaryData not found. Summary cache might be outdated.");
     }
     // --- КОНЕЦ ДОБАВЛЕНИЯ ---
+
+    // Показываем карту
+    if (typeof window.showMap === 'function' && data.route_points) {
+        console.log(`[step3_results.js] Calling window.showMap for selected routeId: ${selectedRouteId}`);
+        // --- ДОБАВЛЕНО: try...catch --- 
+        try {
+            window.showMap(data.route_points);
+        } catch (mapError) {
+            console.error(`[step3_results.js] Error during window.showMap call for routeId ${selectedRouteId}:`, mapError);
+            // --- ДОБАВЛЕНО: Показать сообщение об ошибке на карте --- 
+            const mapContainer = document.getElementById('map-container');
+            const mapElement = document.getElementById('map');
+            if (mapContainer) {
+                mapContainer.classList.remove('hidden'); // Показываем контейнер карты
+                if (mapElement) {
+                    // Показываем сообщение внутри карты
+                    mapElement.innerHTML = `<div style="padding: 20px; text-align: center; color: red;">Не удалось отобразить маршрут на карте: ${mapError.message || 'Неизвестная ошибка'}</div>`;
+                }
+            }
+            // Очищаем маркеры, если функция есть и карта была инициализирована
+            if (typeof window.clearMapMarkers === 'function' && window.map) {
+                try {
+                    window.clearMapMarkers();
+                } catch (clearError) {
+                    console.error("[step3_results.js] Error clearing map markers after showMap error:", clearError);
+                }
+            }
+        }
+        // --- КОНЕЦ ДОБАВЛЕНИЯ --- 
+    } else {
+        console.warn("[step3_results.js] window.showMap function not available or no route_points for this route.");
+        // Скрываем карту, если нет данных
+    }
 }
 
 // --- Функция для инициализации списка маршрутов ---
@@ -959,7 +1003,7 @@ function setupEventListeners() {
                 const hasAddressEdits = modifiedAddresses[currentSelectedRouteId] && 
                                       Object.keys(modifiedAddresses[currentSelectedRouteId]).length > 0;
                 // const currentHasStructuralChanges = hasStructuralChanges; // Проверяем флаг
-
+                
                 if (!hasAddressEdits && !hasStructuralChanges) {
                     console.log('[step3_results.js] No modifications (address edits or structure changes) to recalculate.');
                     return; // Выход, если нет никаких изменений
@@ -1249,15 +1293,15 @@ function startEditAddress(tdElement) {
 
     const addressSpan = tdElement.querySelector('.address-text');
     const editIcon = tdElement.querySelector('.edit-icon'); // Находим и иконку
-
+    
     // --- ИЗМЕНЕНО: Проверяем наличие обоих элементов --- 
     if (!addressSpan || !editIcon) {
         console.error("[startEditAddress] Could not find addressSpan or editIcon within the cell.");
         return;
     }
-
+    
     const originalText = addressSpan.textContent;
-
+    
     // --- ИЗМЕНЕНИЕ: Создаем textarea вместо input ---
     const textarea = document.createElement('textarea');
     textarea.value = originalText;
@@ -1272,7 +1316,7 @@ function startEditAddress(tdElement) {
     textarea.style.boxSizing = 'border-box';
     textarea.style.display = 'block';
     // --- КОНЕЦ ИЗМЕНЕНИЯ ---
-
+    
     // Маркировка для предотвращения гонки событий
     let isFinishingEdit = false;
 
@@ -1281,8 +1325,8 @@ function startEditAddress(tdElement) {
     addressSpan.style.display = 'none'; // Скрываем текст
     editIcon.style.display = 'none'; // Скрываем иконку
     tdElement.appendChild(textarea); // Добавляем textarea
-    // --- КОНЕЦ ИЗМЕНЕНИЯ --- 
-
+    // --- КОНЕЦ ИЗМЕНЕНИЯ ---
+    
     textarea.focus();
 
     // --- ДОБАВЛЕНО: Функция и слушатель для авто-ресайза textarea ---
@@ -1306,14 +1350,14 @@ function startEditAddress(tdElement) {
         if (isFinishingEdit) {
             return;
         }
-
+        
         // Устанавливаем флаг обработки
         isFinishingEdit = true;
-
+        
         // Если нажат Escape, отмечаем это
         if (isEscaped) {
             textarea.dataset.isEscapePressed = "true"; // Используем textarea
-
+            
             // Для Escape сразу восстанавливаем исходное состояние
             tdElement.innerHTML = `<span class="address-text">${originalText}</span><span class="edit-icon">${pencilSvgIcon}</span>`;
             tdElement.classList.remove('editing');
@@ -1324,13 +1368,13 @@ function startEditAddress(tdElement) {
                 endEditAddress(textarea, tdElement, isEscaped); // Передаем textarea и флаг isEscaped
             }, 10);
         }
-
+        
         // В любом случае удаляем слушатели
         textarea.removeEventListener('blur', handleBlur);
         textarea.removeEventListener('keydown', handleKeyDown);
         textarea.removeEventListener('input', autoResizeTextarea); // Удаляем и слушатель ресайза
     };
-
+    
     // Отдельный обработчик для blur
     const handleBlur = () => {
         // Если это не отмена по Escape
@@ -1363,11 +1407,11 @@ function startEditAddress(tdElement) {
 // --- ИЗМЕНЕНО: endEditAddress теперь принимает textareaElement, tdElement, и isEscaped --- 
 function endEditAddress(textareaElement, tdElement, isEscaped = false) { // Меняем inputElement на textareaElement
     console.log(`[endEditAddress] Called. isEscaped: ${isEscaped}`); // Лог начала
-
+    
     // Находим нужные элементы внутри tdElement
     const addressSpan = tdElement.querySelector('.address-text');
     const editIcon = tdElement.querySelector('.edit-icon');
-
+    
     // Проверяем, существует ли еще tdElement, textareaElement, addressSpan, editIcon в DOM
     if (!tdElement || !tdElement.parentNode || !textareaElement || !textareaElement.parentNode || !addressSpan || !editIcon) { // Меняем inputElement
         console.warn("[endEditAddress] One or more elements (td, textarea, span, icon) no longer exist in DOM. Aborting.");
