@@ -1,9 +1,9 @@
 {
   "route_name": "Курск 5",
   "points_count": 6,
-  "calculation_time": "2025-04-21 11:26:28",
-  "total_distance": 488458,
-  "total_duration": 27115,
+  "calculation_time": "2025-04-30 15:26:47",
+  "total_distance": 486228,
+  "total_duration": 27970,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.738322,
         "lon": 36.243631
       },
-      "distance": 229703,
-      "duration": 12479,
+      "distance": 227665,
+      "duration": 13043,
       "status": "OK"
     },
     {
@@ -28,26 +28,26 @@
         "lon": 36.243631
       },
       "to_point": {
-        "lat": 51.738389,
-        "lon": 36.24079
+        "lat": 51.738322,
+        "lon": 36.243631
       },
-      "distance": 252,
-      "duration": 61,
+      "distance": 0,
+      "duration": 0,
       "status": "OK"
     },
     {
       "from_index": 2,
       "to_index": 3,
       "from_point": {
-        "lat": 51.738389,
-        "lon": 36.24079
+        "lat": 51.738322,
+        "lon": 36.243631
       },
       "to_point": {
         "lat": 51.728082,
         "lon": 36.155988
       },
-      "distance": 10266,
-      "duration": 1178,
+      "distance": 10326,
+      "duration": 1237,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 36.268126
       },
       "distance": 15528,
-      "duration": 1393,
+      "duration": 1392,
       "status": "OK"
     },
     {
@@ -77,8 +77,9 @@
         "lon": 39.266546
       },
       "distance": 232709,
-      "duration": 12004,
+      "duration": 12298,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

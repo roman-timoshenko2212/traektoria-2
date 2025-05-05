@@ -1,9 +1,9 @@
 {
   "route_name": "Курск 3",
   "points_count": 15,
-  "calculation_time": "2025-04-29 17:29:58",
+  "calculation_time": "2025-04-30 14:37:10",
   "total_distance": 626308,
-  "total_duration": 36126,
+  "total_duration": 36100,
   "segments": [
     {
       "from_index": 0,
@@ -17,7 +17,7 @@
         "lon": 36.136697
       },
       "distance": 243255,
-      "duration": 14346,
+      "duration": 14256,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 36.137982
       },
       "distance": 309,
-      "duration": 81,
+      "duration": 84,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 36.135675
       },
       "distance": 30361,
-      "duration": 1749,
+      "duration": 1702,
       "status": "OK"
     },
     {
@@ -182,7 +182,7 @@
         "lon": 37.11669
       },
       "distance": 25143,
-      "duration": 1240,
+      "duration": 1239,
       "status": "OK"
     },
     {
@@ -212,9 +212,9 @@
         "lon": 39.266546
       },
       "distance": 166337,
-      "duration": 8930,
+      "duration": 9039,
       "status": "OK"
     }
   ],
-  "start_time_used": "2025-04-22T08:00:00Z"
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

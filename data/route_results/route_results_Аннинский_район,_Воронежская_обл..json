@@ -1,9 +1,9 @@
 {
   "route_name": "Аннинский район, Воронежская обл.",
   "points_count": 4,
-  "calculation_time": "2025-04-21 13:38:22",
-  "total_distance": 336508,
-  "total_duration": 17044,
+  "calculation_time": "2025-04-30 16:03:12",
+  "total_distance": 337164,
+  "total_duration": 17449,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.110405,
         "lon": 40.723214
       },
-      "distance": 159201,
-      "duration": 7419,
+      "distance": 159857,
+      "duration": 7987,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.31678
       },
       "distance": 140556,
-      "duration": 6492,
+      "duration": 6680,
       "status": "OK"
     },
     {
@@ -47,8 +47,9 @@
         "lon": 39.266546
       },
       "distance": 36751,
-      "duration": 3133,
+      "duration": 2782,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

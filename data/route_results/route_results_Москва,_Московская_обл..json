@@ -1,9 +1,9 @@
 {
   "route_name": "Москва, Московская обл.",
   "points_count": 3,
-  "calculation_time": "2025-04-24 15:34:39",
-  "total_distance": 2285594,
-  "total_duration": 100794,
+  "calculation_time": "2025-04-30 16:32:02",
+  "total_distance": 2286251,
+  "total_duration": 98993,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 58.219997,
         "lon": 30.713138
       },
-      "distance": 1171046,
-      "duration": 48660,
+      "distance": 1171703,
+      "duration": 48946,
       "status": "OK"
     },
     {
@@ -32,8 +32,9 @@
         "lon": 39.266546
       },
       "distance": 1114548,
-      "duration": 52134,
+      "duration": 50047,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

@@ -1,9 +1,9 @@
 {
   "route_name": "Панинский район, Воронежская обл.",
   "points_count": 8,
-  "calculation_time": "2025-04-24 15:34:41",
+  "calculation_time": "2025-04-30 16:32:05",
   "total_distance": 164748,
-  "total_duration": 9920,
+  "total_duration": 10100,
   "segments": [
     {
       "from_index": 0,
@@ -17,7 +17,7 @@
         "lon": 39.295444
       },
       "distance": 5513,
-      "duration": 621,
+      "duration": 651,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.294492
       },
       "distance": 431,
-      "duration": 49,
+      "duration": 58,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.291173
       },
       "distance": 1516,
-      "duration": 369,
+      "duration": 320,
       "status": "OK"
     },
     {
@@ -92,7 +92,7 @@
         "lon": 40.207072
       },
       "distance": 80411,
-      "duration": 4675,
+      "duration": 4709,
       "status": "OK"
     },
     {
@@ -107,8 +107,9 @@
         "lon": 39.266546
       },
       "distance": 76877,
-      "duration": 4206,
+      "duration": 4362,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

@@ -1,9 +1,9 @@
 {
   "route_name": "Курск 4",
-  "points_count": 18,
-  "calculation_time": "2025-04-21 13:37:42",
-  "total_distance": 566316,
-  "total_duration": 32331,
+  "points_count": 16,
+  "calculation_time": "2025-04-30 16:50:20",
+  "total_distance": 890943,
+  "total_duration": 51159,
   "segments": [
     {
       "from_index": 0,
@@ -13,61 +13,31 @@
         "lon": 39.266546
       },
       "to_point": {
-        "lat": 51.521342,
-        "lon": 38.020735
+        "lat": 51.880861,
+        "lon": 36.891097
       },
-      "distance": 102241,
-      "duration": 6673,
+      "distance": 195377,
+      "duration": 11508,
       "status": "OK"
     },
     {
       "from_index": 1,
       "to_index": 2,
       "from_point": {
-        "lat": 51.521342,
-        "lon": 38.020735
-      },
-      "to_point": {
-        "lat": 51.85192,
-        "lon": 37.727313
-      },
-      "distance": 74078,
-      "duration": 3330,
-      "status": "OK"
-    },
-    {
-      "from_index": 2,
-      "to_index": 3,
-      "from_point": {
-        "lat": 51.85192,
-        "lon": 37.727313
-      },
-      "to_point": {
-        "lat": 51.880354,
-        "lon": 37.245633
-      },
-      "distance": 42653,
-      "duration": 2310,
-      "status": "OK"
-    },
-    {
-      "from_index": 3,
-      "to_index": 4,
-      "from_point": {
-        "lat": 51.880354,
-        "lon": 37.245633
+        "lat": 51.880861,
+        "lon": 36.891097
       },
       "to_point": {
         "lat": 51.872441,
         "lon": 36.918668
       },
-      "distance": 25101,
-      "duration": 1288,
+      "distance": 2481,
+      "duration": 344,
       "status": "OK"
     },
     {
-      "from_index": 4,
-      "to_index": 5,
+      "from_index": 2,
+      "to_index": 3,
       "from_point": {
         "lat": 51.872441,
         "lon": 36.918668
@@ -81,173 +51,173 @@
       "status": "OK"
     },
     {
-      "from_index": 5,
-      "to_index": 6,
+      "from_index": 3,
+      "to_index": 4,
       "from_point": {
         "lat": 51.872126,
         "lon": 36.917853
       },
       "to_point": {
-        "lat": 51.880861,
-        "lon": 36.891097
+        "lat": 51.863891,
+        "lon": 36.935695
       },
-      "distance": 2419,
-      "duration": 278,
+      "distance": 1821,
+      "duration": 196,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 51.863891,
+        "lon": 36.935695
+      },
+      "to_point": {
+        "lat": 51.822412,
+        "lon": 36.257049
+      },
+      "distance": 61428,
+      "duration": 3559,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 51.822412,
+        "lon": 36.257049
+      },
+      "to_point": {
+        "lat": 51.918181,
+        "lon": 37.281448
+      },
+      "distance": 91393,
+      "duration": 5343,
       "status": "OK"
     },
     {
       "from_index": 6,
       "to_index": 7,
       "from_point": {
-        "lat": 51.880861,
-        "lon": 36.891097
+        "lat": 51.918181,
+        "lon": 37.281448
       },
       "to_point": {
-        "lat": 51.739943,
-        "lon": 36.230609
+        "lat": 51.860897,
+        "lon": 36.930123
       },
-      "distance": 56684,
-      "duration": 3115,
+      "distance": 30754,
+      "duration": 1807,
       "status": "OK"
     },
     {
       "from_index": 7,
       "to_index": 8,
       "from_point": {
-        "lat": 51.739943,
-        "lon": 36.230609
+        "lat": 51.860897,
+        "lon": 36.930123
       },
       "to_point": {
-        "lat": 51.739943,
-        "lon": 36.230609
+        "lat": 51.85192,
+        "lon": 37.727313
       },
-      "distance": 0,
-      "duration": 0,
+      "distance": 65691,
+      "duration": 3565,
       "status": "OK"
     },
     {
       "from_index": 8,
       "to_index": 9,
       "from_point": {
-        "lat": 51.739943,
-        "lon": 36.230609
+        "lat": 51.85192,
+        "lon": 37.727313
       },
       "to_point": {
-        "lat": 51.727182,
-        "lon": 36.248307
+        "lat": 51.847499,
+        "lon": 37.723608
       },
-      "distance": 2055,
-      "duration": 206,
+      "distance": 803,
+      "duration": 139,
       "status": "OK"
     },
     {
       "from_index": 9,
       "to_index": 10,
       "from_point": {
-        "lat": 51.727182,
-        "lon": 36.248307
+        "lat": 51.847499,
+        "lon": 37.723608
       },
       "to_point": {
-        "lat": 51.742497,
-        "lon": 36.235259
+        "lat": 51.826111,
+        "lon": 38.107526
       },
-      "distance": 2440,
-      "duration": 251,
+      "distance": 34751,
+      "duration": 2109,
       "status": "OK"
     },
     {
       "from_index": 10,
       "to_index": 11,
       "from_point": {
-        "lat": 51.742497,
-        "lon": 36.235259
+        "lat": 51.826111,
+        "lon": 38.107526
       },
       "to_point": {
-        "lat": 51.740462,
-        "lon": 36.244694
+        "lat": 51.738322,
+        "lon": 36.243631
       },
-      "distance": 1151,
-      "duration": 201,
+      "distance": 158138,
+      "duration": 8536,
       "status": "OK"
     },
     {
       "from_index": 11,
       "to_index": 12,
       "from_point": {
-        "lat": 51.740462,
-        "lon": 36.244694
+        "lat": 51.738322,
+        "lon": 36.243631
       },
       "to_point": {
-        "lat": 51.740462,
-        "lon": 36.244694
+        "lat": 51.707759,
+        "lon": 36.165146
       },
-      "distance": 0,
-      "duration": 0,
+      "distance": 10429,
+      "duration": 1179,
       "status": "OK"
     },
     {
       "from_index": 12,
       "to_index": 13,
       "from_point": {
-        "lat": 51.740462,
-        "lon": 36.244694
+        "lat": 51.707759,
+        "lon": 36.165146
       },
       "to_point": {
-        "lat": 51.708962,
-        "lon": 36.18247
+        "lat": 51.707759,
+        "lon": 36.165146
       },
-      "distance": 8546,
-      "duration": 806,
+      "distance": 0,
+      "duration": 0,
       "status": "OK"
     },
     {
       "from_index": 13,
       "to_index": 14,
       "from_point": {
-        "lat": 51.708962,
-        "lon": 36.18247
-      },
-      "to_point": {
-        "lat": 51.721299,
-        "lon": 36.190968
-      },
-      "distance": 1772,
-      "duration": 179,
-      "status": "OK"
-    },
-    {
-      "from_index": 14,
-      "to_index": 15,
-      "from_point": {
-        "lat": 51.721299,
-        "lon": 36.190968
-      },
-      "to_point": {
-        "lat": 51.742731,
-        "lon": 36.153378
-      },
-      "distance": 4283,
-      "duration": 515,
-      "status": "OK"
-    },
-    {
-      "from_index": 15,
-      "to_index": 16,
-      "from_point": {
-        "lat": 51.742731,
-        "lon": 36.153378
+        "lat": 51.707759,
+        "lon": 36.165146
       },
       "to_point": {
         "lat": 51.707759,
         "lon": 36.165146
       },
-      "distance": 5016,
-      "duration": 575,
+      "distance": 0,
+      "duration": 0,
       "status": "OK"
     },
     {
-      "from_index": 16,
-      "to_index": 17,
+      "from_index": 14,
+      "to_index": 15,
       "from_point": {
         "lat": 51.707759,
         "lon": 36.165146
@@ -257,8 +227,9 @@
         "lon": 39.266546
       },
       "distance": 237798,
-      "duration": 12585,
+      "duration": 12855,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

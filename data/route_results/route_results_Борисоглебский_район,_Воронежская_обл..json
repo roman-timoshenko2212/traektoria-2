@@ -1,9 +1,9 @@
 {
   "route_name": "Борисоглебский район, Воронежская обл.",
   "points_count": 23,
-  "calculation_time": "2025-04-29 17:31:08",
+  "calculation_time": "2025-04-30 14:37:58",
   "total_distance": 677109,
-  "total_duration": 36954,
+  "total_duration": 36988,
   "segments": [
     {
       "from_index": 0,
@@ -17,7 +17,7 @@
         "lon": 41.974045
       },
       "distance": 211396,
-      "duration": 10757,
+      "duration": 10788,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 42.100582
       },
       "distance": 16970,
-      "duration": 1309,
+      "duration": 1298,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 42.141727
       },
       "distance": 6849,
-      "duration": 625,
+      "duration": 624,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 42.100652
       },
       "distance": 5108,
-      "duration": 556,
+      "duration": 548,
       "status": "OK"
     },
     {
@@ -152,7 +152,7 @@
         "lon": 42.680332
       },
       "distance": 40757,
-      "duration": 2272,
+      "duration": 2266,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 43.236536
       },
       "distance": 55254,
-      "duration": 2555,
+      "duration": 2546,
       "status": "OK"
     },
     {
@@ -302,7 +302,7 @@
         "lon": 43.174513
       },
       "distance": 5401,
-      "duration": 586,
+      "duration": 588,
       "status": "OK"
     },
     {
@@ -317,7 +317,7 @@
         "lon": 41.772453
       },
       "distance": 114290,
-      "duration": 5995,
+      "duration": 5991,
       "status": "OK"
     },
     {
@@ -332,9 +332,9 @@
         "lon": 39.266546
       },
       "distance": 193970,
-      "duration": 9221,
+      "duration": 9261,
       "status": "OK"
     }
   ],
-  "start_time_used": "2025-04-22T08:00:00Z"
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

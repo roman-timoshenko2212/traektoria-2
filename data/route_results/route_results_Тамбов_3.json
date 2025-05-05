@@ -1,9 +1,9 @@
 {
   "route_name": "Тамбов 3",
   "points_count": 13,
-  "calculation_time": "2025-04-21 11:26:17",
-  "total_distance": 641948,
-  "total_duration": 34482,
+  "calculation_time": "2025-04-30 15:26:33",
+  "total_distance": 644212,
+  "total_duration": 35029,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 53.444082,
         "lon": 41.80135
       },
-      "distance": 305167,
-      "duration": 14560,
+      "distance": 308507,
+      "duration": 14996,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 41.818138
       },
       "distance": 2006,
-      "duration": 350,
+      "duration": 355,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 41.356022
       },
       "distance": 88112,
-      "duration": 4985,
+      "duration": 5072,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 41.435942
       },
       "distance": 10421,
-      "duration": 1167,
+      "duration": 1128,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 41.448907
       },
       "distance": 2816,
-      "duration": 432,
+      "duration": 466,
       "status": "OK"
     },
     {
@@ -88,26 +88,26 @@
         "lon": 41.448907
       },
       "to_point": {
-        "lat": 52.758208,
-        "lon": 41.431476
+        "lat": 52.757872,
+        "lon": 41.432738
       },
-      "distance": 2177,
-      "duration": 303,
+      "distance": 1958,
+      "duration": 307,
       "status": "OK"
     },
     {
       "from_index": 6,
       "to_index": 7,
       "from_point": {
-        "lat": 52.758208,
-        "lon": 41.431476
+        "lat": 52.757872,
+        "lon": 41.432738
       },
       "to_point": {
         "lat": 52.738636,
         "lon": 41.455635
       },
-      "distance": 4641,
-      "duration": 614,
+      "distance": 3784,
+      "duration": 555,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 41.437628
       },
       "distance": 1486,
-      "duration": 341,
+      "duration": 354,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 41.424185
       },
       "distance": 3212,
-      "duration": 463,
+      "duration": 489,
       "status": "OK"
     },
     {
@@ -152,7 +152,7 @@
         "lon": 41.418068
       },
       "distance": 3023,
-      "duration": 485,
+      "duration": 512,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 41.388705
       },
       "distance": 2634,
-      "duration": 422,
+      "duration": 418,
       "status": "OK"
     },
     {
@@ -182,8 +182,9 @@
         "lon": 39.266546
       },
       "distance": 216253,
-      "duration": 10360,
+      "duration": 10377,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

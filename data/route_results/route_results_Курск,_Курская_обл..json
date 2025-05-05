@@ -1,9 +1,9 @@
 {
   "route_name": "Курск, Курская обл.",
   "points_count": 16,
-  "calculation_time": "2025-04-21 11:26:14",
-  "total_distance": 556179,
-  "total_duration": 32525,
+  "calculation_time": "2025-04-30 15:26:25",
+  "total_distance": 554141,
+  "total_duration": 34287,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.736174,
         "lon": 36.282957
       },
-      "distance": 225766,
-      "duration": 11980,
+      "distance": 223728,
+      "duration": 12670,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 36.18247
       },
       "distance": 10063,
-      "duration": 960,
+      "duration": 1002,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 36.149161
       },
       "distance": 6033,
-      "duration": 711,
+      "duration": 783,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 36.167285
       },
       "distance": 9197,
-      "duration": 920,
+      "duration": 956,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 36.161802
       },
       "distance": 12400,
-      "duration": 1234,
+      "duration": 1365,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 36.134795
       },
       "distance": 5331,
-      "duration": 485,
+      "duration": 462,
       "status": "OK"
     },
     {
@@ -182,7 +182,7 @@
         "lon": 36.137982
       },
       "distance": 6293,
-      "duration": 518,
+      "duration": 555,
       "status": "OK"
     },
     {
@@ -197,7 +197,7 @@
         "lon": 36.129952
       },
       "distance": 1121,
-      "duration": 234,
+      "duration": 225,
       "status": "OK"
     },
     {
@@ -212,7 +212,7 @@
         "lon": 35.959101
       },
       "distance": 14892,
-      "duration": 1202,
+      "duration": 1242,
       "status": "OK"
     },
     {
@@ -227,8 +227,9 @@
         "lon": 39.266546
       },
       "distance": 260242,
-      "duration": 13857,
+      "duration": 14603,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

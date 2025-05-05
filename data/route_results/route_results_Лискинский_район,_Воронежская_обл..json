@@ -1,9 +1,9 @@
 {
   "route_name": "Лискинский район, Воронежская обл.",
   "points_count": 10,
-  "calculation_time": "2025-04-21 11:26:50",
-  "total_distance": 436577,
-  "total_duration": 24729,
+  "calculation_time": "2025-04-30 15:27:11",
+  "total_distance": 438081,
+  "total_duration": 25382,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 50.97925,
         "lon": 39.508468
       },
-      "distance": 104553,
-      "duration": 4737,
+      "distance": 105209,
+      "duration": 5247,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 39.52143
       },
       "distance": 1520,
-      "duration": 179,
+      "duration": 184,
       "status": "OK"
     },
     {
@@ -47,7 +47,7 @@
         "lon": 39.550441
       },
       "distance": 2275,
-      "duration": 236,
+      "duration": 245,
       "status": "OK"
     },
     {
@@ -62,7 +62,7 @@
         "lon": 39.546786
       },
       "distance": 3919,
-      "duration": 333,
+      "duration": 347,
       "status": "OK"
     },
     {
@@ -77,7 +77,7 @@
         "lon": 39.241535
       },
       "distance": 58283,
-      "duration": 3328,
+      "duration": 3457,
       "status": "OK"
     },
     {
@@ -91,8 +91,8 @@
         "lat": 50.62475,
         "lon": 38.650072
       },
-      "distance": 77681,
-      "duration": 5181,
+      "distance": 77712,
+      "duration": 5263,
       "status": "OK"
     },
     {
@@ -103,26 +103,26 @@
         "lon": 38.650072
       },
       "to_point": {
-        "lat": 51.310573,
-        "lon": 39.215063
+        "lat": 51.306117,
+        "lon": 39.219388
       },
-      "distance": 134998,
-      "duration": 6593,
+      "distance": 135609,
+      "duration": 6821,
       "status": "OK"
     },
     {
       "from_index": 7,
       "to_index": 8,
       "from_point": {
-        "lat": 51.310573,
-        "lon": 39.215063
+        "lat": 51.306117,
+        "lon": 39.219388
       },
       "to_point": {
         "lat": 51.35182,
         "lon": 39.300585
       },
-      "distance": 11028,
-      "duration": 788,
+      "distance": 11234,
+      "duration": 853,
       "status": "OK"
     },
     {
@@ -137,8 +137,9 @@
         "lon": 39.266546
       },
       "distance": 42320,
-      "duration": 3354,
+      "duration": 2965,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }

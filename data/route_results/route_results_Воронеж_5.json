@@ -1,9 +1,9 @@
 {
   "route_name": "Воронеж 5",
   "points_count": 15,
-  "calculation_time": "2025-04-21 13:38:40",
-  "total_distance": 75381,
-  "total_duration": 9602,
+  "calculation_time": "2025-04-30 16:03:33",
+  "total_distance": 78601,
+  "total_duration": 10158,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.594504,
         "lon": 39.239797
       },
-      "distance": 15725,
-      "duration": 1666,
+      "distance": 16381,
+      "duration": 1842,
       "status": "OK"
     },
     {
@@ -31,8 +31,8 @@
         "lat": 51.606971,
         "lon": 39.245612
       },
-      "distance": 2075,
-      "duration": 277,
+      "distance": 2673,
+      "duration": 373,
       "status": "OK"
     },
     {
@@ -46,8 +46,8 @@
         "lat": 51.653322,
         "lon": 39.243171
       },
-      "distance": 6238,
-      "duration": 1344,
+      "distance": 6538,
+      "duration": 1071,
       "status": "OK"
     },
     {
@@ -61,8 +61,8 @@
         "lat": 51.652782,
         "lon": 39.095065
       },
-      "distance": 14862,
-      "duration": 2114,
+      "distance": 15996,
+      "duration": 2098,
       "status": "OK"
     },
     {
@@ -73,26 +73,26 @@
         "lon": 39.095065
       },
       "to_point": {
-        "lat": 51.646122,
-        "lon": 39.122431
+        "lat": 51.644186,
+        "lon": 39.11979
       },
-      "distance": 2869,
-      "duration": 322,
+      "distance": 3015,
+      "duration": 398,
       "status": "OK"
     },
     {
       "from_index": 5,
       "to_index": 6,
       "from_point": {
-        "lat": 51.646122,
-        "lon": 39.122431
+        "lat": 51.644186,
+        "lon": 39.11979
       },
       "to_point": {
         "lat": 51.650911,
         "lon": 39.137835
       },
-      "distance": 1995,
-      "duration": 197,
+      "distance": 2381,
+      "duration": 298,
       "status": "OK"
     },
     {
@@ -107,7 +107,7 @@
         "lon": 39.145675
       },
       "distance": 1172,
-      "duration": 162,
+      "duration": 183,
       "status": "OK"
     },
     {
@@ -122,7 +122,7 @@
         "lon": 39.140067
       },
       "distance": 1840,
-      "duration": 264,
+      "duration": 317,
       "status": "OK"
     },
     {
@@ -137,7 +137,7 @@
         "lon": 39.170741
       },
       "distance": 4027,
-      "duration": 653,
+      "duration": 680,
       "status": "OK"
     },
     {
@@ -152,7 +152,7 @@
         "lon": 39.166462
       },
       "distance": 1722,
-      "duration": 293,
+      "duration": 332,
       "status": "OK"
     },
     {
@@ -167,7 +167,7 @@
         "lon": 39.165833
       },
       "distance": 491,
-      "duration": 88,
+      "duration": 98,
       "status": "OK"
     },
     {
@@ -182,7 +182,7 @@
         "lon": 39.13665
       },
       "distance": 3647,
-      "duration": 434,
+      "duration": 499,
       "status": "OK"
     },
     {
@@ -193,27 +193,28 @@
         "lon": 39.13665
       },
       "to_point": {
-        "lat": 51.736033,
-        "lon": 39.158576
+        "lat": 51.739076,
+        "lon": 39.162142
       },
-      "distance": 4532,
-      "duration": 462,
+      "distance": 4960,
+      "duration": 546,
       "status": "OK"
     },
     {
       "from_index": 13,
       "to_index": 14,
       "from_point": {
-        "lat": 51.736033,
-        "lon": 39.158576
+        "lat": 51.739076,
+        "lon": 39.162142
       },
       "to_point": {
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 14186,
-      "duration": 1326,
+      "distance": 13758,
+      "duration": 1423,
       "status": "OK"
     }
-  ]
+  ],
+  "start_time_used": "2025-04-23T08:00:00Z"
 }
