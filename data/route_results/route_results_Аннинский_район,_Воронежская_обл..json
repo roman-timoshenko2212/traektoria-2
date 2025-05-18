@@ -1,9 +1,9 @@
 {
   "route_name": "Аннинский район, Воронежская обл.",
-  "points_count": 4,
-  "calculation_time": "2025-04-30 16:03:12",
-  "total_distance": 337164,
-  "total_duration": 17449,
+  "points_count": 10,
+  "calculation_time": "2025-05-06 15:09:48",
+  "total_distance": 233822,
+  "total_duration": 14892,
   "segments": [
     {
       "from_index": 0,
@@ -13,43 +13,133 @@
         "lon": 39.266546
       },
       "to_point": {
-        "lat": 51.110405,
-        "lon": 40.723214
+        "lat": 51.489203,
+        "lon": 40.40091
       },
-      "distance": 159857,
-      "duration": 7987,
+      "distance": 96182,
+      "duration": 5233,
       "status": "OK"
     },
     {
       "from_index": 1,
       "to_index": 2,
       "from_point": {
-        "lat": 51.110405,
-        "lon": 40.723214
+        "lat": 51.489203,
+        "lon": 40.40091
       },
       "to_point": {
-        "lat": 51.406721,
-        "lon": 39.31678
+        "lat": 51.508857,
+        "lon": 40.442049
       },
-      "distance": 140556,
-      "duration": 6680,
+      "distance": 5121,
+      "duration": 523,
       "status": "OK"
     },
     {
       "from_index": 2,
       "to_index": 3,
       "from_point": {
-        "lat": 51.406721,
-        "lon": 39.31678
+        "lat": 51.508857,
+        "lon": 40.442049
+      },
+      "to_point": {
+        "lat": 51.47912,
+        "lon": 40.425092
+      },
+      "distance": 4558,
+      "duration": 643,
+      "status": "OK"
+    },
+    {
+      "from_index": 3,
+      "to_index": 4,
+      "from_point": {
+        "lat": 51.47912,
+        "lon": 40.425092
+      },
+      "to_point": {
+        "lat": 51.489843,
+        "lon": 40.42349
+      },
+      "distance": 2328,
+      "duration": 310,
+      "status": "OK"
+    },
+    {
+      "from_index": 4,
+      "to_index": 5,
+      "from_point": {
+        "lat": 51.489843,
+        "lon": 40.42349
+      },
+      "to_point": {
+        "lat": 51.612345,
+        "lon": 39.383533
+      },
+      "distance": 84928,
+      "duration": 3877,
+      "status": "OK"
+    },
+    {
+      "from_index": 5,
+      "to_index": 6,
+      "from_point": {
+        "lat": 51.612345,
+        "lon": 39.383533
+      },
+      "to_point": {
+        "lat": 51.66208,
+        "lon": 39.432218
+      },
+      "distance": 9409,
+      "duration": 1160,
+      "status": "OK"
+    },
+    {
+      "from_index": 6,
+      "to_index": 7,
+      "from_point": {
+        "lat": 51.66208,
+        "lon": 39.432218
+      },
+      "to_point": {
+        "lat": 51.612039,
+        "lon": 39.384659
+      },
+      "distance": 9573,
+      "duration": 1130,
+      "status": "OK"
+    },
+    {
+      "from_index": 7,
+      "to_index": 8,
+      "from_point": {
+        "lat": 51.612039,
+        "lon": 39.384659
+      },
+      "to_point": {
+        "lat": 51.600132,
+        "lon": 39.433388
+      },
+      "distance": 4023,
+      "duration": 358,
+      "status": "OK"
+    },
+    {
+      "from_index": 8,
+      "to_index": 9,
+      "from_point": {
+        "lat": 51.600132,
+        "lon": 39.433388
       },
       "to_point": {
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 36751,
-      "duration": 2782,
+      "distance": 17700,
+      "duration": 1658,
       "status": "OK"
     }
   ],
-  "start_time_used": "2025-04-23T08:00:00Z"
+  "start_time_used": "2025-04-29T08:00:00Z"
 }

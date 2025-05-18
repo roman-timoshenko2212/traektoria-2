@@ -1,0 +1,55 @@
+{
+  "route_name": "Верхнемамонский район, Воронежская обл.",
+  "points_count": 4,
+  "calculation_time": "2025-05-06 16:29:33",
+  "total_distance": 428818,
+  "total_duration": 20004,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 50.189281,
+        "lon": 40.515196
+      },
+      "distance": 215535,
+      "duration": 9571,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 50.189281,
+        "lon": 40.515196
+      },
+      "to_point": {
+        "lat": 50.453528,
+        "lon": 40.147107
+      },
+      "distance": 51463,
+      "duration": 2880,
+      "status": "OK"
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_point": {
+        "lat": 50.453528,
+        "lon": 40.147107
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 161820,
+      "duration": 7553,
+      "status": "OK"
+    }
+  ],
+  "start_time_used": "2025-04-29T08:00:00Z"
+}

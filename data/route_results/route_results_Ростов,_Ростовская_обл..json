@@ -1,0 +1,40 @@
+{
+  "route_name": "Ростов, Ростовская обл.",
+  "points_count": 3,
+  "calculation_time": "2025-05-05 16:33:07",
+  "total_distance": 2011325,
+  "total_duration": 84329,
+  "segments": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "to_point": {
+        "lat": 45.373892,
+        "lon": 36.86456
+      },
+      "distance": 1016497,
+      "duration": 41857,
+      "status": "OK"
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_point": {
+        "lat": 45.373892,
+        "lon": 36.86456
+      },
+      "to_point": {
+        "lat": 51.686288,
+        "lon": 39.266546
+      },
+      "distance": 994828,
+      "duration": 42472,
+      "status": "OK"
+    }
+  ],
+  "start_time_used": "2025-04-28T08:00:00Z"
+}

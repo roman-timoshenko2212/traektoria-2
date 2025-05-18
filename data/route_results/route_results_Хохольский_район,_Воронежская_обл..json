@@ -1,9 +1,9 @@
 {
   "route_name": "Хохольский район, Воронежская обл.",
   "points_count": 4,
-  "calculation_time": "2025-04-30 17:11:07",
-  "total_distance": 103136,
-  "total_duration": 9488,
+  "calculation_time": "2025-05-13 12:36:40",
+  "total_distance": 105748,
+  "total_duration": 8639,
   "segments": [
     {
       "from_index": 0,
@@ -16,8 +16,8 @@
         "lat": 51.595844,
         "lon": 38.760662
       },
-      "distance": 45558,
-      "duration": 4729,
+      "distance": 47763,
+      "duration": 3905,
       "status": "OK"
     },
     {
@@ -32,7 +32,7 @@
         "lon": 38.756167
       },
       "distance": 4989,
-      "duration": 424,
+      "duration": 429,
       "status": "OK"
     },
     {
@@ -46,10 +46,10 @@
         "lat": 51.686288,
         "lon": 39.266546
       },
-      "distance": 52589,
-      "duration": 4335,
+      "distance": 52996,
+      "duration": 4305,
       "status": "OK"
     }
   ],
-  "start_time_used": "2025-04-23T08:00:00Z"
+  "start_time_used": "2025-05-06T08:00:00Z"
 }
