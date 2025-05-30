@@ -8,6 +8,9 @@ import csv
 import sys
 import codecs
 
+# Импортируем настройки из config.py
+import config
+
 # Устанавливаем кодировку UTF-8 для stdout и stderr
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
 sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
@@ -27,15 +30,21 @@ os.makedirs(ROUTE_RESULTS_DIR, exist_ok=True)
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--excel", required=True)
-    parser.add_argument("--openrouter_key", required=True)
-    parser.add_argument("--model", required=True)
     parser.add_argument("--route", help="Название конкретного маршрута для обработки", default=None)
     args = parser.parse_args()
 
     filepath = args.excel
-    api_key = args.openrouter_key
-    model = args.model
+    # Получаем ключ и модель из config.py
+    api_key = config.API_KEYS.get("openrouter")
+    model = config.LLM_SETTINGS.get("model_name")
     target_route = args.route
+
+    if not api_key:
+        print("❌ ОШИБКА: Ключ OpenRouter API не найден в config.py (API_KEYS['openrouter']).")
+        return
+    if not model:
+        print("❌ ОШИБКА: Имя модели LLM не найдено в config.py (LLM_SETTINGS['model_name']).")
+        return
 
     # Извлекаем все маршруты или только указанный
     routes = extract_routes(filepath, target_route)
@@ -47,23 +56,35 @@ def main():
     all_exceptions = [] # Список для всех исключений (для вывода в stdout)
 
     for route_name, addresses_with_rows in routes.items():
+        print(f"DEBUG_MAIN: === Обработка маршрута: {route_name} ===") # DEBUG LOG
+        print(f"DEBUG_MAIN: Исходные адреса из Excel (addresses_with_rows): {addresses_with_rows}") # DEBUG LOG
         addresses = [addr for _, addr in addresses_with_rows]
+        
+        if not addresses:
+            print(f"DEBUG_MAIN: НЕТ АДРЕСОВ для отправки в LLM для маршрута {route_name}.") # DEBUG LOG
+            continue
+
+        print(f"DEBUG_MAIN: Количество адресов для LLM: {len(addresses)}") # DEBUG LOG
+        cleaned_result = send_route_to_llm(route_name, addresses, api_key, model)
+        print(f"DEBUG_MAIN: СЫРОЙ ответ от LLM для маршрута '{route_name}':") # DEBUG LOG
+        print(cleaned_result) # DEBUG LOG
+        
+        lines = [line for line in cleaned_result.split("\n") if line.strip()]
+        print(f"DEBUG_MAIN: Ответ от LLM, разбитый на строки (len={len(lines)}): {lines}") # DEBUG LOG
+
+        valid_lines_output = [] # Для вывода в консоль
         current_route_addresses = [] # <-- Локальный список для адресов текущего маршрута
         route_exceptions = [] # <-- Локальный список для исключений текущего маршрута
 
-        print(f"\n=== 🚚 Маршрут: {route_name} ===")
-        cleaned_result = send_route_to_llm(route_name, addresses, api_key, model)
-        lines = [line for line in cleaned_result.split("\n") if line.strip()]
-
-        valid_lines_output = [] # Для вывода в консоль
         for i, (excel_row, _) in enumerate(addresses_with_rows):
             if i >= len(lines):
-                print(f"⚠️ Недостаточно строк от LLM для строки Excel {excel_row}")
+                print(f"⚠️ Недостаточно строк от LLM для строки Excel {excel_row} (индекс i={i}, всего строк LLM={len(lines)})") # DEBUG LOG
                 # Можно добавить "пустую" запись или пропустить - пока пропускаем
                 continue
             line = lines[i]
+            print(f"DEBUG_MAIN: Обработка excel_row={excel_row}, LLM_line='{line}'") # DEBUG LOG
             if "." not in line:
-                 print(f"⚠️ Некорректный формат строки от LLM (нет точки-разделителя): '{line}'")
+                 print(f"⚠️ Некорректный формат строки от LLM (нет точки-разделителя): '{line}' для excel_row={excel_row}") # DEBUG LOG
                  # Решаем, добавлять ли как исключение? Пока добавляем исходный
                  original_address = addresses[i] # Берем исходный адрес
                  route_exceptions.append((excel_row, original_address))
@@ -72,22 +93,29 @@ def main():
                  
             _, content = line.split(".", 1)
             content = content.strip()
+            print(f"DEBUG_MAIN: Извлеченный content: '{content}' для excel_row={excel_row}") # DEBUG LOG
             
-            if is_only_region_and_district(content):
+            is_problematic = is_only_region_and_district(content)
+            print(f"DEBUG_MAIN: is_only_region_and_district('{content}') -> {is_problematic}") # DEBUG LOG
+            
+            if is_problematic:
                 # Добавляем в локальные и глобальные исключения
                 route_exceptions.append((excel_row, content))
                 all_exceptions.append((excel_row, content, route_name)) # Глобальный для stdout
                 # Добавляем в адреса для сохранения в файл (как есть)
                 current_route_addresses.append((excel_row, content)) 
+                print(f"DEBUG_MAIN: Добавлено в current_route_addresses (как проблемный): {(excel_row, content)}") # DEBUG LOG
             else:
                 valid_lines_output.append(line) # Для вывода в консоль
                 # Добавляем валидный адрес для сохранения в файл
                 current_route_addresses.append((excel_row, content))
+                print(f"DEBUG_MAIN: Добавлено в current_route_addresses (как валидный): {(excel_row, content)}") # DEBUG LOG
 
         print("\n=== ✅ Нормализованные адреса (для консоли) ===")
         for line in valid_lines_output:
             print(line)
             
+        print(f"DEBUG_MAIN: ИТОГОВЫЕ адреса для CSV маршрута '{route_name}' (current_route_addresses): {current_route_addresses}") # DEBUG LOG
         # --- Сохранение CSV для ТЕКУЩЕГО маршрута --- 
         file_name = sanitize_filename(route_name)
         output_path = os.path.join(PARSED_ADDRESSES_DIR, f"parsed_addresses_{file_name}.csv")
@@ -172,7 +200,10 @@ def send_route_to_llm(route_name, address_list, api_key, model):
     input_block = "\n".join(f"{i+1}. {addr}" for i, addr in enumerate(address_list))
     prompt = PROMPT_TEMPLATE.format(route_name=route_name, route_block=input_block)
 
-    API_URL = "https://openrouter.ai/api/v1/chat/completions"
+    API_URL = config.API_URLS.get("openrouter_chat_completions") # Получаем URL из config
+    if not API_URL:
+        return f"❌ ОШИБКА: URL для OpenRouter Chat Completions не найден в config.py (API_URLS['openrouter_chat_completions'])."
+
     HEADERS = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
@@ -242,6 +273,8 @@ def extract_routes(filepath, target_route=None):
         kontragent = row.get(kontragent_col_name) # <-- Получаем контрагента
         # driver = row.get(driver_col_name) # <-- Водителя здесь не используем, только извлекаем адреса
         
+        print(f"DEBUG: Строка Excel {idx+2}, Регион: '{region}', Адрес: '{address}', Контрагент: '{kontragent}'") # ОТЛАДКА
+
         # Определяем начало нового маршрута
         is_new_route_marker = False
         if pd.notna(region) and isinstance(region, str) and region.strip():
@@ -250,26 +283,32 @@ def extract_routes(filepath, target_route=None):
                  is_new_route_marker = True
                  current_route = potential_new_route
                  seen_kontragents_in_route.clear() # <-- Очищаем сет контрагентов для нового маршрута
-                 # print(f"   -> Обнаружен новый маршрут: {current_route}") 
+                 print(f"DEBUG: Новый маршрут определен: '{current_route}', seen_kontragents очищен") # ОТЛАДКА
         
         # Добавляем адрес к ТЕКУЩЕМУ маршруту, если:
         # 1. Маршрут определен
         # 2. Адрес есть
         # 3. Контрагент есть и он еще НЕ встречался в ЭТОМ маршруте
         if current_route and pd.notna(address) and isinstance(address, str) and address.strip():
+            print(f"DEBUG: Проверка добавления для current_route='{current_route}', адрес='{address}'") # ОТЛАДКА
             if pd.notna(kontragent) and isinstance(kontragent, str) and kontragent.strip():
                 kontragent_key = kontragent.strip()
+                print(f"DEBUG: Контрагент: '{kontragent_key}'") # ОТЛАДКА
                 if kontragent_key not in seen_kontragents_in_route:
+                    print(f"DEBUG: Контрагент '{kontragent_key}' НОВЫЙ для маршрута '{current_route}'. Добавляем адрес.") # ОТЛАДКА
                     seen_kontragents_in_route.add(kontragent_key) # Добавляем контрагента в сет
                     routes[current_route].append((idx + 2, address.strip()))
                     # print(f"     Добавляем адрес для '{kontragent_key}' к '{current_route}' (строка Excel {idx+2})")
-                # else:
-                    # print(f"     Пропуск строки {idx+2}: дубликат контрагента '{kontragent_key}' в маршруте '{current_route}'")
-            # else:
-                 # print(f"     Пропуск строки {idx+2}: отсутствует или некорректный контрагент для маршрута '{current_route}'")
+                else:
+                    print(f"DEBUG: Контрагент '{kontragent_key}' УЖЕ ЕСТЬ в seen_kontragents для маршрута '{current_route}'. Пропуск.") # ОТЛАДКА
+            else:
+                 print(f"DEBUG: Пропуск адреса из-за отсутствия/некорректного контрагента.") # ОТЛАДКА
+        else:
+            print(f"DEBUG: Пропуск адреса (current_route не определен или адрес пуст). current_route='{current_route}'") # ОТЛАДКА
         
     # Удаляем маршруты без адресов (на всякий случай)
     routes = {r: adds for r, adds in routes.items() if adds}
+    print(f"DEBUG: Содержимое routes перед возвратом: {routes}") # ОТЛАДКА
 
     # Если указан конкретный маршрут, возвращаем только его
     if target_route:

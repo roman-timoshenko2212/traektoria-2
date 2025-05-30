@@ -1394,17 +1394,20 @@ async def upload_excel(file: UploadFile,
             
             # 1. Запускаем парсинг через LLM
             print(f"  💬 Запуск parsing_route.py...")
-            openrouter_key = os.getenv("OPENROUTER_API_KEY", "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")
+            openrouter_key = config.API_KEYS.get("openrouter") # Используем ключ из config
+            llm_model_name = config.LLM_SETTINGS.get("model_name") # Используем модель из config
+
             if not openrouter_key:
-                print("  ❌ ОШИБКА: Ключ OpenRouter не найден (OPENROUTER_API_KEY).")
-                raise ValueError("Ключ OpenRouter API не настроен.")
+                print("  ❌ ОШИБКА: Ключ OpenRouter API не найден в config.py.")
+                raise ValueError("Ключ OpenRouter API не настроен в config.py.")
+            if not llm_model_name:
+                print("  ❌ ОШИБКА: Имя модели LLM не найдено в config.py.")
+                raise ValueError("Имя модели LLM не настроено в config.py.")
 
             parsing_cmd = [
                  sys.executable, 
                  os.path.abspath(os.path.join(BASE_DIR, "..", "parsing_route.py")),
                  "--excel", path_to_read,
-                 "--openrouter_key", openrouter_key, 
-                 "--model", "google/gemini-flash-1.5",
                  "--route", route_name
             ]
             cmd_str = ' '.join(parsing_cmd)
@@ -1413,11 +1416,13 @@ async def upload_excel(file: UploadFile,
             
             if parsing_result.returncode != 0:
                 print(f"  ❌ Ошибка выполнения parsing_route.py для '{route_name}'")
-                print(f"  Stderr:\n{parsing_result.stderr}")
+                print(f"  Stdout:\\n{parsing_result.stdout}") # Добавлено для отладки stdout при ошибке
+                print(f"  Stderr:\\n{parsing_result.stderr}")
                 parsing_failed_routes.append(route_name) # Запоминаем, что парсинг упал
                 continue # Пропускаем сбор исключений для этого маршрута
             else:
                 print(f"  ✅ parsing_route.py выполнен успешно.")
+                print(f"  Stdout от parsing_route.py для '{route_name}':\\n{parsing_result.stdout}") # Добавлено для отладки stdout при успехе
                 # --- ОБНОВЛЕННАЯ ЛОГИКА ПАРСИНГА ИСКЛЮЧЕНИЙ ИЗ STDOUT --- 
                 lines = parsing_result.stdout.splitlines()
                 route_exceptions = [] # Используем этот список для сбора исключений
