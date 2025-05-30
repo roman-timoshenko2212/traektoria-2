@@ -21,4 +21,14 @@ env/
 *.log
 .cache
 cache/
-.cursor/ 
+.cursor/
+
+# Директории сборки
+dist/
+build/
+
+# Кэш Jupyter Notebook
+.ipynb_checkpoints
+
+# Зависимости Node.js
+node_modules/ 

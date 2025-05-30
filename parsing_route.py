@@ -5,6 +5,12 @@ from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsNERTagger, Doc
 import argparse
 import os
 import csv
+import sys
+import codecs
+
+# Устанавливаем кодировку UTF-8 для stdout и stderr
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
 
 # Определяем константы для путей
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))

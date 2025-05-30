@@ -16518,7 +16518,7 @@
           "error": null
         },
         {
-          "input": "396840, Воронежская область, Хохольский район, рабочий поселок Хохольский, Дорожная улица, 2Б",
+          "input": ",396840, Воронежская обл, Хохольский р-н, , Хохольский рп, Дорожная ул, 2Б, , , дом, корпус, кв.",
           "found": "Дорожная улица, 2Б",
           "type": "exact",
           "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
@@ -16526,17 +16526,6 @@
           "lon": 38.760662,
           "error": "",
           "excel_row": "3",
-          "route_name": "Хохольский район, Воронежская обл."
-        },
-        {
-          "input": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21",
-          "found": "Центральная улица, 21",
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 51.561287,
-          "lon": 38.756167,
-          "error": "",
-          "excel_row": "4",
           "route_name": "Хохольский район, Воронежская обл."
         },
         {
@@ -16562,13 +16551,7 @@
           "lon": 38.760662,
           "lat": 51.595844,
           "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "396840, Воронежская область, Хохольский район, рабочий поселок Хохольский, Дорожная улица, 2Б"
-        },
-        {
-          "lon": 38.756167,
-          "lat": 51.561287,
-          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "Воронежская область, Хохольский район, город Хохол, Центральная улица, 21"
+          "original_address": ",396840, Воронежская обл, Хохольский р-н, , Хохольский рп, Дорожная ул, 2Б, , , дом, корпус, кв."
         },
         {
           "lat": 51.686288,
@@ -16579,10 +16562,10 @@
       ],
       "distance_data": {
         "route_name": "Хохольский район, Воронежская обл.",
-        "points_count": 4,
-        "calculation_time": "2025-05-13 12:36:40",
-        "total_distance": 106,
-        "total_duration": 8639,
+        "points_count": 3,
+        "calculation_time": "2025-05-30 10:08:05",
+        "total_distance": 94,
+        "total_duration": 7317,
         "segments": [
           {
             "from_index": 0,
@@ -16595,8 +16578,8 @@
               "lat": 51.595844,
               "lon": 38.760662
             },
-            "distance": 47763,
-            "duration": 3905,
+            "distance": 46216,
+            "duration": 3867,
             "status": "OK"
           },
           {
@@ -16607,36 +16590,21 @@
               "lon": 38.760662
             },
             "to_point": {
-              "lat": 51.561287,
-              "lon": 38.756167
-            },
-            "distance": 4989,
-            "duration": 429,
-            "status": "OK"
-          },
-          {
-            "from_index": 2,
-            "to_index": 3,
-            "from_point": {
-              "lat": 51.561287,
-              "lon": 38.756167
-            },
-            "to_point": {
               "lat": 51.686288,
               "lon": 39.266546
             },
-            "distance": 52996,
-            "duration": 4305,
+            "distance": 47909,
+            "duration": 3450,
             "status": "OK"
           }
         ],
-        "start_time_used": "2025-05-06T08:00:00Z",
-        "formatted_distance": "106 км",
-        "formatted_duration": "2 ч 23 мин"
+        "start_time_used": "2025-04-10T08:00:00Z",
+        "formatted_distance": "94 км",
+        "formatted_duration": "2 ч 1 мин"
       },
       "number_of_stops": 0,
       "total_route_time_formatted": "Н/Д",
-      "global_service_time_minutes": 20
+      "global_service_time_minutes": 15
     },
     "Эртильский_район,_Воронежская_обл.": {
       "route_name": "Эртильский район, Воронежская обл.",
@@ -16653,7 +16621,7 @@
           "error": null
         },
         {
-          "input": "396110, Воронежская область, Верхнехавский район, село Верхняя Хава, улица Ленина, 46А",
+          "input": ",396110, Воронежская обл, Верхнехавский р-н, , Верхняя Хава с, Ленина ул, 46А, , , дом, корпус, кв.",
           "found": "улица Ленина, 46а",
           "type": "exact",
           "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
@@ -16661,39 +16629,6 @@
           "lon": 39.940141,
           "error": "",
           "excel_row": "6",
-          "route_name": "Эртильский район, Воронежская обл."
-        },
-        {
-          "input": "397482, Воронежская область, Таловский район, рабочий поселок Таловая",
-          "found": "Таловая",
-          "type": "locality",
-          "description": "<span class=\"accuracy-tag tag-locality\">🏘️ Населенный пункт — средняя точность</span>",
-          "lat": 51.110405,
-          "lon": 40.723214,
-          "error": "",
-          "excel_row": "7",
-          "route_name": "Эртильский район, Воронежская обл."
-        },
-        {
-          "input": "45 Стрелковой Дивизии, 234а  ​Коминтерновский район, Воронеж",
-          "found": "45 Стрелковой Дивизии, 234а",
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 51.69317,
-          "lon": 39.132981,
-          "error": "",
-          "excel_row": "8",
-          "route_name": "Эртильский район, Воронежская обл."
-        },
-        {
-          "input": "396140, Воронежская область, рабочий поселок Панино, Первомайская улица, 21",
-          "found": "Первомайская улица, 21",
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 51.654759,
-          "lon": 40.137389,
-          "error": "",
-          "excel_row": "9",
           "route_name": "Эртильский район, Воронежская обл."
         },
         {
@@ -16719,25 +16654,7 @@
           "lon": 39.940141,
           "lat": 51.8399,
           "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "396110, Воронежская область, Верхнехавский район, село Верхняя Хава, улица Ленина, 46А"
-        },
-        {
-          "lon": 40.723214,
-          "lat": 51.110405,
-          "address": "<span class=\"accuracy-tag tag-locality\">🏘️ Населенный пункт — средняя точность</span>",
-          "original_address": "397482, Воронежская область, Таловский район, рабочий поселок Таловая"
-        },
-        {
-          "lon": 39.132981,
-          "lat": 51.69317,
-          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "45 Стрелковой Дивизии, 234а  ​Коминтерновский район, Воронеж"
-        },
-        {
-          "lon": 40.137389,
-          "lat": 51.654759,
-          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "396140, Воронежская область, рабочий поселок Панино, Первомайская улица, 21"
+          "original_address": ",396110, Воронежская обл, Верхнехавский р-н, , Верхняя Хава с, Ленина ул, 46А, , , дом, корпус, кв."
         },
         {
           "lat": 51.686288,
@@ -16748,10 +16665,10 @@
       ],
       "distance_data": {
         "route_name": "Эртильский район, Воронежская обл.",
-        "points_count": 6,
-        "calculation_time": "2025-05-13 12:36:41",
-        "total_distance": 535,
-        "total_duration": 29067,
+        "points_count": 3,
+        "calculation_time": "2025-05-30 10:08:07",
+        "total_distance": 126,
+        "total_duration": 7212,
         "segments": [
           {
             "from_index": 0,
@@ -16764,8 +16681,8 @@
               "lat": 51.8399,
               "lon": 39.940141
             },
-            "distance": 68670,
-            "duration": 4177,
+            "distance": 63565,
+            "duration": 4000,
             "status": "OK"
           },
           {
@@ -16776,66 +16693,21 @@
               "lon": 39.940141
             },
             "to_point": {
-              "lat": 51.110405,
-              "lon": 40.723214
-            },
-            "distance": 141368,
-            "duration": 7165,
-            "status": "OK"
-          },
-          {
-            "from_index": 2,
-            "to_index": 3,
-            "from_point": {
-              "lat": 51.110405,
-              "lon": 40.723214
-            },
-            "to_point": {
-              "lat": 51.69317,
-              "lon": 39.132981
-            },
-            "distance": 168974,
-            "duration": 8310,
-            "status": "OK"
-          },
-          {
-            "from_index": 3,
-            "to_index": 4,
-            "from_point": {
-              "lat": 51.69317,
-              "lon": 39.132981
-            },
-            "to_point": {
-              "lat": 51.654759,
-              "lon": 40.137389
-            },
-            "distance": 89991,
-            "duration": 5549,
-            "status": "OK"
-          },
-          {
-            "from_index": 4,
-            "to_index": 5,
-            "from_point": {
-              "lat": 51.654759,
-              "lon": 40.137389
-            },
-            "to_point": {
               "lat": 51.686288,
               "lon": 39.266546
             },
-            "distance": 65622,
-            "duration": 3866,
+            "distance": 62572,
+            "duration": 3212,
             "status": "OK"
           }
         ],
-        "start_time_used": "2025-05-06T08:00:00Z",
-        "formatted_distance": "535 км",
-        "formatted_duration": "8 ч 4 мин"
+        "start_time_used": "2025-04-10T08:00:00Z",
+        "formatted_distance": "126 км",
+        "formatted_duration": "2 ч 0 мин"
       },
       "number_of_stops": 0,
       "total_route_time_formatted": "Н/Д",
-      "global_service_time_minutes": 20
+      "global_service_time_minutes": 15
     },
     "Тамбов,_Тамбовская_обл.": {
       "route_name": "Тамбов, Тамбовская обл.",
@@ -16852,25 +16724,14 @@
           "error": null
         },
         {
-          "input": "392028, Тамбовская область, город Тамбов, Ипподромная улица, 22а",
-          "found": "Ипподромная улица, 22а",
+          "input": ",392028, Тамбовская обл, , Тамбов г, , Ипподромная ул, 22, а, , дом, корпус, кв.",
+          "found": "Ипподромная улица, 22",
           "type": "exact",
           "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 52.738379,
-          "lon": 41.410542,
+          "lat": 52.737336,
+          "lon": 41.409638,
           "error": "",
           "excel_row": "11",
-          "route_name": "Тамбов, Тамбовская обл."
-        },
-        {
-          "input": "392018, Тамбовская область, город Тамбов, Мичуринская улица, 48",
-          "found": "Мичуринская улица, 48",
-          "type": "exact",
-          "description": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "lat": 52.737307,
-          "lon": 41.437628,
-          "error": "",
-          "excel_row": "12",
           "route_name": "Тамбов, Тамбовская обл."
         },
         {
@@ -16893,16 +16754,10 @@
           "original_address": "Офис РТК"
         },
         {
-          "lon": 41.410542,
-          "lat": 52.738379,
+          "lon": 41.409638,
+          "lat": 52.737336,
           "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "392028, Тамбовская область, город Тамбов, Ипподромная улица, 22а"
-        },
-        {
-          "lon": 41.437628,
-          "lat": 52.737307,
-          "address": "<span class=\"accuracy-tag tag-exact\">🏠 Здание — высокая точность</span>",
-          "original_address": "392018, Тамбовская область, город Тамбов, Мичуринская улица, 48"
+          "original_address": ",392028, Тамбовская обл, , Тамбов г, , Ипподромная ул, 22, а, , дом, корпус, кв."
         },
         {
           "lat": 51.686288,
@@ -16913,10 +16768,10 @@
       ],
       "distance_data": {
         "route_name": "Тамбов, Тамбовская обл.",
-        "points_count": 4,
-        "calculation_time": "2025-05-13 12:36:43",
-        "total_distance": 438,
-        "total_duration": 21356,
+        "points_count": 3,
+        "calculation_time": "2025-05-30 10:08:10",
+        "total_distance": 437,
+        "total_duration": 20821,
         "segments": [
           {
             "from_index": 0,
@@ -16926,103 +16781,88 @@
               "lon": 39.266546
             },
             "to_point": {
-              "lat": 52.738379,
-              "lon": 41.410542
+              "lat": 52.737336,
+              "lon": 41.409638
             },
-            "distance": 219804,
-            "duration": 10902,
+            "distance": 219152,
+            "duration": 10754,
             "status": "OK"
           },
           {
             "from_index": 1,
             "to_index": 2,
             "from_point": {
-              "lat": 52.738379,
-              "lon": 41.410542
-            },
-            "to_point": {
-              "lat": 52.737307,
-              "lon": 41.437628
-            },
-            "distance": 2903,
-            "duration": 417,
-            "status": "OK"
-          },
-          {
-            "from_index": 2,
-            "to_index": 3,
-            "from_point": {
-              "lat": 52.737307,
-              "lon": 41.437628
+              "lat": 52.737336,
+              "lon": 41.409638
             },
             "to_point": {
               "lat": 51.686288,
               "lon": 39.266546
             },
-            "distance": 215755,
-            "duration": 10037,
+            "distance": 218127,
+            "duration": 10067,
             "status": "OK"
           }
         ],
-        "start_time_used": "2025-05-06T08:00:00Z",
-        "formatted_distance": "438 км",
-        "formatted_duration": "5 ч 55 мин"
+        "start_time_used": "2025-04-10T08:00:00Z",
+        "formatted_distance": "437 км",
+        "formatted_duration": "5 ч 47 мин"
       },
       "number_of_stops": 0,
       "total_route_time_formatted": "Н/Д",
-      "global_service_time_minutes": 20
+      "global_service_time_minutes": 15
     }
   },
   "summary": {
     "Хохольский_район,_Воронежская_обл.": {
       "original_name": "Хохольский район, Воронежская обл.",
       "driver_name": "Зябкин Николай Николаевич",
-      "distance": 106,
-      "duration_seconds": 8639,
-      "duration_formatted": "2 ч 23 мин",
-      "number_of_stops": 2,
+      "distance": 94,
+      "duration_seconds": 7317,
+      "duration_formatted": "2 ч 1 мин",
+      "number_of_stops": 1,
       "report_distance": null,
       "report_duration_hours": null,
       "report_duration_minutes": null,
       "distance_difference": null,
-      "time_difference_formatted": "+3 ч 3 мин",
-      "time_difference_seconds": 11039,
-      "total_route_time_seconds": 11039,
-      "total_route_time_formatted": "3 ч 3 мин",
+      "time_difference_formatted": "+2 ч 16 мин",
+      "time_difference_seconds": 8217,
+      "total_route_time_seconds": 8217,
+      "total_route_time_formatted": "2 ч 16 мин",
       "comment": ""
     },
     "Эртильский_район,_Воронежская_обл.": {
       "original_name": "Эртильский район, Воронежская обл.",
       "driver_name": "Ищук Олег Вильгельмович",
-      "distance": 535,
-      "duration_seconds": 29067,
-      "duration_formatted": "8 ч 4 мин",
-      "number_of_stops": 4,
+      "distance": 126,
+      "duration_seconds": 7212,
+      "duration_formatted": "2 ч 0 мин",
+      "number_of_stops": 1,
       "report_distance": null,
       "report_duration_hours": null,
       "report_duration_minutes": null,
       "distance_difference": null,
-      "time_difference_formatted": "+9 ч 24 мин",
-      "time_difference_seconds": 33867,
-      "total_route_time_seconds": 33867,
-      "total_route_time_formatted": "9 ч 24 мин",
+      "time_difference_formatted": "+2 ч 15 мин",
+      "time_difference_seconds": 8112,
+      "total_route_time_seconds": 8112,
+      "total_route_time_formatted": "2 ч 15 мин",
       "comment": ""
     },
     "Тамбов,_Тамбовская_обл.": {
       "original_name": "Тамбов, Тамбовская обл.",
       "driver_name": "Новичихин Евгений Владимирович",
-      "distance": 438,
-      "duration_seconds": 21356,
-      "duration_formatted": "5 ч 55 мин",
-      "number_of_stops": 2,
+      "distance": 437,
+      "duration_seconds": 20821,
+      "duration_formatted": "5 ч 47 мин",
+      "number_of_stops": 1,
       "report_distance": null,
       "report_duration_hours": null,
       "report_duration_minutes": null,
       "distance_difference": null,
-      "time_difference_formatted": "+6 ч 35 мин",
-      "time_difference_seconds": 23756,
-      "total_route_time_seconds": 23756,
-      "total_route_time_formatted": "6 ч 35 мин",
+      "time_difference_formatted": "+6 ч 2 мин",
+      "time_difference_seconds": 21721,
+      "total_route_time_seconds": 21721,
+      "total_route_time_formatted": "6 ч 2 мин",
       "comment": ""
     }
   },
@@ -17032,6 +16872,6 @@
     "Тамбов,_Тамбовская_обл.": "Новичихин Евгений Владимирович"
   },
   "current_file": "journal_route_mini.xlsx",
-  "global_service_time_minutes": 20,
-  "report_date_str": "2025-05-13"
+  "global_service_time_minutes": 15,
+  "report_date_str": "2025-04-10"
 }

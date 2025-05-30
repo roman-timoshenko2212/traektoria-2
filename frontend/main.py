@@ -1409,7 +1409,7 @@ async def upload_excel(file: UploadFile,
             ]
             cmd_str = ' '.join(parsing_cmd)
             print(f"  Выполняем команду: {cmd_str}")
-            parsing_result = subprocess.run(parsing_cmd, capture_output=True, text=True, cwd=ROOT_DIR)
+            parsing_result = subprocess.run(parsing_cmd, capture_output=True, text=True, encoding='utf-8', cwd=ROOT_DIR)
             
             if parsing_result.returncode != 0:
                 print(f"  ❌ Ошибка выполнения parsing_route.py для '{route_name}'")
@@ -2452,8 +2452,19 @@ def run_geocoding(parsed_addresses_file: str, geocoded_json_path: str, original_
         return False
 # --- КОНЕЦ НОВОЙ ФУНКЦИИ ---
 
+# --- КОНЕЦ КЛАССА RouteData И ДРУГИХ ОПРЕДЕЛЕНИЙ ПЕРЕД ГЛОБАЛЬНЫМИ ЭНДПОИНТАМИ ---
+
+# Глобальный экземпляр данных, если он еще не определен где-то выше
+# (если он уже есть, эта строка не нужна, но для примера оставим,
+# предполагая, что route_data_store должен быть доступен глобально)
+# route_data_store = RouteData() # Убедитесь, что это согласуется с вашей логикой
+
+# ... здесь идут ваши @app.get, @app.post декораторы и функции ...
+
+# Добавляем этот блок в самый конец файла:
 if __name__ == "__main__":
-    # Загрузка данных при старте
-    route_data_store = RouteData() # Создаем экземпляр класса (исправлено на route_data_store)
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    import uvicorn
+    # Этот код находится в frontend/main.py, и переменная FastAPI называется 'app'.
+    # Uvicorn будет искать объект 'app' в текущем модуле ('main').
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=False, workers=1)
 
